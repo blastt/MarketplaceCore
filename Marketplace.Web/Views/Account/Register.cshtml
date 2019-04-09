@@ -1,0 +1,76 @@
+﻿
+@{
+    ViewData["Title"] = "Register";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container body-content">
+
+            <form action="/" method="post" class="block-auth">
+                <fieldset >
+                    <legend class="text-center mb-4">Create Account</legend>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <form action="/Account/Register" class="form-horizontal" method="post" role="form" novalidate="novalidate">
+                                @*<input name="__RequestVerificationToken" type="hidden" value="TqNHLs3KbTOxPYEIVuWOVjjgPkxxDMRWHMHPIHjl_mg5ehQSPJ49F_NVyeerJ3Acxfw-BFDgvf1BQuFbBdrtvgh0iVd3Bw84xBPNC1Q02nk1">                        <div class="form-group">
+                                    <input class="form-control form-control-md" data-val="true" data-val-required="The Login field is required." id="UserName" name="UserName" placeholder="Имя пользователя" type="text" value="">
+                                    <span class="field-validation-valid" data-valmsg-for="UserName" data-valmsg-replace="true"></span>
+                                </div>*@
+                                <div class="form-group">
+                                    <div class="input-group mb-3">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text"><i class="fas fa-user"></i></span>
+                                        </div>
+                                        <input type="text" class="form-control" aria-label="Amount (to the nearest dollar) id=" Email" name="Email" placeholder="User Name">
+
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="input-group mb-3">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text"><i class="fas fa-envelope"></i></span>
+                                        </div>
+                                        <input type="text" class="form-control" aria-label="Amount (to the nearest dollar)" id=" Email" name="Email" placeholder="Email">
+
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="input-group mb-3">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text"><i class="fas fa-key"></i></span>
+                                        </div>
+                                        <input type="text" class="form-control" aria-label="Amount (to the nearest dollar)" id=" Email" name="Email" placeholder="Password">
+
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="input-group mb-3">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text"><i class="fas fa-key"></i></span>
+                                        </div>
+                                        <input type="text" class="form-control" aria-label="Amount (to the nearest dollar)" id=" Email" name="Email" placeholder="Confirm password">
+
+                                    </div>
+                                </div>
+
+                                @*<div class="form-group">
+            <input class="form-control form-control-md" data-val="true" data-val-email="The Email field is not a valid e-mail address." data-val-required="The Email field is required." id="Email" name="Email" placeholder="Почта" type="text" value="">
+            <span class="field-validation-valid" data-valmsg-for="Email" data-valmsg-replace="true"></span>
+        </div>
+        <div class="form-group">
+            <input class="form-control form-control-md" data-val="true" data-val-length="The Password must be at least 6 characters long." data-val-length-max="100" data-val-length-min="6" data-val-required="The Password field is required." id="Password" name="Password" placeholder="Пароль" type="password" aria-autocomplete="list">
+            <span class="field-validation-valid" data-valmsg-for="Password" data-valmsg-replace="true"></span>
+        </div>
+        <div class="form-group">
+            <input class="form-control form-control-md" data-val="true" data-val-equalto="The password and confirmation password do not match." data-val-equalto-other="*.Password" id="ConfirmPassword" name="ConfirmPassword" placeholder="Подтверждение пароля" type="password">
+            <span class="field-validation-valid" data-valmsg-for="ConfirmPassword" data-valmsg-replace="true"></span>
+        </div>*@
+                                <div class="text-center">
+                                    <input type="submit" class="btn btn-submit" value="Зарегистрироваться">
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </fieldset>
+            </form>
+</div>

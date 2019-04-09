@@ -1,0 +1,64 @@
+﻿@model Dictionary<char, List<KeyValuePair<string, string>>>
+
+
+    <div class="game-line">
+        <div class="container">
+            <nav class="game-menu">
+
+                <ul class="section-list">
+
+
+                    <li>
+                        <a href="#" class="text-center">
+
+                            <div>
+                                See All Games
+                            </div>
+
+                        </a>
+
+                        <ul class="letter-list">
+                            @foreach (var item in Model)
+                            {
+                                <li>
+                                    <a href="#">@item.Key</a>
+                                    <ul class="game-list">
+                                        @foreach (var game in item.Value)
+                                        {
+                                            <li><a href="@Url.Action("List","Offer", new { area = "", game = game.Key })">@game.Value</a></li>
+                                        }
+
+                                    </ul>
+                                </li>
+                            }
+
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="@Url.Action("List","Offer", new { area = "", game = "csgo" })">CS:GO</a>
+                    </li>
+                    <li>
+                        <a href="@Url.Action("List","Offer", new { area = "", game = "dota2" })">DOTA 2</a>
+
+                    </li>
+                    <li>
+                        <a href="@Url.Action("List","Offer", new { area = "", game = "lol" })">League Of Lagends</a>
+                    </li>
+                    <li>
+                        <a href="@Url.Action("List","Offer", new { area = "", game = "wot" })">World Of Tanks</a>
+                    </li>
+                    <li>
+                        <a href="@Url.Action("List","Offer", new { area = "", game = "warframe" })">Warframe</a>
+                    </li>
+                    <li>
+                        <a href="@Url.Action("List","Offer", new { area = "", game = "poe" })">Path of Exile</a>
+                    </li>
+                    <li>
+                        <a href="@Url.Action("List","Offer", new { area = "", game ="wow" })">World Of Warcraft</a>
+                    </li>
+
+                </ul>
+
+            </nav>
+        </div>
+    </div>
