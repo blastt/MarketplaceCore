@@ -5,16 +5,19 @@ using System.Text;
 
 namespace Marketplace.Model.Models
 {
-    public class Game : BaseEntity<int>
+    public enum FilterType
+    {
+        Text,
+        Number,
+        Boolean
+    }
+    public class Filter : BaseEntity<int>
     {
         public string Name { get; set; }
         public string Value { get; set; }
 
-        public string ImagePath { get; set; }
-
-        public int Rank { get; set; } // порядковый номер среди рангов
+        public FilterType Types { get; set; }
 
         public IList<FilterItem> FilterItems { get; set; }
-        public ICollection<Offer> Offers { get; set; }
     }
 }

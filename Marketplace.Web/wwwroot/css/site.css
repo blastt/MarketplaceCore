@@ -1,4 +1,21 @@
-﻿.btn-primary {
+﻿.offer-body {
+    background: #f7f7f7;
+    
+}
+li {
+    list-style: none;
+    
+}
+
+ul{
+    padding-left: 0px
+}
+
+.font-14{
+    font-size: 14px
+}
+
+.btn-primary {
     background-color: #54aaff
 }
 
@@ -10,9 +27,13 @@ html, body {
     height: 100%;
 }
 body {
-    background-color: #f6f6f6;
+    /*background-color: #f6f6f6;*/
     
     /*padding-top: 120px;*/
+}
+
+.table{
+    margin-bottom:0px
 }
 
 .form-control {
@@ -22,6 +43,7 @@ body {
 
 
 .btn {
+    border: 0px;
     border-radius: 2px;
     color: white;
     -webkit-transition: all .15s;
@@ -37,13 +59,19 @@ body {
     background-color: #54aaff;
     color: white;
 }
+
+.btn-search{
+    font-size: 18px;
+    font-weight: 500
+}
+
 .navbar {
     padding: 1rem 1rem
 }
 
 .trans-navbar {
     background-color: #fff;
-    border-bottom: 1px solid #e6e6e6
+    border-bottom: 1px solid #ececec;
     /*box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.07);*/
 }
 .login-button {
@@ -102,19 +130,59 @@ body {
     border-bottom-left-radius: 3rem;
 }
 
+.block-offer-details {
+    border: 1px solid #efefef;
+    border-radius: 5px;
+    background-color: white;
+}
+
+.padding-details {
+    padding: 20px 20px
+}
+.helper {
+    display: inline-block;
+    height: 100%;
+    vertical-align: middle;
+}
+.offer-img {
+    background: #3A6F9A;
+    vertical-align: middle;
+    max-width: 360px;
+}
+.offer-filter-separator{
+    border-right: 1px solid #E0E0E0
+}
+.offer-details-sector {
+    border-bottom: 1px solid #efefef;
+}
+
 .block {
     padding: 20px;
     background-color: #fff;
-    /*border-radius: 4px;*/
-    box-shadow: 0 0px 10px 0 rgba(0, 0, 0, 0.15)
+    border-radius: 4px;
+    border: 1px solid #eaeaea;
 }
-.block-form {
-    margin-bottom: 30px;
-    padding: 50px 80px;
+.block-offer {   
+    padding-right: 10px;
     background-color: #fff;
-    margin: 0px 100px;
-    box-shadow: 0 0px 10px 0 rgba(0, 0, 0, 0.15);
+    border-radius: 4px;
+    border: 1px solid #eaeaea;
 }
+.block-offer-image{
+        
+}
+.block-offer-other {
+    padding: 10px;
+    margin-left: -50px
+    
+}
+    .block-form {
+        margin-bottom: 30px;
+        padding: 50px 80px;
+        background-color: #fff;
+        margin: 0px 100px;
+        box-shadow: 0 0px 10px 0 rgba(0, 0, 0, 0.15);
+    }
 
 .block-auth {
     margin-bottom: 30px;
@@ -132,8 +200,7 @@ body {
 }
 
 .game-line {
-    background: #fbfbfb;
-    box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.10);
+    
     width: 100%;
 }
 .game-menu {
@@ -317,8 +384,17 @@ ul.ul-auth li {
 }
 
 .offer-header {
-    margin-bottom: 20px;
-    font-size: 18px
+    
+    font-size: 18px;
+   
+}
+
+.search-rools{
+    font-size: 14px
+}
+
+.offers-count {
+    font-size: 20px
 }
 
 
@@ -326,9 +402,7 @@ ul.ul-auth li {
     margin-top: 40px;
     padding-bottom: 30px;
     background-color: #222;
-
     height: 119px;
-
 }
 
 .copyright {
@@ -369,4 +443,66 @@ ul.ul-auth li {
     transition: -webkit-transform .5s ease;
     transition: transform .5s ease;
     transition: transform .5s ease, -webkit-transform .5s ease;
+}
+
+.search-bar {
+    margin-bottom: 60px;
+    padding-top: 20px;
+    background: #f7f7f7;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.filter-item{
+    margin-bottom: 10px
+}
+
+.offer-sidebar-buttons li {
+    margin-bottom: 8px;
+}
+
+.offer-sidebar-buttons .contact-button {
+    display: block;
+    padding: 12px 15px 12px 50px;
+    border: 1px solid #efefef;
+    font-weight: 700;
+    border-radius: 4px;
+    position: relative;
+    color: #fff;
+    font-size: 18px;
+    background: #0098d0;
+    word-wrap: break-word;
+    cursor: pointer;
+}
+
+.range-connector {
+    position: absolute;
+    border: 1px solid #d3d3d3;
+    border-right:none;
+    top: 14px;
+    height: 42px;
+    width: 10px;
+    border-bottom-left-radius: 2px;
+    border-top-left-radius: 2px
+}
+.range-group{
+    
+}
+    .range-group:before {
+        content:"";
+        position: absolute;
+        border: 1px solid #d3d3d3;
+        border-right: none;
+        top: 14px;
+        left: 8px;
+        height: 42px;
+        width: 7px;
+        border-bottom-left-radius: 2px;
+        border-top-left-radius: 2px
+    }
+.range-from{
+    margin-bottom: 10px
+}
+
+.range-to{
+
 }

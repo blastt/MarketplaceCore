@@ -1,18 +1,20 @@
-﻿
+﻿@model Marketplace.Web.Models.Offer.CreateOfferViewModel
 @{
     ViewData["Title"] = "Create";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <div class="container">
-    
+
     <form asp-controller="Offer" asp-action="Create" method="post" class="block-form">
         <fieldset>
             <legend class="text-center mb-5">Create Account</legend>
 
             <div class="form-group">
                 <label for="game">Game</label>
-                <input type="text" class="form-control" id="game" name="Game">
+                <select asp-items="@Model.Games" class="form-control" id="game" name="Game">
+                    
+                </select>
             </div>
             <div class="form-group">
                 <label for="header">Header</label>
@@ -31,7 +33,7 @@
             <fieldset class="form-group">
                 <div class="form-check">
                     <label class="form-check-label">
-                        <input class="form-check-input" type="checkbox" value="" checked="" name="PersonalAccount">
+                        <input class="form-check-input" type="checkbox" checked="" id="personalAccount" name="PersonalAccount">
                         Personal Account?
                     </label>
                 </div>
@@ -49,7 +51,7 @@
             <fieldset class="form-group">
                 <div class="form-check">
                     <label class="form-check-label">
-                        <input class="form-check-input" type="checkbox" value="" checked="" name="IsBanned">
+                        <input class="form-check-input" type="checkbox" checked="" id="isBanned" name="IsBanned">
                         Account is Banned?
                     </label>
                 </div>
@@ -65,12 +67,12 @@
                 <label for="price">Price</label>
                 <input type="text" class="form-control" id="price" name="Price">
             </div>
-            
+
 
             <fieldset class="form-group">
                 <div class="form-check">
                     <label class="form-check-label">
-                        <input class="form-check-input" type="checkbox" value="" checked="" name="SellerPaysMiddleman">
+                        <input class="form-check-input" type="checkbox" checked="" id="sellerPaysMiddleman" name="SellerPaysMiddleman">
                         I am ready to pay for Middleman
                     </label>
                 </div>
@@ -80,9 +82,13 @@
             <div class="text-center">
                 <button type="submit" class="btn btn-submit">Submit</button>
             </div>
-            
+
         </fieldset>
     </form>
 </div>
 
-
+<script>
+    function myfunction() {
+        
+    }
+</script>

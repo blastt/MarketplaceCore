@@ -130,6 +130,13 @@ namespace Marketplace.Web.Controllers
             return PartialView("_OfferTable", model);
         }
 
+        //public JsonResult GetFilters(string game)
+        //{
+        //    Game gameObj = gameService.GetGameByValue(game);
+        //    var filters = gameObj.FilterItems;
+        //    return Json("test");
+        //}
+
         [HttpGet]
         public async Task<ActionResult> Create()
         {
@@ -175,6 +182,7 @@ namespace Marketplace.Web.Controllers
         [HttpGet]
         public async Task<IActionResult> Details(int? id)
         {
+            return View();
             if (id != null)
             {
                 Offer offer = await offerService.GetOfferAsync(id.Value, i => i.UserProfile, i => i.Game);

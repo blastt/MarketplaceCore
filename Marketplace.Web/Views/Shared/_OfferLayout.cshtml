@@ -14,11 +14,11 @@
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
 
 </head>
-<body>
+<body class="offer-body">
     <div class="off-canvas-container">
         <div class="off-canvas-content">
             <div class="layout">
-                <nav class="navbar navbar-expand-lg  navbar-light trans-navbar">
+                <nav class="navbar navbar-expand-lg  navbar-light trans-navbar mb-5">
                     <div class="container">
                         <img class="navbar-brand" src="~/images/apple-brands.svg" width="16" alt="Alternate Text" />
 
@@ -39,18 +39,7 @@
                     </div>
 
                 </nav>
-                @*<div class="search-bar">
-                    @await Component.InvokeAsync("GameList")
-                </div>*@
-
-
-
-
-
-                <div class="pt-4">
-
-
-
+                <div>
                     @RenderBody()
                 </div>
 

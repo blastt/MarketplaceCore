@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using Hangfire;
 using Marketplace.Data.Context;
 using Marketplace.Data.Infrastructure;
@@ -10,6 +11,7 @@ using Marketplace.Data.Repositories;
 using Marketplace.Model.Models;
 using Marketplace.Service.Identity;
 using Marketplace.Service.Services;
+using Marketplace.Web.Automapper;
 using Marketplace.Web.Hangfire;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -81,8 +83,8 @@ namespace Marketplace.Web
             //services.AddTransient<IStatusLogService, StatusLogService>();
             //services.AddTransient<IBillingService, BillingService>();
             //services.AddTransient<IUserService, UserService>();
-
-
+            services.AddAutoMapper();
+           
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
             //services.AddTransient<UserManager<User>>(provider => new UserManager<User>());
@@ -103,7 +105,7 @@ namespace Marketplace.Web
                 app.UseExceptionHandler("/Home/Error");
                 app.UseHsts();
             }
-
+            
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseCookiePolicy();
@@ -122,9 +124,16 @@ namespace Marketplace.Web
 
             app.UseMvc(routes =>
             {
+                routes.MapAreaRoute(
+                    name: "MyAdmin",
+                    areaName:"Admin",
+                    template: "Admin/{controller=Home}/{action=Index}/{id?}");
+
                 routes.MapRoute(
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
+
+                
             });
         }
     }
@@ -176,6 +185,14 @@ namespace Marketplace.Web
         private static string GetAuthConnectionStringFromConfig()
         {
             return new DatabaseConfiguration().GetAuthConnectionString();
+        }
+    }
+
+    public static class AutoMapperExtentions
+    {
+        public static void AddAutoMapper(this IServiceCollection services)
+        {
+            AutoMapperConfiguration.Configure();
         }
     }
 

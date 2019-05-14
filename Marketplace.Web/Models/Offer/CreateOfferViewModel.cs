@@ -27,12 +27,9 @@ namespace Marketplace.Web.Models.Offer
         [Display(Name = "Логин продаваемого аккаунта")]
         public string AccountLogin { get; set; }
 
-        [Required]
+        
         [Display(Name = "Являестся ли аккаунт вашим основным (личный)?")]
         public bool PersonalAccount { get; set; }
-
-        [Display(Name = "Колличество игр *")]
-        public int? CountOfGames { get; set; }
 
         [Display(Name = "Дата регистрации аккаунта *")]
         public DateTime? CreatedAccountDate { get; set; }
@@ -47,8 +44,10 @@ namespace Marketplace.Web.Models.Offer
         [Display(Name = "Цена")]
         public decimal Price { get; set; }
 
-        [Required]
+        
         [Display(Name = "Платите ли вы за гаранта?")]
         public bool SellerPaysMiddleman { get; set; }
+
+        public string[] filters { get; set; }
     }
 }
