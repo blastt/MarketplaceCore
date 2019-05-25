@@ -29,7 +29,7 @@ html, body {
 body {
     /*background-color: #f6f6f6;*/
     
-    /*padding-top: 120px;*/
+    padding-top: 100px;
 }
 
 .table{
@@ -199,41 +199,26 @@ body {
     border: 1px solid #efefef;
 }
 
-.game-line {
-    
-    width: 100%;
-}
 .game-menu {
-    font-size: 14px;
-    
-    
     text-align: center;
-    
+    width: 100%;
     padding: 0;
     margin: 0;
     margin-bottom: 60px;
-    height: 40px;
+    height: 60px;
     position: relative;
+    
 }
 
     .game-menu ul {
-        
-        display: -webkit-box;
-        display: -ms-flexbox;
-        display: flex;
-        -webkit-box-flex: 0;
-        -ms-flex: 0 0 100%;
-        flex: 0 0 100%;
-        -webkit-box-pack: justify;
-        -ms-flex-pack: justify;
-        justify-content: space-between;
+        background: #fff;
         list-style: none;
         padding: 0 20px;
         z-index: 1;
         margin: 0;
-        height: 40px;
-        
-        /*border-radius: 10px*/
+        height: 60px;
+        border-radius: 10px;
+        border: 1px solid #eaeaea
     }
 
 
@@ -248,8 +233,8 @@ body {
                 padding: 0px 15px;
                 text-decoration: none;
                 float: left;
-                height: 40px;
-                line-height: 40px;
+                height: 60px;
+                line-height: 60px;
             }
 
             .game-menu ul li:hover {
@@ -273,9 +258,8 @@ body {
             width: 100%;
             z-index: 200;
             position: absolute;
-            top: 40px;
+            top: 60px;
             left: 0px;
-            
         }
 
             .game-menu ul ul li {
@@ -506,3 +490,24 @@ ul.ul-auth li {
 .range-to{
 
 }
+
+.price-from{
+
+}
+
+.price-to{
+
+}
+
+    .price-to:before {
+        content: "";
+        position: absolute;
+        border-top: 1px solid #d3d3d3;
+
+        top: 14px;
+        left: -5px;
+        height: 42px;
+        width: 10px;
+        border-bottom-left-radius: 2px;
+        border-top-left-radius: 2px
+    }
