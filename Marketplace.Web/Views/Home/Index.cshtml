@@ -4,11 +4,64 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
+<<<<<<< Updated upstream
+=======
+<style>
+    .multiselect {
+        width: 100%;
+
+    }
+
+    .selectBox {
+        position: relative;
+
+    }
+
+        .selectBox select {
+            width: 100%;
+            
+        }
+
+    .overSelect {
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 0;
+        bottom: 0;
+    }
+
+    .checkBoxContainer{
+
+        width: calc(100% - 72px);
+        position:absolute;
+        z-index: 99;
+        background-color:white;
+    }
+
+    #checkboxes {
+        display: none;
+        border: 1px #dadada solid;
+    }
+
+        #checkboxes label {
+
+            padding:0;
+            display: block;
+            padding-left: 10px;
+            text-align: left;
+        }
+
+        #checkboxes label:hover {
+            background-color: #1e90ff;
+        }
+</style>
+
+>>>>>>> Stashed changes
 <div>
     <div class="container">
-        
+
         <div class="row">
-            
+
             <div class="col-lg-12">
 
                 <div class="row">
@@ -52,6 +105,7 @@
                                 </div>
                             </div>
                             <div class="form-group">
+<<<<<<< Updated upstream
                                 <select class="custom-select">
                                     <option selected="">Open this select menu</option>
                                     <option value="1">One</option>
@@ -67,8 +121,46 @@
                                     <option value="2">Two</option>
                                     <option value="3">Three</option>
                                 </select>
+=======
+                                <label class="col-form-label" for="inputDefault">Кто платит за гаранта?</label>
 
+                                <div class="form-check form-control-sm">
+                                    <label class="form-check-label">
+                                        <input type="radio" class="form-check-input" name="optionsRadios" id="optionsRadios1" value="option1" checked="">
+                                        Не важно
+                                    </label>
+                                </div>
+                                <div class="form-check form-control-sm">
+                                    <label class="form-check-label">
+                                        <input type="radio" class="form-check-input" name="optionsRadios" id="optionsRadios1" value="option1" checked="">
+                                        Продавец
+                                    </label>
+                                </div>
+                                <div class="form-check form-control-sm">
+                                    <label class="form-check-label">
+                                        <input type="radio" class="form-check-input" name="optionsRadios" id="optionsRadios1" value="option1" checked="">
+                                        Покупатель
+                                    </label>
+                                </div>
+                                <div class="form-check form-control-sm">
+                                    <label class="form-check-label">
+                                        <input type="radio" class="form-check-input" name="optionsRadios" id="optionsRadios1" value="option1" checked="">
+                                        50/50
+                                    </label>
+                                </div>
                             </div>
+
+                            @*<div class="form-group">
+                                    <select class="custom-select">
+                                        <option selected="">Ранг 2х2</option>
+                                        <option value="1">One</option>
+                                        <option value="2">Two</option>
+                                        <option value="3">Three</option>
+                                    </select>
+
+                                </div>*@
+>>>>>>> Stashed changes
+
                             <div class="form-group">
                                 <select class="custom-select">
                                     <option selected="">Ранг 5х5</option>
@@ -76,21 +168,46 @@
                                     <option value="2">Two</option>
                                     <option value="3">Three</option>
                                 </select>
-
                             </div>
-                            
+
+                            <form class="form-group">
+                                <div class="multiselect">
+                                    <div class="selectBox" onclick="showCheckboxes()">
+                                        <select class="custom-select">
+                                            <option>Select an option</option>
+                                        </select>
+                                        <div class="overSelect"></div>
+                                    </div>
+                                    <div class="checkBoxContainer">
+                                        <div id="checkboxes">
+                                            <label for="one">
+                                                <input type="checkbox" id="one" /> First checkbox
+                                            </label>
+                                            <label for="two">
+                                                <input type="checkbox" id="two" /> Second checkbox
+                                            </label>
+                                            <label for="three">
+                                                <input type="checkbox" id="three" /> Third checkbox
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+
+
+
                             <div class="form-group">
                                 <div class="row">
-                                    
+
                                     <div class="col-lg-12">
                                         <div class="range-group">
                                             <input class="form-control form-control-sm range-from" type="text" placeholder="Faceit level from" id="inputSmall">
                                             <input class="form-control form-control-sm range-to" type="text" placeholder="Faceit level to" id="inputSmall">
                                         </div>
-                                        
+
                                     </div>
                                 </div>
-                                
+
                             </div>
                             <div class="">
                                 <div class="row">
@@ -110,17 +227,23 @@
                             <div class="row">
                                 <div class="col-lg-3">
                                     <div class="block-offer-image">
-                                        <a><img src="~/images/300.png" style="background-color:#f7f7f7; width: 150px; height: 130px" /></a>
-
+                                        <a>
+                                            <img src="~/images/300.png" style="        background-color: #f7f7f7;
+        width: 150px;
+        height: 130px" />
+                                        </a>
                                     </div>
                                 </div>
                                 <div class="col-lg-9">
                                     <div class="block-offer-other">
                                         <div class="row">
                                             <div class="col-lg-9"><a class="offer-header" href="#">Buy dota 2 account Lem 2x2</a></div>
-                                            <div class="col-lg-3 text-right"><span style="font-weight: 500; font-size: 24px;" href="#">$ 120</span></div>
+                                            <div class="col-lg-3 text-right">
+                                                <span style="        font-weight: 500;
+        font-size: 24px;" href="#">$ 120</span>
+                                            </div>
                                         </div>
-                                        <div class="row" style="font-size: 14px">
+                                        <div class="row" style="        font-size: 14px">
                                             <div class="col-lg-8">
                                                 <div><a href="/u/admin">admin</a> </div>
                                                 <div>Rating: 12</div>
@@ -131,7 +254,7 @@
                                             </div>
 
                                         </div>
-                                        <div class="row mt-2" style="font-size: 14px">
+                                        <div class="row mt-2" style="        font-size: 14px">
                                             <div class="col-lg-5">
                                                 <span class="mr-2"><i class="fas fa-history"></i> 17 April 2019</span>
                                                 <span><i class="fas fa-gamepad"></i> DOTA 2</span>
@@ -145,8 +268,6 @@
                                 </div>
                             </div>
 
-
-
                         </div>
 
 
@@ -155,7 +276,11 @@
                             <div class="row">
                                 <div class="col-lg-3">
                                     <div class="block-offer-image">
-                                        <a><img src="~/images/300.png" style="background-color:#f7f7f7; width: 150px; height: 130px" /></a>
+                                        <a>
+                                            <img src="~/images/300.png" style="        background-color: #f7f7f7;
+        width: 150px;
+        height: 130px" />
+                                        </a>
 
                                     </div>
                                 </div>
@@ -163,9 +288,12 @@
                                     <div class="block-offer-other">
                                         <div class="row">
                                             <div class="col-lg-9"><a class="offer-header" href="#">Buy dota 2 account Lem 2x2</a></div>
-                                            <div class="col-lg-3 text-right"><span style="font-weight: 500; font-size: 22px;" href="#">$ 120</span></div>
+                                            <div class="col-lg-3 text-right">
+                                                <span style="        font-weight: 500;
+        font-size: 22px;" href="#">$ 120</span>
+                                            </div>
                                         </div>
-                                        <div class="row" style="font-size: 14px">
+                                        <div class="row" style="        font-size: 14px">
                                             <div class="col-lg-5">
                                                 <div><a href="/u/admin">admin</a> </div>
                                                 <div>Rating: 12</div>
@@ -173,33 +301,41 @@
                                             </div>
 
                                         </div>
-                                        <div class="row" style="font-size: 14px">
+                                        <div class="row" style="        font-size: 14px">
                                             <div class="col-lg-5 pt-2">
                                                 <span class="mr-2"><i class="fas fa-history"></i> 17 April 2019</span>
                                                 <span><i class="fas fa-gamepad"></i> DOTA 2</span>
                                             </div>
 
-                                            <div class="col-lg-7 text-right" style="font-size: 22px">
+                                            <div class="col-lg-7 text-right" style="        font-size: 22px">
                                                 <i class="far fa-star"></i>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-
-
-
                         </div>
-
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    
-    
 </div>
 
 <script>
     $('.selectpicker').selectpicker();
+</script>
+<script>
+    var expanded = false;
+
+    function showCheckboxes() {
+        var checkboxes = document.getElementById("checkboxes");
+        if (!expanded) {
+            checkboxes.style.display = "block";
+            expanded = true;
+        } else {
+            checkboxes.style.display = "none";
+            expanded = false;
+        }
+    }
 </script>
