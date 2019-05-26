@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Marketplace.Service.Services;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,9 +9,10 @@ namespace Marketplace.Web.Views.GameList.Components
 {
     public class GameListViewComponent : ViewComponent
     {
-        public GameListViewComponent()
+        private readonly IGameService gameService;
+        public GameListViewComponent(IGameService gameService)
         {
-
+            this.gameService = gameService;
         }
         public IViewComponentResult Invoke()
         {
@@ -23,17 +25,17 @@ namespace Marketplace.Web.Views.GameList.Components
                 'Y', 'Z'
             };
 
-            //var games = gameService.GetAllGames();
-            //var sortedGames = games.OrderBy(g => g.Name);
+            var games = gameService.GetAllGames();
+            var sortedGames = games.OrderBy(g => g.Name);
 
 
             foreach (var letter in letters)
             {
                 var gamesInLetter = new List<KeyValuePair<string, string>>();
-                //foreach (var game in sortedGames.Where(g => g.Name.FirstOrDefault() == letter))
-                //{
-                //    gamesInLetter.Add(new KeyValuePair<string, string>(game.Value, game.Name));
-                //}
+                foreach (var game in sortedGames.Where(g => g.Name.FirstOrDefault() == letter))
+                {
+                    gamesInLetter.Add(new KeyValuePair<string, string>(game.Value, game.Name));
+                }
                 gameNames.Add(letter, gamesInLetter);
             }
             return View("_GameList", gameNames);

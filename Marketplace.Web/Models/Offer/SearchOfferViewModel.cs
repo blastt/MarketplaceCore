@@ -17,6 +17,16 @@ namespace Marketplace.Web.Models.Offer
         public bool PersonalAccount { get; set; }
         public bool IsBanned { get; set; }
 
-        public int Page { get; set; } = 1;
+        public int Page { get; set; }
+
+        public SearchOfferViewModel()
+        {
+            Page = 1;            
+        }
+        public SearchOfferViewModel(int page, string game)
+        {
+            Page = page;
+            Game = game;
+        }
     }
 }

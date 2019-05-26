@@ -20,7 +20,7 @@
                             <ul class="game-list">
                                 @foreach (var game in item.Value)
                                 {
-                                    <li><a href="@Url.Action("List","Offer", new { area = "", game = game.Key })">@game.Value</a></li>
+                                    <li><a href="@Url.Action("Index","Home", new { area = "", Game = game.Key })">@game.Value</a></li>
                                 }
 
                             </ul>

@@ -161,6 +161,7 @@ namespace Marketplace.Web.Controllers
             int currentUserId = await userService.GetCurrentUserId(HttpContext.User);
             Game game = gameService.GetGameByValue(model.Game);
             UserProfile user = await userProfileService.GetUserProfileByIdAsync(currentUserId);
+            var errors = ModelState.Values.SelectMany(v => v.Errors);
             if (ModelState.IsValid && game != null && user != null)
             {
                 var offer = Mapper.Map<CreateOfferViewModel, Offer>(model);
