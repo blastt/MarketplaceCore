@@ -1,0 +1,35 @@
+﻿@model Marketplace.Web.Areas.User.Models.Dialog.DialogListViewModel
+
+@{
+    ViewBag.Title = "List";
+    Layout = "~/Areas/User/Views/Shared/_UserLayout.cshtml";
+}
+<div class="page-info">
+    <h2>Сообщения</h2>
+    <p class="lead">Здесь отображается информация по входящим и исходящим сообщениям</p>
+</div>
+@{await Html.RenderPartialAsync("_Menu"); }
+@{await Html.RenderPartialAsync("_DialogMenu", Model); }
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">First</th>
+            <th scope="col">Last</th>
+            <th scope="col">Handle</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var offer in Model.Dialogs)
+        {
+            <tr>
+                <th scope="row">1</th>
+                <td>@offer.Companion.Name</td>
+                <td>@offer.CountOfNewMessages</td>
+                <td>@offer.</td>
+            </tr>
+        }
+
+    </tbody>
+</table>
+

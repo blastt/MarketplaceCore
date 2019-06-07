@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Marketplace.Web.Hangfire
 {
-    public static class Hangfire
+    public static class MarketplaceHangfire
     {
         public static string SetOrderCloseJob(int orderId, TimeSpan timeSpan)
         {

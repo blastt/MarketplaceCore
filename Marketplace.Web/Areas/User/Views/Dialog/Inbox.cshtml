@@ -1,0 +1,104 @@
+﻿@model Marketplace.Web.Areas.User.Models.Dialog.DialogListViewModel
+@{
+    ViewBag.Title = "Inbox";
+    Layout = "~/Areas/User/Views/Shared/_UserLayout.cshtml";
+}
+
+
+<div class="page-info">
+    <h2>Сообщения</h2>
+    <p class="lead">Здесь отображается информация по входящим и исходящим сообщениям</p>
+</div>
+<div class="card-custom-account">
+    @{await Html.RenderPartialAsync("_Menu"); }
+    @{await Html.RenderPartialAsync("_DialogMenu", Model); }
+    <table class="table align-middle" id="dialogs-table">
+        <thead>
+            <tr>
+                <th>@Html.ActionLink("Отправитель", "Inbox", "Message", new { sortOrder = ViewData["NameSortParm"], currentFilter = ViewData["SearchString"] }, null)</th>
+                <th>Сообщение</th>
+                <th class="date-table">@Html.ActionLink("Дата", "Inbox", "Message", new { sortOrder = ViewData["DateSortParm"], currentFilter = ViewData["SearchString"] }, null)</th>
+            </tr>
+        </thead>
+
+        @foreach (var dialog in Model.Dialogs)
+        {
+
+            var clsBold = "";
+            if (dialog.CountOfNewMessages != 0)
+            {
+                clsBold = "warning-row";
+            }
+
+            <tr data-href="@Url.Action("Details","Dialog", new { id = dialog.Id })" id="message-row-@dialog.Id" class="@clsBold">
+
+                <td class="clickable sender-table align-middle position-relative" id="dialog-name">
+                   
+                        
+                            <img class="rounded-circle avatar-48 mr-2" src="~/Content/Images/Avatars/@dialog.Companion.Avatar32" alt="Alternate Text" />
+                            
+                        
+                        <span id="div-message-counter">
+                            
+                            @dialog.Companion.Name
+                            
+                                @if (dialog.CountOfNewMessages != 0)
+                                {
+                            <span class="dialog-message-counter">
+                                @dialog.CountOfNewMessages
+                            </span>
+                                }
+                            
+                            
+                        </span>
+                    
+
+                    
+                    
+                </td>
+                <td class="clickable" id="dialog-text" style=" max-width: 100px;overflow: hidden;text-overflow: ellipsis; white-space: nowrap; "><span id="message-text" class="wqe" style="">@dialog.Messages.LastOrDefault().MessageBody</span></td>
+
+                <td class="clickable date-table" id="dialog-date" title="@dialog.Messages.LastOrDefault().CreatedDate.ToShortTimeString()">@dialog.Messages.LastOrDefault().CreatedDate.ToShortDateString()</td>
+            </tr>
+
+        }
+    </table>
+</div>
+
+<table style="display:none">
+    <tr id="dialog-block" data-href="#" style="display:none" class="warning-row">
+        <td class="clickable sender-table" id="dialog-name">
+            <div class="row">
+                <div class="col-sm-2">
+                    <img id="dialog-block-img" class="rounded-circle avatar-48 mr-2" src="" alt="Alternate Text" />
+
+                </div>
+                <div class="col-sm-10" id="div-message-counter">
+                    <span id="dialog-companion-name">
+                        Name
+                    </span>
+                    
+
+                    <span class="dialog-message-counter">
+                        CountOfNewMessages
+                    </span>
+                    
+
+
+                </div>
+            </div>
+        </td>
+        <td class="clickable" id="dialog-text" style=" max-width: 100px;overflow: hidden;text-overflow: ellipsis; white-space: nowrap; "><span id="message-text" class="wqe" style="">MessageBody</span></td>
+        <td class="clickable date-table" id="dialog-date" title="date">date</td>
+    </tr>
+</table>
+
+@section scripts
+{
+    <script>
+        $('tr[data-href]').on("click", function () {
+            document.location = $(this).data('href');
+        });
+    </script>
+
+}

@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using Hangfire;
+using Hangfire.SqlServer;
 using Marketplace.Data.Context;
 using Marketplace.Data.Infrastructure;
 using Marketplace.Data.Repositories;
@@ -13,6 +14,7 @@ using Marketplace.Service.Identity;
 using Marketplace.Service.Services;
 using Marketplace.Web.Automapper;
 using Marketplace.Web.Hangfire;
+using Marketplace.Web.Hangfire.Jobs;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -38,7 +40,23 @@ namespace Marketplace.Web
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
-            
+            services.Configure<IdentityOptions>(options =>
+            {
+                // Password settings.
+                options.Password.RequireDigit = true;
+                options.Password.RequireLowercase = true;
+                options.Password.RequireNonAlphanumeric = true;
+                options.Password.RequireUppercase = true;
+                options.Password.RequiredLength = 6;
+                options.Password.RequiredUniqueChars = 1;
+
+                // Lockout settings.
+                options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(60);
+                options.Lockout.MaxFailedAccessAttempts = 5;
+                options.Lockout.AllowedForNewUsers = true;
+
+                options.User.RequireUniqueEmail = false;
+            });
 
             services.Configure<CookiePolicyOptions>(options =>
             {
@@ -75,14 +93,34 @@ namespace Marketplace.Web
             services.AddTransient<IGameService, GameService>();
             services.AddTransient<IUserProfileService, UserProfileService>();
             services.AddTransient<IFeedbackService, FeedbackService>();
-            //services.AddTransient<IMessageService, MessageService>();
+            services.AddTransient<IMessageService, MessageService>();
             //services.AddTransient<IOrderStatusService, OrderStatusService>();
-            //services.AddTransient<IDialogService, DialogService>();
+            services.AddTransient<IDialogService, DialogService>();
             //services.AddTransient<IBillingService, BillingService>();
             //services.AddTransient<ITransactionService, TransactionService>();
             //services.AddTransient<IStatusLogService, StatusLogService>();
             //services.AddTransient<IBillingService, BillingService>();
             //services.AddTransient<IUserService, UserService>();
+            services.AddScoped<IConfirmOrderJob, ConfirmOrderJob>();
+            services.AddScoped<IDeactivateOfferJob, DeactivateOfferJob>();
+            services.AddScoped<ILeaveFeedbackJob, LeaveFeedbackJob>();
+            services.AddScoped<IOrderCloseJob, OrderCloseJob>();
+            services.AddScoped<ISendEmailAccountDataJob, SendEmailAccountDataJob>();
+            services.AddScoped<ISendEmailChangeStatusJob, SendEmailChangeStatusJob>();
+
+            services.AddHangfire(configuration => 
+        {
+            var options = new SqlServerStorageOptions
+            {
+                PrepareSchemaIfNecessary = true,
+                QueuePollInterval = TimeSpan.FromMinutes(5)
+            };
+            configuration.UseSqlServerStorage(ApplicationBuilderExtentions.GetDataConnectionStringFromConfig(), options);
+        });
+
+            // Add the processing server as IHostedService
+            
+
             services.AddAutoMapper();
            
 
@@ -106,6 +144,7 @@ namespace Marketplace.Web
                 app.UseHsts();
             }
             
+
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseCookiePolicy();
@@ -128,6 +167,11 @@ namespace Marketplace.Web
                     name: "MyAdmin",
                     areaName:"Admin",
                     template: "Admin/{controller=Home}/{action=Index}/{id?}");
+
+                routes.MapAreaRoute(
+                    name: "MyUser",
+                    areaName: "User",
+                    template: "User/{controller=Home}/{action=Index}/{id?}");
 
                 routes.MapRoute(
                     name: "default",
@@ -170,19 +214,14 @@ namespace Marketplace.Web
 
     public static class ApplicationBuilderExtentions
     {
-        public static void ConfigureHangfire(this IApplicationBuilder app,
-            string dataConnectionString = null, string authConnectionString = null)
-        {
-            app.UseHangfireServer();
-            app.UseHangfireDashboard("/hangfire");
-        }
+        
 
-        private static string GetDataConnectionStringFromConfig()
+        public static string GetDataConnectionStringFromConfig()
         {
             return new DatabaseConfiguration().GetDataConnectionString();
         }
 
-        private static string GetAuthConnectionStringFromConfig()
+        public static string GetAuthConnectionStringFromConfig()
         {
             return new DatabaseConfiguration().GetAuthConnectionString();
         }

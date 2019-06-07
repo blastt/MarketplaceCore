@@ -2,6 +2,10 @@
     background: #f7f7f7;
     
 }
+
+.user-body {
+    background-color: #f7f7f7;
+}
 li {
     list-style: none;
     
@@ -128,6 +132,9 @@ body {
     height: 120%;
     transform: rotate(-7deg);
     border-bottom-left-radius: 3rem;
+}
+.block {
+    border: 1px solid #efefef;
 }
 
 .block-offer-details {
@@ -511,3 +518,98 @@ ul.ul-auth li {
         border-bottom-left-radius: 2px;
         border-top-left-radius: 2px
     }
+
+ul.account-list li {
+    display: inline; /* Отображать как строчный элемент */
+    margin-right: 5px; /* Отступ слева */
+    border: 1px solid #000; /* Рамка вокруг текста */
+    padding: 3px; /* Поля вокруг текста */
+}
+
+ul.account-inner-list {
+    padding-top: 15px;
+    padding-left: 10px;
+}
+
+    ul.account-inner-list li {
+        display: inline; /* Отображать как строчный элемент */
+        margin-right: 5px; /* Отступ слева */
+        padding: 1px; /* Поля вокруг текста */
+    }
+
+        ul.account-inner-list li a {
+            color: #333;
+            font-size: 14px;
+        }
+
+            ul.account-inner-list li a.active {
+                font-weight: 700
+            }
+
+.ul-details {
+    padding-left: 0px;
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    border-radius: 10px 10px 0px 0px;
+    -webkit-box-align: center;
+    -webkit-align-items: center;
+    -ms-flex-align: center;
+    align-items: center;
+    -webkit-box-pack: center;
+    display: flex;
+}
+
+ul.ul-details li {
+    width: 50%;
+    display: inline;
+    background-color: #eaeaea;
+    position: relative;
+}
+
+    ul.ul-details li:first-child {
+        border-top-left-radius: 10px;
+    }
+
+    ul.ul-details li:last-child {
+        border-top-right-radius: 10px;
+    }
+
+
+
+
+
+    ul.ul-details li a {
+        padding: 15px 20px;
+        font-size: 18px;
+        font-weight: 700;
+        color: #adadad;
+        display: block;
+        text-decoration: none
+    }
+
+
+
+    ul.ul-details li.active {
+        color: #70848f;
+        background-color: #fff
+    }
+
+        ul.ul-details li.active a {
+            color: #737373;
+        }
+
+.settings-container {
+    padding: 20px 20px
+}
+
+.card-custom-account {
+    background-color: white;
+    padding: 0px 10px;
+    border-radius: 10px;
+    box-shadow: 0 0px 5px 0 rgba(0, 0, 0, 0.02);
+}
+.settings-container {
+    padding: 20px 20px
+}

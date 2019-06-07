@@ -1,6 +1,17 @@
 ﻿@model Marketplace.Web.Models.Offer.OfferListViewModel
-
-    <span class="offers-count">Найдено @Model.Offers.Count() предложений</span>
+    <div class="row">
+        <div class="col-lg-4 text-left">
+            <span class="offers-count">Найдено @Model.Offers.Count() предложений</span>
+        </div>
+        <div class="col-lg-4 text-right">
+            <span class="offers-count">Сортировать </span>
+        </div>
+        <div class="col-lg-4 text-right">
+            @Html.DropDownListFor(m => m.SearchInfo.SortBy, Model.SortBy, new { @class="custom-select", @onchange="submitSearchOfferForm()", @id="select-sort-list" })
+         
+        </div>
+    </div>
+    
 
 @foreach (var offer in Model.Offers)
 {
@@ -18,7 +29,7 @@
             <div class="col-lg-9">
                 <div class="block-offer-other">
                     <div class="row">
-                        <div class="col-lg-9"><a class="offer-header" href="#">@offer.Header</a></div>
+                        <div class="col-lg-9"><a class="offer-header" href="@Url.Action("Details","Offer", new { id = offer.Id })">@offer.Header</a></div>
                         <div class="col-lg-3 text-right">
                             <span style="font-weight: 500;font-size: 24px;" href="#">$ @offer.Price</span>
                         </div>

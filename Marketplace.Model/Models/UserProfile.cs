@@ -11,6 +11,7 @@ namespace Marketplace.Model.Models
         public string Avatar64 { get; set; }
         public string Avatar96 { get; set; }
 
+        public string UserName { get; set; }
         public int PositiveFeedbackCount
         {
             set; get;

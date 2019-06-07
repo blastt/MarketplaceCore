@@ -92,6 +92,7 @@ namespace Marketplace.Web.Controllers
                 string urlPath32 = "Default32.png";
                 string urlPath48 = "Default48.png";
                 string urlPath96 = "Default96.png";
+                userProfile.UserName = user.UserName;
                 userProfile.Id = user.Id;
                 userProfile.Avatar32 = urlPath32;
                 userProfile.Avatar64 = urlPath48;

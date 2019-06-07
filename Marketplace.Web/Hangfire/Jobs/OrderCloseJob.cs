@@ -6,7 +6,11 @@ using System.Threading.Tasks;
 
 namespace Marketplace.Web.Hangfire.Jobs
 {
-    public class OrderCloseJob
+    public interface IOrderCloseJob
+    {
+        void Do(int orderId);
+    }
+    public class OrderCloseJob : IOrderCloseJob
     {
         private readonly IOrderService orderService;
 

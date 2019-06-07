@@ -6,7 +6,11 @@ using System.Threading.Tasks;
 
 namespace Marketplace.Web.Hangfire.Jobs
 {
-    public class ConfirmOrderJob
+    public interface IConfirmOrderJob
+    {
+        Task Do(int orderId);
+    }
+    public class ConfirmOrderJob : IConfirmOrderJob
     {
         private readonly IOrderService orderService;
 
@@ -25,7 +29,7 @@ namespace Marketplace.Web.Hangfire.Jobs
                 var result = orderService.ConfirmOrder(orderId, order.BuyerId.Value);
                 if (result)
                 {
-                    order.JobId = Hangfire.SetLeaveFeedbackJob(order.SellerId, order.BuyerId.Value, order.Id, TimeSpan.FromDays(15));
+                    order.JobId = MarketplaceHangfire.SetLeaveFeedbackJob(order.SellerId, order.BuyerId.Value, order.Id, TimeSpan.FromDays(15));
                 }
                 await orderService.SaveOrderAsync();
             }

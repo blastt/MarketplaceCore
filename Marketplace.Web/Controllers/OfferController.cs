@@ -57,7 +57,7 @@ namespace Marketplace.Web.Controllers
         {
             Sort sort = (Sort)Enum.Parse(typeof(Sort), search.SortBy, true);
 
-
+            
             List<Offer> offers = await offerService.GetOffersAsync(o => o.Game.Value == search.Game && o.State == OfferState.active, i => i.Game, i => i.UserProfile);
 
             if (search.PersonalAccount)
@@ -172,7 +172,7 @@ namespace Marketplace.Web.Controllers
                 offerService.SaveOffer();
                 
                 if (Request.Path != null)
-                    offer.JobId = Hangfire.Hangfire.SetDeactivateOfferJob(offer.Id,
+                    offer.JobId = Hangfire.MarketplaceHangfire.SetDeactivateOfferJob(offer.Id,
                         Url.Action("Activate", "Offer", new { id = offer.Id }, Request.Scheme), TimeSpan.FromDays(30));
                 offerService.SaveOffer();
             }
@@ -183,18 +183,15 @@ namespace Marketplace.Web.Controllers
         [HttpGet]
         public async Task<IActionResult> Details(int? id)
         {
-            return View();
             if (id != null)
             {
                 Offer offer = await offerService.GetOfferAsync(id.Value, i => i.UserProfile, i => i.Game);
                 if (offer != null)
                 {
                     var model = Mapper.Map<Offer, DetailsOfferViewModel>(offer);
-
                     return View(model);
                 }
             }
-            return View();
             return NotFound();
         }
     }

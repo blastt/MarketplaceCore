@@ -1,4 +1,4 @@
-﻿
+﻿@model Marketplace.Web.Models.Offer.DetailsOfferViewModel
 @{
     ViewData["Title"] = "Details";
     Layout = "~/Views/Shared/_OfferLayout.cshtml";
@@ -28,15 +28,15 @@
                                             <table class="table" style="font-size: 14px">
                                                 <tr>
                                                     <td><i class="fas fa-link mr-2"></i> Ссылка</td>
-                                                    <td class="text-right font-weight-bold">google.com</td>
+                                                    <td class="text-right font-weight-bold">@Model.Url</td>
                                                 </tr>
                                                 <tr>
                                                     <td><i class="fas fa-gamepad mr-2"></i> Игра</td>
-                                                    <td class="text-right font-weight-bold">DOTA 2</td>
+                                                    <td class="text-right font-weight-bold">@Model.Game</td>
                                                 </tr>
                                                 <tr>
-                                                    <td><i class="fas fa-calendar-alt mr-2"></i> Дата создания</td>
-                                                    <td class="text-right align-middle font-weight-bold">12.12.2017</td>
+                                                    <td><i class="fas fa-calendar-alt mr-2"></i> Дата создания аккаунта</td>
+                                                    <td class="text-right align-middle font-weight-bold">@Model.CreatedAccountDate</td>
                                                 </tr>
 
                                             </table>
@@ -44,15 +44,15 @@
 
                                                 <tr>
                                                     <td>Без бана</td>
-                                                    <td class="text-right">YEs</td>
+                                                    <td class="text-right">@(!Model.IsBanned)</td>
                                                 </tr>
                                                 <tr>
                                                     <td>Личный аккаунт</td>
-                                                    <td class="text-right">Yes</td>
+                                                    <td class="text-right">@Model.PersonalAccount</td>
                                                 </tr>
                                                 <tr>
                                                     <td>Продавец платит за гаранта</td>
-                                                    <td class="text-right">Yes</td>
+                                                    <td class="text-right">@Model.SellerPaysMiddleman</td>
                                                 </tr>
                                             </table>
                                         </div>

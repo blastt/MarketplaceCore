@@ -8,7 +8,11 @@ using System.Threading.Tasks;
 
 namespace Marketplace.Web.Hangfire.Jobs
 {
-    public class DeactivateOfferJob
+    public interface IDeactivateOfferJob
+    {
+        Task Do(int itemId, string callbackUrl);
+    }
+    public class DeactivateOfferJob : IDeactivateOfferJob
     {
         private readonly IOfferService offerService;
         private readonly IEmailSender emailSender;

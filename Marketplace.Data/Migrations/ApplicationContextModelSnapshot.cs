@@ -15,7 +15,7 @@ namespace Marketplace.Data.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "2.1.4-rtm-31024")
+                .HasAnnotation("ProductVersion", "2.1.8-servicing-32085")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
@@ -115,6 +115,50 @@ namespace Marketplace.Data.Migrations
                     b.HasIndex("UserToId");
 
                     b.ToTable("Feedbacks");
+                });
+
+            modelBuilder.Entity("Marketplace.Model.Models.Filter", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime>("CreatedDate");
+
+                    b.Property<string>("Name");
+
+                    b.Property<int>("Types");
+
+                    b.Property<string>("Value");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Filter");
+                });
+
+            modelBuilder.Entity("Marketplace.Model.Models.FilterItem", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime>("CreatedDate");
+
+                    b.Property<int?>("FilterId");
+
+                    b.Property<int?>("GameId");
+
+                    b.Property<string>("Name");
+
+                    b.Property<string>("Value");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("FilterId");
+
+                    b.HasIndex("GameId");
+
+                    b.ToTable("FilterItem");
                 });
 
             modelBuilder.Entity("Marketplace.Model.Models.Game", b =>
@@ -506,6 +550,8 @@ namespace Marketplace.Data.Migrations
 
                     b.Property<int?>("SuccessOrderRate");
 
+                    b.Property<string>("UserName");
+
                     b.HasKey("Id");
 
                     b.ToTable("UserProfiles");
@@ -666,6 +712,17 @@ namespace Marketplace.Data.Migrations
                         .WithMany("FeedbacksMy")
                         .HasForeignKey("UserToId")
                         .OnDelete(DeleteBehavior.Restrict);
+                });
+
+            modelBuilder.Entity("Marketplace.Model.Models.FilterItem", b =>
+                {
+                    b.HasOne("Marketplace.Model.Models.Filter", "Filter")
+                        .WithMany("FilterItems")
+                        .HasForeignKey("FilterId");
+
+                    b.HasOne("Marketplace.Model.Models.Game")
+                        .WithMany("FilterItems")
+                        .HasForeignKey("GameId");
                 });
 
             modelBuilder.Entity("Marketplace.Model.Models.Message", b =>

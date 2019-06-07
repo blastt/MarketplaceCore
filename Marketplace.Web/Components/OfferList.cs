@@ -21,6 +21,37 @@ namespace Marketplace.Web.Components
         {
             var model = new OfferListViewModel();
             var offers = await offerService.GetAllOffersAsync(i => i.UserProfile.User, i => i.Game);
+            Sort sort;
+            Enum.TryParse(searchInfo.SortBy, out sort);
+            switch (sort)
+            {
+                case Sort.BestSeller:
+                    offers = offers.OrderBy(o => o.UserProfile.Rating).ToList();
+                    break;
+                case Sort.Newest:
+                    offers = offers.OrderBy(o => o.CreatedDate).ToList();
+                    break;
+                case Sort.PriceAsc:
+                    offers = offers.OrderBy(o => o.Price).ToList();
+                    break;
+                case Sort.PriceDesc:
+                    offers = offers.OrderByDescending(o => o.Price).ToList();
+                    break;
+                default:
+                    offers = offers.OrderBy(o => o.UserProfile.Rating).ToList();
+                    break;
+            }
+            foreach (var sortItem in model.SortBy)
+            {
+                if (sortItem.Value == searchInfo.SortBy)
+                {
+                    sortItem.Selected = true;
+                }
+                else
+                {
+                    sortItem.Selected = false;
+                }
+            }
             if (!string.IsNullOrWhiteSpace(searchInfo.Game))
                 offers = offers.Where(o => o.Game.Value == searchInfo.Game).ToList();            
             var offersViewModel = Mapper.Map<IEnumerable<Offer>, IEnumerable<OfferViewModel>>(offers);

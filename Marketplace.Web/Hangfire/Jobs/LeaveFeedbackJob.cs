@@ -6,7 +6,11 @@ using Marketplace.Service.Services;
 
 namespace Marketplace.Web.Hangfire.Jobs
 {
-    public class LeaveFeedbackJob
+    public interface ILeaveFeedbackJob
+    {
+        void Do(int sellerId, int buyerId, int orderId);
+    }
+    public class LeaveFeedbackJob : ILeaveFeedbackJob
     {
         private readonly IFeedbackService feedbackService;
 
