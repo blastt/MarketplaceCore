@@ -1,0 +1,40 @@
+﻿@model Marketplace.Web.Areas.Admin.Models.FilterRange.CreateFilterRangeViewModel
+
+
+@{
+    ViewData["Title"] = "Create";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+@await Html.PartialAsync("_CreateFilterMenuPartial")
+<h2>Create Filter range</h2>
+
+<form asp-controller="FilterRange" asp-action="Create" method="post">
+    <div class="form-group">
+        <label asp-for="Game" class="control-label"></label>
+        <input name="Game" class="form-control" />
+        <span asp-validation-for="Game" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Name" class="control-label"></label>
+        <input name="Name" class="form-control" />
+        <span asp-validation-for="Name" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Value" class="control-label"></label>
+        <input name="Value" class="form-control" />
+        <span asp-validation-for="Value" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="From" class="control-label"></label>
+        <input name="From" class="form-control" />
+        <span asp-validation-for="From" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="To" class="control-label"></label>
+        <input name="To" class="form-control" />
+        <span asp-validation-for="To" class="text-danger"></span>
+    </div>
+    <input type="submit" value="Submit" />
+</form>
+

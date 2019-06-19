@@ -15,7 +15,7 @@ namespace Marketplace.Data.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "2.1.8-servicing-32085")
+                .HasAnnotation("ProductVersion", "2.1.11-servicing-32099")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
@@ -117,7 +117,7 @@ namespace Marketplace.Data.Migrations
                     b.ToTable("Feedbacks");
                 });
 
-            modelBuilder.Entity("Marketplace.Model.Models.Filter", b =>
+            modelBuilder.Entity("Marketplace.Model.Models.FilterBoolean", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -125,28 +125,9 @@ namespace Marketplace.Data.Migrations
 
                     b.Property<DateTime>("CreatedDate");
 
-                    b.Property<string>("Name");
+                    b.Property<int?>("FilterBooleanValueId");
 
-                    b.Property<int>("Types");
-
-                    b.Property<string>("Value");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Filter");
-                });
-
-            modelBuilder.Entity("Marketplace.Model.Models.FilterItem", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<DateTime>("CreatedDate");
-
-                    b.Property<int?>("FilterId");
-
-                    b.Property<int?>("GameId");
+                    b.Property<int>("GameId");
 
                     b.Property<string>("Name");
 
@@ -154,11 +135,134 @@ namespace Marketplace.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("FilterId");
+                    b.HasIndex("FilterBooleanValueId")
+                        .IsUnique()
+                        .HasFilter("[FilterBooleanValueId] IS NOT NULL");
 
                     b.HasIndex("GameId");
 
-                    b.ToTable("FilterItem");
+                    b.ToTable("FiltersBoolean");
+                });
+
+            modelBuilder.Entity("Marketplace.Model.Models.FilterBooleanValue", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime>("CreatedDate");
+
+                    b.Property<int>("OfferId");
+
+                    b.Property<bool>("Value");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("OfferId");
+
+                    b.ToTable("FilterBooleanValues");
+                });
+
+            modelBuilder.Entity("Marketplace.Model.Models.FilterRange", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime>("CreatedDate");
+
+                    b.Property<int?>("FilterRangeValueId");
+
+                    b.Property<double>("From");
+
+                    b.Property<int>("GameId");
+
+                    b.Property<string>("Name");
+
+                    b.Property<double>("To");
+
+                    b.Property<string>("Value");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("FilterRangeValueId")
+                        .IsUnique()
+                        .HasFilter("[FilterRangeValueId] IS NOT NULL");
+
+                    b.HasIndex("GameId");
+
+                    b.ToTable("FiltersRange");
+                });
+
+            modelBuilder.Entity("Marketplace.Model.Models.FilterRangeValue", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime>("CreatedDate");
+
+                    b.Property<int>("OfferId");
+
+                    b.Property<double>("Value");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("OfferId");
+
+                    b.ToTable("FilterRangeValues");
+                });
+
+            modelBuilder.Entity("Marketplace.Model.Models.FilterText", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime>("CreatedDate");
+
+                    b.Property<int?>("FilterTextValueId");
+
+                    b.Property<int>("GameId");
+
+                    b.Property<string>("Name");
+
+                    b.Property<string>("Value");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("FilterTextValueId")
+                        .IsUnique()
+                        .HasFilter("[FilterTextValueId] IS NOT NULL");
+
+                    b.HasIndex("GameId");
+
+                    b.ToTable("FiltersText");
+                });
+
+            modelBuilder.Entity("Marketplace.Model.Models.FilterTextValue", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime>("CreatedDate");
+
+                    b.Property<int?>("FilterTextId");
+
+                    b.Property<string>("Name");
+
+                    b.Property<int>("OfferId");
+
+                    b.Property<string>("Value");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("FilterTextId");
+
+                    b.HasIndex("OfferId");
+
+                    b.ToTable("FilterTextValues");
                 });
 
             modelBuilder.Entity("Marketplace.Model.Models.Game", b =>
@@ -714,15 +818,68 @@ namespace Marketplace.Data.Migrations
                         .OnDelete(DeleteBehavior.Restrict);
                 });
 
-            modelBuilder.Entity("Marketplace.Model.Models.FilterItem", b =>
+            modelBuilder.Entity("Marketplace.Model.Models.FilterBoolean", b =>
                 {
-                    b.HasOne("Marketplace.Model.Models.Filter", "Filter")
-                        .WithMany("FilterItems")
-                        .HasForeignKey("FilterId");
+                    b.HasOne("Marketplace.Model.Models.FilterBooleanValue", "FilterBooleanValue")
+                        .WithOne("FilterBoolean")
+                        .HasForeignKey("Marketplace.Model.Models.FilterBoolean", "FilterBooleanValueId");
 
-                    b.HasOne("Marketplace.Model.Models.Game")
-                        .WithMany("FilterItems")
-                        .HasForeignKey("GameId");
+                    b.HasOne("Marketplace.Model.Models.Game", "Game")
+                        .WithMany("BooleanFilters")
+                        .HasForeignKey("GameId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("Marketplace.Model.Models.FilterBooleanValue", b =>
+                {
+                    b.HasOne("Marketplace.Model.Models.Offer", "Offer")
+                        .WithMany("FilterBooleanValues")
+                        .HasForeignKey("OfferId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("Marketplace.Model.Models.FilterRange", b =>
+                {
+                    b.HasOne("Marketplace.Model.Models.FilterRangeValue", "FilterRangeValue")
+                        .WithOne("FilterRange")
+                        .HasForeignKey("Marketplace.Model.Models.FilterRange", "FilterRangeValueId");
+
+                    b.HasOne("Marketplace.Model.Models.Game", "Game")
+                        .WithMany("RangeFilters")
+                        .HasForeignKey("GameId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("Marketplace.Model.Models.FilterRangeValue", b =>
+                {
+                    b.HasOne("Marketplace.Model.Models.Offer", "Offer")
+                        .WithMany("FilterRangeValues")
+                        .HasForeignKey("OfferId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("Marketplace.Model.Models.FilterText", b =>
+                {
+                    b.HasOne("Marketplace.Model.Models.FilterTextValue", "FilterTextValue")
+                        .WithOne("SelectedFilterText")
+                        .HasForeignKey("Marketplace.Model.Models.FilterText", "FilterTextValueId");
+
+                    b.HasOne("Marketplace.Model.Models.Game", "Game")
+                        .WithMany("TextFilters")
+                        .HasForeignKey("GameId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("Marketplace.Model.Models.FilterTextValue", b =>
+                {
+                    b.HasOne("Marketplace.Model.Models.FilterText", "FilterText")
+                        .WithMany("PredefinedValues")
+                        .HasForeignKey("FilterTextId");
+
+                    b.HasOne("Marketplace.Model.Models.Offer", "Offer")
+                        .WithMany("FilterTextValues")
+                        .HasForeignKey("OfferId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("Marketplace.Model.Models.Message", b =>

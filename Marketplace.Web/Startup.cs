@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -20,10 +21,13 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
+using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Razor;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 
 namespace Marketplace.Web
 {
@@ -86,6 +90,14 @@ namespace Marketplace.Web
             services.AddTransient<IBillingRepository, BillingRepository>();
             services.AddTransient<IAccountInfoRepository, AccountInfoRepository>();
 
+            services.AddTransient<IFilterBooleanRepository, FilterBooleanRepository>();
+            services.AddTransient<IFilterBooleanValueRepository, FilterBooleanValueRepository>();
+            services.AddTransient<IFilterRangeRepository, FilterRangeRepository>();
+            services.AddTransient<IFilterRangeValueRepository, FilterRangeValueRepository>();
+            services.AddTransient<IFilterTextRepository, FilterTextRepository>();
+            services.AddTransient<IFilterTextValueRepository, FilterTextValueRepository>();
+            //services.AddTransient<IFilterRepository, FilterRepository>();
+
 
             services.AddTransient<IUserService, UserService>();
             services.AddTransient<IOfferService, OfferService>();
@@ -94,6 +106,8 @@ namespace Marketplace.Web
             services.AddTransient<IUserProfileService, UserProfileService>();
             services.AddTransient<IFeedbackService, FeedbackService>();
             services.AddTransient<IMessageService, MessageService>();
+            //services.AddTransient<IFilterItemService, FilterItemService>();
+            //services.AddTransient<IFilterService, FilterService>();
             //services.AddTransient<IOrderStatusService, OrderStatusService>();
             services.AddTransient<IDialogService, DialogService>();
             //services.AddTransient<IBillingService, BillingService>();
@@ -108,7 +122,40 @@ namespace Marketplace.Web
             services.AddScoped<ISendEmailAccountDataJob, SendEmailAccountDataJob>();
             services.AddScoped<ISendEmailChangeStatusJob, SendEmailChangeStatusJob>();
 
-            services.AddHangfire(configuration => 
+            services.AddTransient<IFilterBooleanService, FilterBooleanService>();
+            services.AddTransient<IFilterBooleanValueService, FilterBooleanValueService>();
+            services.AddTransient<IFilterRangeService, FilterRangeService>();
+            services.AddTransient<IFilterRangeValueService, FilterRangeValueService>();
+            services.AddTransient<IFilterTextService, FilterTextService>();
+            services.AddTransient<IFilterTextValueService, FilterTextValueService>();
+
+            services.AddLocalization(options => options.ResourcesPath = "Resources");
+            services.AddMvc()
+                .AddDataAnnotationsLocalization(options =>
+                {
+                    options.DataAnnotationLocalizerProvider = (type, factory) =>
+                        factory.Create(typeof(SharedResource));
+                })
+                .AddViewLocalization(
+            LanguageViewLocationExpanderFormat.Suffix,
+            opts => { opts.ResourcesPath = "Resources"; });
+            services.Configure<RequestLocalizationOptions>(
+        opts =>
+        {
+            var supportedCultures = new List<CultureInfo>
+            {
+                new CultureInfo("en"),
+                new CultureInfo("ru"),
+            };
+
+            opts.DefaultRequestCulture = new RequestCulture("en");
+            // Formatting numbers, dates, etc.
+            opts.SupportedCultures = supportedCultures;
+            // UI strings that we have localized.
+            opts.SupportedUICultures = supportedCultures;
+        });
+
+            services.AddHangfire(configuration =>
         {
             var options = new SqlServerStorageOptions
             {
@@ -119,10 +166,11 @@ namespace Marketplace.Web
         });
 
             // Add the processing server as IHostedService
-            
+
+
 
             services.AddAutoMapper();
-           
+
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
             //services.AddTransient<UserManager<User>>(provider => new UserManager<User>());
@@ -143,7 +191,8 @@ namespace Marketplace.Web
                 app.UseExceptionHandler("/Home/Error");
                 app.UseHsts();
             }
-            
+            var locOptions = app.ApplicationServices.GetService<IOptions<RequestLocalizationOptions>>();
+            app.UseRequestLocalization(locOptions.Value);
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
@@ -154,7 +203,7 @@ namespace Marketplace.Web
             GlobalConfiguration.Configuration.UseActivator(new HangfireActivator(serviceProvider));
             app.UseHangfireServer();
             app.UseHangfireDashboard();
-            
+
 
             #endregion
 
@@ -165,7 +214,7 @@ namespace Marketplace.Web
             {
                 routes.MapAreaRoute(
                     name: "MyAdmin",
-                    areaName:"Admin",
+                    areaName: "Admin",
                     template: "Admin/{controller=Home}/{action=Index}/{id?}");
 
                 routes.MapAreaRoute(
@@ -177,14 +226,14 @@ namespace Marketplace.Web
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
 
-                
+
             });
         }
     }
 
     public static class ConfigureContainerExtentions
     {
-        public static void AddDbContext(this IServiceCollection serviceCollection, 
+        public static void AddDbContext(this IServiceCollection serviceCollection,
             string dataConnectionString = null, string authConnectionString = null)
         {
             serviceCollection.AddDbContext<ApplicationContext>(options =>
@@ -214,7 +263,7 @@ namespace Marketplace.Web
 
     public static class ApplicationBuilderExtentions
     {
-        
+
 
         public static string GetDataConnectionStringFromConfig()
         {

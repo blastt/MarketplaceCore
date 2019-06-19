@@ -2,40 +2,40 @@
 
 @{
     ViewData["Title"] = "Create";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
 }
 
 <h2>Create</h2>
 
 <h4>Game</h4>
+@await Html.PartialAsync("_GameMenuPartial")
 <hr />
-<div class="container">
-    <div class="row">
-        <div class="col-md-4">
-            <form asp-area="Admin" asp-controller="Game" asp-action="Create" method="post">
-                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                <div class="form-group">
-                    <label asp-for="Name" class="control-label"></label>
-                    <input name="Name" class="form-control" />
-                    <span asp-validation-for="Name" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="Value" class="control-label"></label>
-                    <input name="Value" class="form-control" />
-                    <span asp-validation-for="Value" class="text-danger"></span>
-                </div>
+<div class="row">
+    <div class="col-md-4">
+        <form asp-area="Admin" asp-controller="Game" asp-action="Create" method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Name" class="control-label"></label>
+                <input name="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Value" class="control-label"></label>
+                <input name="Value" class="form-control" />
+                <span asp-validation-for="Value" class="text-danger"></span>
+            </div>
 
-                <div class="form-group">
-                    <label asp-for="Rank" class="control-label"></label>
-                    <input name="Rank" class="form-control" />
-                    <span asp-validation-for="Rank" class="text-danger"></span>
-                </div>
+            <div class="form-group">
+                <label asp-for="Rank" class="control-label"></label>
+                <input name="Rank" class="form-control" />
+                <span asp-validation-for="Rank" class="text-danger"></span>
+            </div>
 
-                <div class="form-group">
-                    <input type="submit" value="Create" class="btn btn-default" />
-                </div>
-            </form>
-        </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-default" />
+            </div>
+        </form>
     </div>
 </div>
+
 

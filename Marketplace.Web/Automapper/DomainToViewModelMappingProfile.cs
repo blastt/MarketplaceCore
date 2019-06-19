@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Marketplace.Model.Models;
+using Marketplace.Web.Models;
 using Marketplace.Web.Models.Offer;
 using Marketplace.Web.Models.UserProfile;
 using System;
@@ -68,6 +69,25 @@ namespace Marketplace.Web.Automapper
                 .ForMember(o => o.Avatar32, map => map.MapFrom(vm => vm.Avatar32))
             .ForMember(o => o.Avatar64, map => map.MapFrom(vm => vm.Avatar64))
                .ForMember(o => o.Avatar96, map => map.MapFrom(vm => vm.Avatar96));
+
+            CreateMap<FilterRange, FilterRangeViewModel>()
+               .ForMember(o => o.Name, map => map.MapFrom(vm => vm.Name))
+               .ForMember(o => o.Value, map => map.MapFrom(vm => vm.Value))
+               .ForMember(o => o.From, map => map.MapFrom(vm => vm.From))
+               .ForMember(o => o.To, map => map.MapFrom(vm => vm.To));
+
+            CreateMap<FilterBoolean, FilterBooleanViewModel>()
+               .ForMember(o => o.Name, map => map.MapFrom(vm => vm.Name))
+               .ForMember(o => o.Value, map => map.MapFrom(vm => vm.Value));
+
+            CreateMap<FilterText, FilterTextViewModel>()
+                .ForMember(o => o.PredefinedValues, map => map.MapFrom(vm => vm.PredefinedValues))
+              .ForMember(o => o.Name, map => map.MapFrom(vm => vm.Name))
+               .ForMember(o => o.Value, map => map.MapFrom(vm => vm.Value));
+
+            CreateMap<FilterTextValue, FilterTextValueViewModel>()
+              .ForMember(o => o.Name, map => map.MapFrom(vm => vm.Name))
+               .ForMember(o => o.Value, map => map.MapFrom(vm => vm.Value));
         }
     }
 }

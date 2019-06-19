@@ -74,6 +74,13 @@ namespace Marketplace.Data.Context
             new StatusLogConfiguration(modelBuilder.Entity<StatusLog>());
             new TransactionConfiguration(modelBuilder.Entity<Transaction>());
             new WithdrawConfiguration(modelBuilder.Entity<Withdraw>());
+
+            new FilterBooleanConfiguration(modelBuilder.Entity<FilterBoolean>());
+            new FilterBooleanValueConfiguration(modelBuilder.Entity<FilterBooleanValue>());
+            new FilterRangeConfiguration(modelBuilder.Entity<FilterRange>());
+            new FilterRangeValueConfiguration(modelBuilder.Entity<FilterRangeValue>());
+            new FilterTextConfiguration(modelBuilder.Entity<FilterText>());
+            new FilterTextValueConfiguration(modelBuilder.Entity<FilterTextValue>());
             
         }
     }

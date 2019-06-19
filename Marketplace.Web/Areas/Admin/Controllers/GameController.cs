@@ -34,5 +34,23 @@ namespace Marketplace.Web.Areas.Admin.Controllers
             await gameService.SaveGameAsync();
             return View();
         }
+
+        public IActionResult Update()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Update(CreateGameViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View();
+            }
+            var game = Mapper.Map<CreateGameViewModel, Game>(model);
+            gameService.CreateGame(game);
+            await gameService.SaveGameAsync();
+            return View();
+        }
     }
 }

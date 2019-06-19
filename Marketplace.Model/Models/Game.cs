@@ -14,7 +14,16 @@ namespace Marketplace.Model.Models
 
         public int Rank { get; set; } // порядковый номер среди рангов
 
-        public IList<FilterItem> FilterItems { get; set; }
+        public IList<FilterText> TextFilters { get; set; }
+        public IList<FilterRange> RangeFilters { get; set; }
+        public IList<FilterBoolean> BooleanFilters { get; set; }
         public ICollection<Offer> Offers { get; set; }
+
+        public Game()
+        {
+            TextFilters = new List<FilterText>();
+            RangeFilters = new List<FilterRange>();
+            BooleanFilters = new List<FilterBoolean>();
+        }
     }
 }

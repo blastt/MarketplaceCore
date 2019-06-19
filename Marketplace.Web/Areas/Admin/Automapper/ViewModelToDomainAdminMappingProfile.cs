@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Marketplace.Model.Models;
+using Marketplace.Web.Areas.Admin.Models.FilterRange;
 using Marketplace.Web.Areas.Admin.Models.Game;
 using System;
 using System.Collections.Generic;
@@ -16,6 +17,20 @@ namespace Marketplace.Web.Areas.Admin.Automapper
                 .ForMember(o => o.Name, map => map.MapFrom(vm => vm.Name))
                 .ForMember(o => o.Value, map => map.MapFrom(vm => vm.Value))
                 .ForMember(o => o.Rank, map => map.MapFrom(vm => vm.Rank));
+
+            CreateMap<CreateFilterRangeViewModel, FilterRange>()
+                .ForMember(o => o.Name, map => map.MapFrom(vm => vm.Name))
+                .ForMember(o => o.Value, map => map.MapFrom(vm => vm.Value))
+                .ForMember(o => o.From, map => map.MapFrom(vm => vm.From))
+                .ForMember(o => o.To, map => map.MapFrom(vm => vm.To))
+                .ForAllOtherMembers(opt => opt.Ignore());
+
+            //CreateMap<CreateFilterViewModel, Filter>()
+            //    .ForMember(o => o.Name, map => map.MapFrom(vm => vm.Name))
+            //    .ForMember(o => o.Value, map => map.MapFrom(vm => vm.Value))
+            //    .ForMember(o => o.Rank, map => map.MapFrom(vm => vm.Rank))
+            //    .ForMember(o => o.Type, map => map.MapFrom(vm => vm.Type))
+            //    .ForAllOtherMembers(opt => opt.Ignore());
         }
     }
 }

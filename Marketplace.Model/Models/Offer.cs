@@ -75,8 +75,9 @@ namespace Marketplace.Model.Models
         public int UserProfileId { get; set; }
         public UserProfile UserProfile { get; set; }
 
-        //public IList<FilterItem> FilterItems { get; set; }
-        //public IList<FilterItem> FilterItems { get; set; }
+        public IList<FilterTextValue> FilterTextValues { get; set; }
+        public IList<FilterRangeValue> FilterRangeValues { get; set; }
+        public IList<FilterBooleanValue> FilterBooleanValues { get; set; }
 
     }
 }

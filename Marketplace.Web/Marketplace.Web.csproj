@@ -14,11 +14,14 @@
 
   <ItemGroup>
     <Folder Include="Areas\Admin\Data\" />
+    <Folder Include="Areas\Admin\Views\FilterBooleanValue\" />
+    <Folder Include="Areas\Admin\Views\FilterRangeValue\" />
     <Folder Include="Areas\Middleman\Controllers\" />
     <Folder Include="Areas\Middleman\Data\" />
     <Folder Include="Areas\Middleman\Models\" />
     <Folder Include="Areas\Middleman\Views\" />
     <Folder Include="Areas\User\Data\" />
+    <Folder Include="Areas\User\Resources\" />
     <Folder Include="Models\Game\" />
     <Folder Include="Models\Order\" />
     <Folder Include="Views\Game\" />

@@ -1,9 +1,15 @@
 ﻿@model Marketplace.Web.Areas.User.Models.Offer.OfferListViewModel
 @using Marketplace.Web.HtmlHelpers
 
+
+@{ 
+    var active = Localizer["Active"].Value;
+    var inactive = Localizer["Inactive"].Value;
+    var closed = Localizer["Closed"].Value;
+}
 <ul class="account-inner-list" id="account-inner-list">
 
-    <li class="account-inner-menu-item ">@Html.ActionLink("Активные (" + Model.CountOfActive + ")", "Active", "Offer", null, new { @class = "account-inner-menu-link " + Html.IsSelected(actions: "Active", controllers: "Offer") })</li>
-    <li class="account-inner-menu-item">@Html.ActionLink("Неактивные (" + Model.CountOfInactive + ")", "InActive", "Offer", null, new { @class = "account-inner-menu-link " + Html.IsSelected(actions: "InActive", controllers: "Offer") })</li>
-    <li class="account-inner-menu-item">@Html.ActionLink("Закрытые (" + Model.CountOfClosed + ")", "Closed", "Offer", null, new { @class = "account-inner-menu-link " + Html.IsSelected(actions: "Closed", controllers: "Offer") })</li>
+    <li class="account-inner-menu-item ">@Html.ActionLink(active + " (" + Model.CountOfActive + ")", "Active", "Offer", null, new { @class = "account-inner-menu-link " + Html.IsSelected(actions: "Active", controllers: "Offer") })</li>
+    <li class="account-inner-menu-item">@Html.ActionLink(inactive + " (" + Model.CountOfInactive + ")", "InActive", "Offer", null, new { @class = "account-inner-menu-link " + Html.IsSelected(actions: "InActive", controllers: "Offer") })</li>
+    <li class="account-inner-menu-item">@Html.ActionLink(closed + " (" + Model.CountOfClosed + ")", "Closed", "Offer", null, new { @class = "account-inner-menu-link " + Html.IsSelected(actions: "Closed", controllers: "Offer") })</li>
 </ul>
