@@ -28,11 +28,11 @@ namespace Marketplace.Web.Views.GameList.Components
             var games = gameService.GetAllGames();
             var sortedGames = games.OrderBy(g => g.Name);
 
-
+            
             foreach (var letter in letters)
             {
                 var gamesInLetter = new List<KeyValuePair<string, string>>();
-                foreach (var game in sortedGames.Where(g => g.Name.FirstOrDefault() == letter))
+                foreach (var game in sortedGames.Where(g => char.ToLowerInvariant(g.Name.FirstOrDefault()) == char.ToLowerInvariant(letter)))
                 {
                     gamesInLetter.Add(new KeyValuePair<string, string>(game.Value, game.Name));
                 }

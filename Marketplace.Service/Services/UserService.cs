@@ -2,8 +2,10 @@
 using Marketplace.Data.Repositories;
 using Marketplace.Model.Models;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore.Query;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Linq.Expressions;
 using System.Security.Claims;
 using System.Text;
@@ -17,10 +19,10 @@ namespace Marketplace.Service.Services
         Task<List<User>> GetAllUsersAsync();
         //int GetUser(int id);
         Task<int> GetCurrentUserId(ClaimsPrincipal principal);
-        User GetUser(Expression<Func<User, bool>> where, params Expression<Func<User, object>>[] includes);
+        User GetUser(Expression<Func<User, bool>> where, Func<IQueryable<User>, IIncludableQueryable<User, object>> include);
 
         Task<User> GetUserAsync(int id);
-        Task<User> GetUserAsync(Expression<Func<User, bool>> where, params Expression<Func<User, object>>[] includes);
+        Task<User> GetUserAsync(Expression<Func<User, bool>> where, Func<IQueryable<User>, IIncludableQueryable<User, object>> include);
 
         Task<IdentityResult> CreateUserAsyncAndSave(User user, string password);
 
@@ -69,7 +71,7 @@ namespace Marketplace.Service.Services
             throw new NotImplementedException();
         }
 
-        public User GetUser(Expression<Func<User, bool>> where, params Expression<Func<User, object>>[] includes)
+        public User GetUser(Expression<Func<User, bool>> where, Func<IQueryable<User>, IIncludableQueryable<User, object>> include)
         {
             throw new NotImplementedException();
         }
@@ -79,7 +81,7 @@ namespace Marketplace.Service.Services
             throw new NotImplementedException();
         }
 
-        public Task<User> GetUserAsync(Expression<Func<User, bool>> where, params Expression<Func<User, object>>[] includes)
+        public Task<User> GetUserAsync(Expression<Func<User, bool>> where, Func<IQueryable<User>, IIncludableQueryable<User, object>> include)
         {
             throw new NotImplementedException();
         }

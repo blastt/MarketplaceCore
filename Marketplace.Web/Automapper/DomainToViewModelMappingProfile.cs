@@ -35,7 +35,7 @@ namespace Marketplace.Web.Automapper
         {
             CreateMap<Offer, OfferViewModel>()
                 .ForMember(o => o.Header, map => map.MapFrom(vm => vm.Header))
-               .ForMember(o => o.SellerPaysMiddleman, map => map.MapFrom(vm => vm.SellerPaysMiddleman))
+               //.ForMember(o => o.SellerPaysMiddleman, map => map.MapFrom(vm => vm.SellerPaysMiddleman))
                .ForMember(o => o.IsBanned, map => map.MapFrom(vm => vm.IsBanned))
                .ForMember(o => o.PersonalAccount, map => map.MapFrom(vm => vm.PersonalAccount))
                .ForMember(o => o.Url, map => map.MapFrom(vm => vm.Url))
@@ -46,6 +46,7 @@ namespace Marketplace.Web.Automapper
                .ForMember(o => o.UserAvatar32, map => map.MapFrom(vm => vm.UserProfile.Avatar32))
                .ForMember(o => o.UserAvatar64, map => map.MapFrom(vm => vm.UserProfile.Avatar64))
                .ForMember(o => o.UserAvatar96, map => map.MapFrom(vm => vm.UserProfile.Avatar96))
+               .ForMember(o => o.RefreshDate, map => map.MapFrom(vm => vm.CreatedDate))
                 .ForMember(o => o.ShortUrl, map => map.MapFrom((vm) => GetSplitedUrl(vm.Url, '/', 4)))
                 .ForPath(vm => vm.Game, map => map.MapFrom(o => o.Game.Name));
 

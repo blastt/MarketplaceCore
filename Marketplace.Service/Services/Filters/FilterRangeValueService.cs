@@ -1,8 +1,10 @@
 ﻿using Marketplace.Data.Infrastructure;
 using Marketplace.Data.Repositories;
 using Marketplace.Model.Models;
+using Microsoft.EntityFrameworkCore.Query;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
@@ -14,11 +16,11 @@ namespace Marketplace.Service.Services
         void Delete(FilterRangeValue filterRangeValue);
 
         IEnumerable<FilterRangeValue> GetAllFilterRangeValues();
-        IEnumerable<FilterRangeValue> GetAllFilterRangeValues(params Expression<Func<FilterRangeValue, object>>[] includes);
+        IEnumerable<FilterRangeValue> GetAllFilterRangeValues(Func<IQueryable<FilterRangeValue>, IIncludableQueryable<FilterRangeValue, object>> include);
         Task<IList<FilterRangeValue>> GetAllFilterRangeValuesAsync();
-        Task<IList<FilterRangeValue>> GetAllFilterRangeValuesAsync(params Expression<Func<FilterRangeValue, object>>[] includes);
-        IEnumerable<FilterRangeValue> GetFilterRangeValues(Expression<Func<FilterRangeValue, bool>> where, params Expression<Func<FilterRangeValue, object>>[] includes);
-        Task<IList<FilterRangeValue>> GetFilterRangeValuesAsync(Expression<Func<FilterRangeValue, bool>> where, params Expression<Func<FilterRangeValue, object>>[] includes);
+        Task<IList<FilterRangeValue>> GetAllFilterRangeValuesAsync(Func<IQueryable<FilterRangeValue>, IIncludableQueryable<FilterRangeValue, object>> include);
+        IEnumerable<FilterRangeValue> GetFilterRangeValues(Expression<Func<FilterRangeValue, bool>> where, Func<IQueryable<FilterRangeValue>, IIncludableQueryable<FilterRangeValue, object>> include);
+        Task<IList<FilterRangeValue>> GetFilterRangeValuesAsync(Expression<Func<FilterRangeValue, bool>> where, Func<IQueryable<FilterRangeValue>, IIncludableQueryable<FilterRangeValue, object>> include);
 
         void CreateFilterRangeValue(FilterRangeValue filterRangeValue);
         void SaveFilterRangeValue();
@@ -44,9 +46,9 @@ namespace Marketplace.Service.Services
             filterRangeValueRepository.Remove(filterRangeValue);
         }
 
-        public IEnumerable<FilterRangeValue> GetAllFilterRangeValues(params Expression<Func<FilterRangeValue, object>>[] includes)
+        public IEnumerable<FilterRangeValue> GetAllFilterRangeValues(Func<IQueryable<FilterRangeValue>, IIncludableQueryable<FilterRangeValue, object>> include)
         {
-            var filterRangeValue = filterRangeValueRepository.GetAll(includes);
+            var filterRangeValue = filterRangeValueRepository.GetAll(include);
             return filterRangeValue;
         }
 
@@ -60,21 +62,21 @@ namespace Marketplace.Service.Services
         {
             return await filterRangeValueRepository.GetAllAsync();
         }
-        public async Task<IList<FilterRangeValue>> GetAllFilterRangeValuesAsync(params Expression<Func<FilterRangeValue, object>>[] includes)
+        public async Task<IList<FilterRangeValue>> GetAllFilterRangeValuesAsync(Func<IQueryable<FilterRangeValue>, IIncludableQueryable<FilterRangeValue, object>> include)
         {
-            return await filterRangeValueRepository.GetAllAsync(includes);
+            return await filterRangeValueRepository.GetAllAsync(include);
         }
 
 
-        public IEnumerable<FilterRangeValue> GetFilterRangeValues(Expression<Func<FilterRangeValue, bool>> where, params Expression<Func<FilterRangeValue, object>>[] includes)
+        public IEnumerable<FilterRangeValue> GetFilterRangeValues(Expression<Func<FilterRangeValue, bool>> where, Func<IQueryable<FilterRangeValue>, IIncludableQueryable<FilterRangeValue, object>> include)
         {
-            var query = filterRangeValueRepository.GetMany(where, includes);
+            var query = filterRangeValueRepository.GetMany(where, include);
             return query;
         }
 
-        public async Task<IList<FilterRangeValue>> GetFilterRangeValuesAsync(Expression<Func<FilterRangeValue, bool>> where, params Expression<Func<FilterRangeValue, object>>[] includes)
+        public async Task<IList<FilterRangeValue>> GetFilterRangeValuesAsync(Expression<Func<FilterRangeValue, bool>> where, Func<IQueryable<FilterRangeValue>, IIncludableQueryable<FilterRangeValue, object>> include)
         {
-            return await filterRangeValueRepository.GetManyAsync(where, includes);
+            return await filterRangeValueRepository.GetManyAsync(where, include);
         }
 
         public void SaveFilterRangeValue()

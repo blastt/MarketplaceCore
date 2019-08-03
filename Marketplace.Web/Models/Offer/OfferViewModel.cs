@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Marketplace.Model;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -30,6 +31,9 @@ namespace Marketplace.Web.Models.Offer
         [Display(Name = "Дата регистрации аккаунта *")]
         public DateTime? CreatedAccountDate { get; set; }
 
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:MMMM/dd/yyyy}")]
+        public DateTime RefreshDate { get; set; }
+
         [Display(Name = "Есль ли бан на аккаунте? *")]
         public bool IsBanned { get; set; }
 
@@ -42,7 +46,7 @@ namespace Marketplace.Web.Models.Offer
         public decimal Price { get; set; }
 
         [Display(Name = "Платите ли вы за гаранта?")]
-        public bool SellerPaysMiddleman { get; set; }
+        public SecureTransactionPayerViewModel SecureTransactionPayer { get; set; }
 
         public string UserAvatar32 { get; set; }
         public string UserAvatar64 { get; set; }

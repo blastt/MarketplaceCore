@@ -22,7 +22,7 @@ namespace Marketplace.Web.Areas.User.Automapper
             CreateMap<Offer, OfferViewModel>()
                 .ForPath(o => o.Game, map => map.MapFrom(vm => vm.Game.Name))
                 .ForMember(o => o.Header, map => map.MapFrom(vm => vm.Header))
-                .ForMember(o => o.SellerPaysMiddleman, map => map.MapFrom(vm => vm.SellerPaysMiddleman))
+                //.ForMember(o => o.SellerPaysMiddleman, map => map.MapFrom(vm => vm.SellerPaysMiddleman))
                 .ForMember(o => o.IsBanned, map => map.MapFrom(vm => vm.IsBanned))
                 .ForMember(o => o.PersonalAccount, map => map.MapFrom(vm => vm.PersonalAccount))
                 .ForMember(o => o.Url, map => map.MapFrom(vm => vm.Url))

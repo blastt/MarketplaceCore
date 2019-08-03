@@ -5,8 +5,9 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Marketplace.Model.Models;
 using Marketplace.Service.Services;
-using Marketplace.Web.Areas.Admin.Models.FilterTextValue;
+using Marketplace.Web.Areas.Admin.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace Marketplace.Web.Areas.Admin.Controllers
 {
@@ -30,15 +31,16 @@ namespace Marketplace.Web.Areas.Admin.Controllers
         {
             if (ModelState.IsValid)
             {
-                IEnumerable<Game> games = await gameService.GetAllGamesAsync();
-                var game = games.FirstOrDefault(g => g.Value == model.Game);
+                var game = gameService.GetGameByValue(model.Game, include: source => source.Include(i => i.TextFilters).ThenInclude(tf => tf.FilterTextValue));
                 if (game != null)
                 {
-                    var filterText = game.TextFilters.FirstOrDefault(f => f.FilterTextValue.Value == model.Value);
+                    var filterText = game.TextFilters.FirstOrDefault(f => f.Value == model.FilterText);
                     if (filterText != null)
                     {
                         var filterTextValue = Mapper.Map<CreateFilterTextValueViewModel, FilterTextValue>(model); //TODO
+                        filterText.PredefinedValues.Add(filterTextValue);
                         filterTextValueService.CreateFilterTextValue(filterTextValue);
+                        
                         await filterTextValueService.SaveFilterTextValueAsync();
                         return View();
                     }

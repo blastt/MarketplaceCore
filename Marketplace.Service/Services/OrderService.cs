@@ -1,7 +1,9 @@
 ﻿using Marketplace.Data.Infrastructure;
 using Marketplace.Data.Repositories;
-using Marketplace.Model.Enums;
+using Marketplace.Model;
 using Marketplace.Model.Models;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Query;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,14 +24,14 @@ namespace Marketplace.Service.Services
     public interface IOrderService
     {
         IEnumerable<Order> GetOrders();
-        IEnumerable<Order> GetOrders(params Expression<Func<Order, object>>[] includes);
-        IEnumerable<Order> GetOrders(Expression<Func<Order, bool>> where, params Expression<Func<Order, object>>[] includes);
-        Task<List<Order>> GetOrdersAsync(Expression<Func<Order, bool>> where, params Expression<Func<Order, object>>[] includes);
+        IEnumerable<Order> GetOrders(Func<IQueryable<Order>, IIncludableQueryable<Order, object>> include);
+        IEnumerable<Order> GetOrders(Expression<Func<Order, bool>> where, Func<IQueryable<Order>, IIncludableQueryable<Order, object>> include);
+        Task<List<Order>> GetOrdersAsync(Expression<Func<Order, bool>> where, Func<IQueryable<Order>, IIncludableQueryable<Order, object>> include = null);
 
         IEnumerable<Order> GetAllOrders();
-        IEnumerable<Order> GetAllOrders(params Expression<Func<Order, object>>[] includes);
+        IEnumerable<Order> GetAllOrders(Func<IQueryable<Order>, IIncludableQueryable<Order, object>> include);
         Task<List<Order>> GetAllOrdersAsync();
-        Task<List<Order>> GetAllOrdersAsync(params Expression<Func<Order, object>>[] includes);
+        Task<List<Order>> GetAllOrdersAsync(Func<IQueryable<Order>, IIncludableQueryable<Order, object>> include);
 
 
         //IEnumerable<Offer> GetCategoryGadgets(string categoryName, string gadgetName = null);
@@ -37,11 +39,11 @@ namespace Marketplace.Service.Services
         Task<Order> GetOrderAsync(int id);
         void DeleteOrder(Order order);
         Order GetOrder(string accountLogin, int? moderatorId, int? sellerId, int? buyerId);
-        Order GetOrder(string accountLogin, int? moderatorId, int? sellerId, int? buyerId, params Expression<Func<Order, object>>[] include);
-        Order GetOrder(int id, params Expression<Func<Order, object>>[] includes);
+        Order GetOrder(string accountLogin, int? moderatorId, int? sellerId, int? buyerId, Func<IQueryable<Order>, IIncludableQueryable<Order, object>> include);
+        Order GetOrder(int id, Func<IQueryable<Order>, IIncludableQueryable<Order, object>> include);
         Task<Order> GetOrderAsync(string accountLogin, int? moderatorId, int? sellerId, int? buyerId);
-        Task<Order> GetOrderAsync(string accountLogin, int? moderatorId, int? sellerId, int? buyerId, params Expression<Func<Order, object>>[] include);
-        Task<Order> GetOrderAsync(int id, params Expression<Func<Order, object>>[] includes);
+        Task<Order> GetOrderAsync(string accountLogin, int? moderatorId, int? sellerId, int? buyerId, Func<IQueryable<Order>, IIncludableQueryable<Order, object>> include);
+        Task<Order> GetOrderAsync(int id, Func<IQueryable<Order>, IIncludableQueryable<Order, object>> include);
         void UpdateOrder(Order order);
         void CreateOrder(Order order);
         bool ConfirmAbortOrder(int orderId, int userId);
@@ -83,21 +85,21 @@ namespace Marketplace.Service.Services
             return orders;
         }
 
-        public IEnumerable<Order> GetOrders(params Expression<Func<Order, object>>[] includes)
+        public IEnumerable<Order> GetOrders(Func<IQueryable<Order>, IIncludableQueryable<Order, object>> include)
         {
-            var orders = ordersRepository.GetAll(includes);
+            var orders = ordersRepository.GetAll(include);
             return orders;
         }
 
-        public IEnumerable<Order> GetOrders(Expression<Func<Order, bool>> where, params Expression<Func<Order, object>>[] includes)
+        public IEnumerable<Order> GetOrders(Expression<Func<Order, bool>> where, Func<IQueryable<Order>, IIncludableQueryable<Order, object>> include)
         {
-            var query = ordersRepository.GetMany(where, includes);
+            var query = ordersRepository.GetMany(where, include);
             return query;
         }
 
-        public async Task<List<Order>> GetOrdersAsync(Expression<Func<Order, bool>> where, params Expression<Func<Order, object>>[] includes)
+        public async Task<List<Order>> GetOrdersAsync(Expression<Func<Order, bool>> where, Func<IQueryable<Order>, IIncludableQueryable<Order, object>> include)
         {
-            return await ordersRepository.GetManyAsync(where, includes);
+            return await ordersRepository.GetManyAsync(where, include);
 
         }
 
@@ -122,15 +124,15 @@ namespace Marketplace.Service.Services
             return order;
         }
 
-        public Order GetOrder(int id, params Expression<Func<Order, object>>[] includes)
+        public Order GetOrder(int id, Func<IQueryable<Order>, IIncludableQueryable<Order, object>> include)
         {
-            var order = ordersRepository.Get(o => o.Id == id, includes);
+            var order = ordersRepository.Get(o => o.Id == id, include);
             return order;
         }
 
-        public async Task<Order> GetOrderAsync(int id, params Expression<Func<Order, object>>[] includes)
+        public async Task<Order> GetOrderAsync(int id, Func<IQueryable<Order>, IIncludableQueryable<Order, object>> include)
         {
-            return await ordersRepository.GetByIdAsync(id, includes);
+            return await ordersRepository.GetByIdAsync(id, include);
         }
 
         public Order GetOrder(string accountLogin, int? middlemanId, int? sellerId, int? buyerId)
@@ -141,10 +143,10 @@ namespace Marketplace.Service.Services
 
         }
 
-        public Order GetOrder(string accountLogin, int? middlemanId, int? sellerId, int? buyerId, params Expression<Func<Order, object>>[] includes)
+        public Order GetOrder(string accountLogin, int? middlemanId, int? sellerId, int? buyerId, Func<IQueryable<Order>, IIncludableQueryable<Order, object>> include)
         {
             Order order = ordersRepository.GetMany(o => o.Offer.AccountLogin == accountLogin &&
-            o.MiddlemanId == middlemanId && o.BuyerId == buyerId && o.SellerId == sellerId, includes).FirstOrDefault();
+            o.MiddlemanId == middlemanId && o.BuyerId == buyerId && o.SellerId == sellerId, include).FirstOrDefault();
             return order;
 
         }
@@ -156,10 +158,10 @@ namespace Marketplace.Service.Services
 
         }
 
-        public async Task<Order> GetOrderAsync(string accountLogin, int? middlemanId, int? sellerId, int? buyerId, params Expression<Func<Order, object>>[] includes)
+        public async Task<Order> GetOrderAsync(string accountLogin, int? middlemanId, int? sellerId, int? buyerId, Func<IQueryable<Order>, IIncludableQueryable<Order, object>> include)
         {
             return await ordersRepository.GetAsync(o => o.Offer.AccountLogin == accountLogin &&
-            o.MiddlemanId == middlemanId && o.BuyerId == buyerId && o.SellerId == sellerId, includes);
+            o.MiddlemanId == middlemanId && o.BuyerId == buyerId && o.SellerId == sellerId, include);
 
         }
 
@@ -180,7 +182,7 @@ namespace Marketplace.Service.Services
 
         public bool ConfirmAbortOrder(int orderId, int userId)
         {
-            var order = GetOrder(orderId, i => i.CurrentStatus, i => i.StatusLogs, i => i.Transactions, i => i.Middleman, id => id.Transactions.Select(m => m.Sender), id => id.Transactions.Select(m => m.Receiver));
+            var order = GetOrder(orderId, include: source => source.Include(i => i.CurrentStatus).Include(i => i.StatusLogs).Include(i => i.Middleman).Include(i => i.Transactions).ThenInclude(t => t.Sender).Include(i => i.Transactions).ThenInclude(t => t.Receiver));
             if (order != null)
             {
                 OrderStatus newOrderStatus = null;
@@ -224,7 +226,7 @@ namespace Marketplace.Service.Services
 
         private bool CloseOrder(int orderId, Closer closer)
         {
-            var order = GetOrder(orderId, i => i.CurrentStatus, i => i.StatusLogs, i => i.Transactions, id => id.Transactions.Select(m => m.Sender), id => id.Transactions.Select(m => m.Receiver));
+            var order = GetOrder(orderId, include: source => source.Include(i => i.CurrentStatus).Include(i => i.StatusLogs).Include(i => i.Transactions).ThenInclude(t => t.Sender).Include(i => i.Transactions).ThenInclude(t => t.Receiver));
             if (order != null)
             {
                 if (order.CurrentStatus.Value == OrderStatusValue.BuyerPaying ||
@@ -266,7 +268,7 @@ namespace Marketplace.Service.Services
 
 
                     if (newOrderStatus != null)
-                    {
+                    {                        
                         var orderTransactions = order.Transactions.ToList();
 
                         foreach (var transaction in orderTransactions)
@@ -326,7 +328,7 @@ namespace Marketplace.Service.Services
 
         public bool ConfirmOrder(int orderId, int currentUserId)
         {
-            var order = GetOrder(orderId, i => i.Buyer, i => i.CurrentStatus, i => i.Seller, i => i.StatusLogs);
+            var order = GetOrder(orderId, include: source => source.Include(i => i.Buyer).Include(i => i.Seller).Include(i => i.CurrentStatus).Include(i => i.StatusLogs));
             if (order != null)
             {
                 if (order.CurrentStatus != null)
@@ -383,7 +385,7 @@ namespace Marketplace.Service.Services
 
         public bool ConfirmOrderByMiddleman(int orderId, int currentUserId)
         {
-            var order = GetOrder(orderId, i => i.Seller, i => i.CurrentStatus, i => i.Seller, i => i.StatusLogs);
+            var order = GetOrder(orderId, include: source => source.Include(i => i.Seller).Include(i => i.CurrentStatus).Include(i => i.StatusLogs));
             if (order != null)
             {
                 if (order.CurrentStatus != null)
@@ -440,7 +442,7 @@ namespace Marketplace.Service.Services
 
         public bool AbortOrder(int orderId, int currentUserId)
         {
-            var order = GetOrder(orderId, i => i.Buyer, i => i.CurrentStatus, i => i.StatusLogs);
+            var order = GetOrder(orderId,include: source => source.Include(i => i.Buyer).Include(i => i.CurrentStatus).Include(i => i.StatusLogs));
             if (order != null)
             {
                 if (order.CurrentStatus != null)
@@ -488,9 +490,9 @@ namespace Marketplace.Service.Services
             return orders;
         }
 
-        public IEnumerable<Order> GetAllOrders(params Expression<Func<Order, object>>[] includes)
+        public IEnumerable<Order> GetAllOrders(Func<IQueryable<Order>, IIncludableQueryable<Order, object>> include)
         {
-            var orders = ordersRepository.GetAll(includes);
+            var orders = ordersRepository.GetAll(include);
             return orders;
         }
 
@@ -499,9 +501,9 @@ namespace Marketplace.Service.Services
             return await ordersRepository.GetAllAsync();
         }
 
-        public async Task<List<Order>> GetAllOrdersAsync(params Expression<Func<Order, object>>[] includes)
+        public async Task<List<Order>> GetAllOrdersAsync(Func<IQueryable<Order>, IIncludableQueryable<Order, object>> include)
         {
-            return await ordersRepository.GetAllAsync(includes);
+            return await ordersRepository.GetAllAsync(include);
         }
 
         #endregion

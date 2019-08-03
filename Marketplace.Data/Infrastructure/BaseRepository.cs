@@ -3,6 +3,7 @@ using Marketplace.Model.Abstracts;
 using Marketplace.Model.Interfaces;
 using Marketplace.Model.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Query;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,26 +23,26 @@ namespace Marketplace.Data.Infrastructure
         T Get(Expression<Func<T, bool>> where);
         Task<T> GetAsync(Expression<Func<T, bool>> where);
 
-        T Get(Expression<Func<T, bool>> where, params Expression<Func<T, object>>[] includes);
-        Task<T> GetAsync(Expression<Func<T, bool>> where, params Expression<Func<T, object>>[] includes);
+        T Get(Expression<Func<T, bool>> where, Func<IQueryable<T>, IIncludableQueryable<T, object>> include);
+        Task<T> GetAsync(Expression<Func<T, bool>> where, Func<IQueryable<T>, IIncludableQueryable<T, object>> include);
 
         IEnumerable<T> GetMany(Expression<Func<T, bool>> where);
         Task<List<T>> GetManyAsync(Expression<Func<T, bool>> where);
 
-        IEnumerable<T> GetMany(Expression<Func<T, bool>> where, params Expression<Func<T, object>>[] includes);
-        Task<List<T>> GetManyAsync(Expression<Func<T, bool>> where, params Expression<Func<T, object>>[] includes);
+        IEnumerable<T> GetMany(Expression<Func<T, bool>> where, Func<IQueryable<T>, IIncludableQueryable<T, object>> include);
+        Task<List<T>> GetManyAsync(Expression<Func<T, bool>> where, Func<IQueryable<T>, IIncludableQueryable<T, object>> include);
 
         IEnumerable<T> GetAll();
         Task<List<T>> GetAllAsync();
 
-        IEnumerable<T> GetAll(params Expression<Func<T, object>>[] includes);
-        Task<List<T>> GetAllAsync(params Expression<Func<T, object>>[] includes);
+        IEnumerable<T> GetAll(Func<IQueryable<T>, IIncludableQueryable<T, object>> include);
+        Task<List<T>> GetAllAsync(Func<IQueryable<T>, IIncludableQueryable<T, object>> include);
 
         T GetById(int id);
         Task<T> GetByIdAsync(int id);
 
-        T GetById(int id, params Expression<Func<T, object>>[] includes);
-        Task<T> GetByIdAsync(int id, params Expression<Func<T, object>>[] includes);
+        T GetById(int id, Func<IQueryable<T>, IIncludableQueryable<T, object>> include);
+        Task<T> GetByIdAsync(int id, Func<IQueryable<T>, IIncludableQueryable<T, object>> include);
 
 
     }
@@ -102,23 +103,17 @@ namespace Marketplace.Data.Infrastructure
             return dbSet.FirstOrDefaultAsync<T>(where);
         }
 
-        public T Get(Expression<Func<T, bool>> where, params Expression<Func<T, object>>[] includes)
+        public T Get(Expression<Func<T, bool>> where, Func<IQueryable<T>, IIncludableQueryable<T, object>> include)
         {
-            var query = dbSet.Where(where);
-            foreach (var include in includes)
-            {
-                query = query.Include(include);
-            }
+            var query = dbSet.Where(where);            
+            query = include(query);
             return query.FirstOrDefault<T>();
         }
 
-        public Task<T> GetAsync(Expression<Func<T, bool>> where, params Expression<Func<T, object>>[] includes)
+        public Task<T> GetAsync(Expression<Func<T, bool>> where, Func<IQueryable<T>, IIncludableQueryable<T, object>> include)
         {
             var query = dbSet.Where(where);
-            foreach (var include in includes)
-            {
-                query = query.Include(include);
-            }
+            query = include(query);
             return query.FirstOrDefaultAsync<T>();
         }
 
@@ -132,23 +127,20 @@ namespace Marketplace.Data.Infrastructure
             return dbSet.ToListAsync();
         }
 
-        public IEnumerable<T> GetAll(params Expression<Func<T, object>>[] includes)
+        public IEnumerable<T> GetAll(Func<IQueryable<T>, IIncludableQueryable<T, object>> include)
         {
-            var set = dbSet.AsQueryable();
-            foreach (var include in includes)
-            {
-                set = set.Include(include);
-            }
+            IQueryable<T> set = dbSet;
+
+            set = include(set);
             return set.ToList();
         }
 
-        public Task<List<T>> GetAllAsync(params Expression<Func<T, object>>[] includes)
+        public Task<List<T>> GetAllAsync(Func<IQueryable<T>, IIncludableQueryable<T, object>> include)
         {
-            var set = dbSet.AsQueryable();
-            foreach (var include in includes)
-            {
-                set = set.Include(include);
-            }
+            IQueryable<T> set = dbSet;
+            
+            set = include(set);
+            
             return set.ToListAsync();
         }
 
@@ -162,23 +154,19 @@ namespace Marketplace.Data.Infrastructure
             return dbSet.FindAsync(id);
         }
 
-        public T GetById(int id, params Expression<Func<T, object>>[] includes)
+        public T GetById(int id, Func<IQueryable<T>, IIncludableQueryable<T, object>> include)
         {
-            var set = dbSet.AsQueryable();
-            foreach (var include in includes)
-            {
-                set = set.Include(include);
-            }
+            IQueryable<T> set = dbSet;
+
+            set = include(set);
             return set.SingleOrDefault(i => i.Id == id);
         }
 
-        public Task<T> GetByIdAsync(int id, params Expression<Func<T, object>>[] includes)
+        public Task<T> GetByIdAsync(int id, Func<IQueryable<T>, IIncludableQueryable<T, object>> include)
         {
-            var set = dbSet.AsQueryable();
-            foreach (var include in includes)
-            {
-                set = set.Include(include);
-            }
+            IQueryable<T> set = dbSet;
+
+            set = include(set);
             return set.SingleOrDefaultAsync(i => i.Id == id);
         }
 
@@ -192,23 +180,19 @@ namespace Marketplace.Data.Infrastructure
             return dbSet.Where(where).ToListAsync();
         }
 
-        public IEnumerable<T> GetMany(Expression<Func<T, bool>> where, params Expression<Func<T, object>>[] includes)
+        public IEnumerable<T> GetMany(Expression<Func<T, bool>> where, Func<IQueryable<T>, IIncludableQueryable<T, object>> include)
         {
-            var set = dbSet.Where(where);
-            foreach (var include in includes)
-            {
-                set = set.Include(include);
-            }
+            IQueryable<T> set = dbSet;
+
+            set = include(set);
             return set.ToList();
         }
 
-        public Task<List<T>> GetManyAsync(Expression<Func<T, bool>> where, params Expression<Func<T, object>>[] includes)
+        public Task<List<T>> GetManyAsync(Expression<Func<T, bool>> where, Func<IQueryable<T>, IIncludableQueryable<T, object>> include)
         {
-            var set = dbSet.Where(where);
-            foreach (var include in includes)
-            {
-                set = set.Include(include);
-            }
+            IQueryable<T> set = dbSet;
+
+            set = include(set);
             return set.ToListAsync();
         }
 

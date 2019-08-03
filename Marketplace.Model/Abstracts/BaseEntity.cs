@@ -11,6 +11,11 @@ namespace Marketplace.Model.Abstracts
         public T Id { get; set; }
         public DateTime CreatedDate { get; set; }
 
+        public BaseEntity()
+        {
+            CreatedDate = DateTime.Now;
+        }
+
 
     }
 }

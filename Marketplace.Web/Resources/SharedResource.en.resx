@@ -117,6 +117,15 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="Active" xml:space="preserve">
+    <value>Active</value>
+  </data>
+  <data name="Buyer" xml:space="preserve">
+    <value>Buyer</value>
+  </data>
+  <data name="Closed" xml:space="preserve">
+    <value>Closed</value>
+  </data>
   <data name="Copyright" xml:space="preserve">
     <value>© 2015 - 2019 PlayerUp® Global Inc</value>
   </data>
@@ -125,6 +134,9 @@
   </data>
   <data name="FromDate" xml:space="preserve">
     <value>From</value>
+  </data>
+  <data name="Inactive" xml:space="preserve">
+    <value>Inactive</value>
   </data>
   <data name="Messages" xml:space="preserve">
     <value>Messages</value>
@@ -150,6 +162,9 @@
   <data name="Policy" xml:space="preserve">
     <value>Privacy Policy</value>
   </data>
+  <data name="Seller" xml:space="preserve">
+    <value>Seller</value>
+  </data>
   <data name="Settings" xml:space="preserve">
     <value>Settings</value>
   </data>
@@ -158,5 +173,8 @@
   </data>
   <data name="ToDate" xml:space="preserve">
     <value>To</value>
+  </data>
+  <data name="Today" xml:space="preserve">
+    <value>Today</value>
   </data>
 </root>

@@ -1,17 +1,18 @@
 ﻿@model Marketplace.Web.Models.Offer.OfferListViewModel
-    <div class="row">
-        <div class="col-lg-4 text-left">
-            <span class="offers-count">Найдено @Model.Offers.Count() предложений</span>
-        </div>
-        <div class="col-lg-4 text-right">
-            <span class="offers-count">Сортировать </span>
-        </div>
-        <div class="col-lg-4 text-right">
-            @Html.DropDownListFor(m => m.SearchInfo.SortBy, Model.SortBy, new { @class="custom-select", @onchange="submitSearchOfferForm()", @id="select-sort-list" })
-         
-        </div>
+@using Marketplace.Web.Extensions
+<div class="row">
+    <div class="col-lg-4 text-left">
+        <span class="offers-count">Найдено @Model.Offers.Count() предложений</span>
     </div>
-    
+    <div class="col-lg-4 text-right">
+        <span class="offers-count">Сортировать </span>
+    </div>
+    <div class="col-lg-4 text-right">
+        @Html.DropDownListFor(m => m.SearchInfo.SortBy, Model.SortBy, new { @class = "custom-select", @onchange = "submitSearchOfferForm()", @id = "select-sort-list" })
+
+    </div>
+</div>
+
 
 @foreach (var offer in Model.Offers)
 {
@@ -41,13 +42,13 @@
 
                         </div>
                         <div class="col-lg-4 text-right">
-                            <span class="font-14">Оплата гаранта: @offer.SellerPaysMiddleman</span>
+                            <span class="font-14">Оплата гаранта: @offer.SecureTransactionPayer.GetDisplayName()</span>
                         </div>
 
                     </div>
                     <div class="row mt-2" style="        font-size: 14px">
                         <div class="col-lg-5">
-                            <span class="mr-2"><i class="fas fa-history"></i> 17 April 2019</span>
+                            <span class="mr-2"><i class="fas fa-history"></i> @offer.RefreshDate.ToShortMonthName()</span>
                             <span><i class="fas fa-gamepad"></i> @offer.Game</span>
                         </div>
 

@@ -1,7 +1,9 @@
 ﻿using Marketplace.Data.Infrastructure;
 using Marketplace.Data.Repositories;
-using Marketplace.Model.Enums;
+using Marketplace.Model;
 using Marketplace.Model.Models;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Query;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,8 +17,8 @@ namespace Marketplace.Service.Services
     {
         IEnumerable<Feedback> GetAllFeedbacks();
         Task<List<Feedback>> GetAllFeedbacksAsync();
-        IEnumerable<Feedback> GetFeedbacks(Expression<Func<Feedback, bool>> where, params Expression<Func<Feedback, object>>[] includes);
-        Task<List<Feedback>> GetFeedbacksAsync(Expression<Func<Feedback, bool>> where, params Expression<Func<Feedback, object>>[] includes);
+        IEnumerable<Feedback> GetFeedbacks(Expression<Func<Feedback, bool>> where, Func<IQueryable<Feedback>, IIncludableQueryable<Feedback, object>> include);
+        Task<List<Feedback>> GetFeedbacksAsync(Expression<Func<Feedback, bool>> where, Func<IQueryable<Feedback>, IIncludableQueryable<Feedback, object>> include);
 
         int PositiveFeedbackCount(UserProfile user);
         int NegativeFeedbackCount(UserProfile user);
@@ -59,25 +61,25 @@ namespace Marketplace.Service.Services
             return await feedbacksRepository.GetAllAsync();
         }
 
-        public IEnumerable<Feedback> GetFeedbacks(Expression<Func<Feedback, bool>> where, params Expression<Func<Feedback, object>>[] includes)
+        public IEnumerable<Feedback> GetFeedbacks(Expression<Func<Feedback, bool>> where, Func<IQueryable<Feedback>, IIncludableQueryable<Feedback, object>> include)
         {
-            var feedbacks = feedbacksRepository.GetMany(where, includes);
+            var feedbacks = feedbacksRepository.GetMany(where, include);
             return feedbacks;
         }
 
-        public async Task<List<Feedback>> GetFeedbacksAsync(Expression<Func<Feedback, bool>> where, params Expression<Func<Feedback, object>>[] includes)
+        public async Task<List<Feedback>> GetFeedbacksAsync(Expression<Func<Feedback, bool>> where, Func<IQueryable<Feedback>, IIncludableQueryable<Feedback, object>> include)
         {
-            return await feedbacksRepository.GetManyAsync(where, includes);
+            return await feedbacksRepository.GetManyAsync(where, include);
         }
 
         public void LeaveAutomaticFeedback(int sellerId, int buyerId, int orderId)
         {
-            var seller = userProfileRepository.Get(u => u.Id == sellerId, i => i.FeedbacksToOthers);
-            var buyer = userProfileRepository.Get(u => u.Id == buyerId, i => i.FeedbacksToOthers);
-            var order = orderRepository.GetById(orderId, i => i.BuyerId, i => i.SellerId);
+            var seller = userProfileRepository.Get(u => u.Id == sellerId, include: source => source.Include(i => i.FeedbacksToOthers));
+            var buyer = userProfileRepository.Get(u => u.Id == buyerId, include: source => source.Include(i => i.FeedbacksToOthers));
+            var order = orderRepository.GetById(orderId, include: source => source.Include(i => i.Buyer).Include(i => i.Seller));
             if (seller != null && buyer != null && order != null)
             {
-                if (order.BuyerId == buyerId && order.SellerId == sellerId) // добавить условие на статус заказа
+                if (order.Buyer.Id == buyerId && order.Seller.Id == sellerId) // добавить условие на статус заказа
                 {
                     var feedbackToSeller = new Feedback()
                     {

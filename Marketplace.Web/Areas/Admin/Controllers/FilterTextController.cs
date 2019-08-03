@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Marketplace.Model.Models;
 using Marketplace.Service.Services;
-using Marketplace.Web.Areas.Admin.Models.FilterText;
+using Marketplace.Web.Areas.Admin.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Marketplace.Web.Areas.Admin.Controllers
@@ -35,6 +35,7 @@ namespace Marketplace.Web.Areas.Admin.Controllers
                 if (game != null)
                 {
                     var filterText = Mapper.Map<CreateFilterTextViewModel, FilterText>(model);
+                    filterText.Game = game;
                     filterTextService.CreateFilterText(filterText);
                     await filterTextService.SaveFilterTextAsync();
                     return View();

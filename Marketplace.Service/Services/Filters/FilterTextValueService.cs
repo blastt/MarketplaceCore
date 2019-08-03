@@ -1,8 +1,10 @@
 ﻿using Marketplace.Data.Infrastructure;
 using Marketplace.Data.Repositories;
 using Marketplace.Model.Models;
+using Microsoft.EntityFrameworkCore.Query;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
@@ -14,11 +16,11 @@ namespace Marketplace.Service.Services
         void Delete(FilterTextValue filterTextValue);
 
         IEnumerable<FilterTextValue> GetAllFilterTextValues();
-        IEnumerable<FilterTextValue> GetAllFilterTextValues(params Expression<Func<FilterTextValue, object>>[] includes);
+        IEnumerable<FilterTextValue> GetAllFilterTextValues(Func<IQueryable<FilterTextValue>, IIncludableQueryable<FilterTextValue, object>> include);
         Task<IList<FilterTextValue>> GetAllFilterTextValuesAsync();
-        Task<IList<FilterTextValue>> GetAllFilterTextValuesAsync(params Expression<Func<FilterTextValue, object>>[] includes);
-        IEnumerable<FilterTextValue> GetFilterTextValues(Expression<Func<FilterTextValue, bool>> where, params Expression<Func<FilterTextValue, object>>[] includes);
-        Task<IList<FilterTextValue>> GetFilterTextValuesAsync(Expression<Func<FilterTextValue, bool>> where, params Expression<Func<FilterTextValue, object>>[] includes);
+        Task<IList<FilterTextValue>> GetAllFilterTextValuesAsync(Func<IQueryable<FilterTextValue>, IIncludableQueryable<FilterTextValue, object>> include);
+        IEnumerable<FilterTextValue> GetFilterTextValues(Expression<Func<FilterTextValue, bool>> where, Func<IQueryable<FilterTextValue>, IIncludableQueryable<FilterTextValue, object>> include);
+        Task<IList<FilterTextValue>> GetFilterTextValuesAsync(Expression<Func<FilterTextValue, bool>> where, Func<IQueryable<FilterTextValue>, IIncludableQueryable<FilterTextValue, object>> include);
 
         void CreateFilterTextValue(FilterTextValue filterTextValue);
         void SaveFilterTextValue();
@@ -44,9 +46,9 @@ namespace Marketplace.Service.Services
             filterTextValueRepository.Remove(filterTextValue);
         }
 
-        public IEnumerable<FilterTextValue> GetAllFilterTextValues(params Expression<Func<FilterTextValue, object>>[] includes)
+        public IEnumerable<FilterTextValue> GetAllFilterTextValues(Func<IQueryable<FilterTextValue>, IIncludableQueryable<FilterTextValue, object>> include)
         {
-            var filterTextValue = filterTextValueRepository.GetAll(includes);
+            var filterTextValue = filterTextValueRepository.GetAll(include);
             return filterTextValue;
         }
 
@@ -60,21 +62,21 @@ namespace Marketplace.Service.Services
         {
             return await filterTextValueRepository.GetAllAsync();
         }
-        public async Task<IList<FilterTextValue>> GetAllFilterTextValuesAsync(params Expression<Func<FilterTextValue, object>>[] includes)
+        public async Task<IList<FilterTextValue>> GetAllFilterTextValuesAsync(Func<IQueryable<FilterTextValue>, IIncludableQueryable<FilterTextValue, object>> include)
         {
-            return await filterTextValueRepository.GetAllAsync(includes);
+            return await filterTextValueRepository.GetAllAsync(include);
         }
 
 
-        public IEnumerable<FilterTextValue> GetFilterTextValues(Expression<Func<FilterTextValue, bool>> where, params Expression<Func<FilterTextValue, object>>[] includes)
+        public IEnumerable<FilterTextValue> GetFilterTextValues(Expression<Func<FilterTextValue, bool>> where, Func<IQueryable<FilterTextValue>, IIncludableQueryable<FilterTextValue, object>> include)
         {
-            var query = filterTextValueRepository.GetMany(where, includes);
+            var query = filterTextValueRepository.GetMany(where, include);
             return query;
         }
 
-        public async Task<IList<FilterTextValue>> GetFilterTextValuesAsync(Expression<Func<FilterTextValue, bool>> where, params Expression<Func<FilterTextValue, object>>[] includes)
+        public async Task<IList<FilterTextValue>> GetFilterTextValuesAsync(Expression<Func<FilterTextValue, bool>> where, Func<IQueryable<FilterTextValue>, IIncludableQueryable<FilterTextValue, object>> include)
         {
-            return await filterTextValueRepository.GetManyAsync(where, includes);
+            return await filterTextValueRepository.GetManyAsync(where, include);
         }
 
         public void SaveFilterTextValue()

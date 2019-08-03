@@ -4,13 +4,7 @@ using System.Collections.Generic;
 using System.Text;
 
 namespace Marketplace.Model.Models
-{
-    public enum OfferState
-    {
-        active,
-        inactive,
-        closed
-    }
+{   
 
     public class Offer : BaseEntity<int>
     {
@@ -32,7 +26,7 @@ namespace Marketplace.Model.Models
 
         public int Views { get; set; }
 
-        public bool SellerPaysMiddleman { get; set; }
+        public SecureTransactionPayer SecureTransactionPayer { get; set; }
 
         public virtual IList<Screenshot> Screenshots { get; set; } = new List<Screenshot>();
 
@@ -75,9 +69,16 @@ namespace Marketplace.Model.Models
         public int UserProfileId { get; set; }
         public UserProfile UserProfile { get; set; }
 
-        public IList<FilterTextValue> FilterTextValues { get; set; }
+        public IList<OfferFilterTextValue> OfferFilterTextValues { get; set; }
         public IList<FilterRangeValue> FilterRangeValues { get; set; }
         public IList<FilterBooleanValue> FilterBooleanValues { get; set; }
+
+        public Offer()
+        {
+            OfferFilterTextValues = new List<OfferFilterTextValue>();
+            FilterRangeValues = new List<FilterRangeValue>();
+            FilterBooleanValues = new List<FilterBooleanValue>();
+        }
 
     }
 }

@@ -1,5 +1,5 @@
 ﻿using Marketplace.Data.Infrastructure;
-using Marketplace.Model.Enums;
+using Marketplace.Model;
 using Marketplace.Model.Models;
 using System;
 using System.Collections.Generic;

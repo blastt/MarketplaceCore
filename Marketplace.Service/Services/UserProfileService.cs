@@ -1,8 +1,10 @@
 ﻿using Marketplace.Data.Infrastructure;
 using Marketplace.Data.Repositories;
 using Marketplace.Model.Models;
+using Microsoft.EntityFrameworkCore.Query;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,15 +14,15 @@ namespace Marketplace.Service.Services
     public interface IUserProfileService
     {
         IEnumerable<UserProfile> GetAllUserProfiles();
-        IEnumerable<UserProfile> GetAllUserProfiles(params Expression<Func<UserProfile, object>>[] includes);
+        IEnumerable<UserProfile> GetAllUserProfiles(Func<IQueryable<UserProfile>, IIncludableQueryable<UserProfile, object>> include);
         Task<List<UserProfile>> GetAllUserProfilesAsync();
-        Task<List<UserProfile>> GetAllUserProfilesAsync(params Expression<Func<UserProfile, object>>[] includes);
+        Task<List<UserProfile>> GetAllUserProfilesAsync(Func<IQueryable<UserProfile>, IIncludableQueryable<UserProfile, object>> include);
 
-        UserProfile GetUserProfile(Expression<Func<UserProfile, bool>> where, params Expression<Func<UserProfile, object>>[] includes);
+        UserProfile GetUserProfile(Expression<Func<UserProfile, bool>> where, Func<IQueryable<UserProfile>, IIncludableQueryable<UserProfile, object>> include);
         UserProfile GetUserProfileById(int id);
         UserProfile GetUserProfileByName(string name);
 
-        Task<UserProfile> GetUserProfileAsync(Expression<Func<UserProfile, bool>> where, params Expression<Func<UserProfile, object>>[] includes);
+        Task<UserProfile> GetUserProfileAsync(Expression<Func<UserProfile, bool>> where, Func<IQueryable<UserProfile>, IIncludableQueryable<UserProfile, object>> include);
         Task<UserProfile> GetUserProfileByIdAsync(int id);
         Task<UserProfile> GetUserProfileByNameAsync(string name);
 
@@ -50,9 +52,9 @@ namespace Marketplace.Service.Services
             return userProfile;
         }
 
-        public IEnumerable<UserProfile> GetAllUserProfiles(params Expression<Func<UserProfile, object>>[] includes)
+        public IEnumerable<UserProfile> GetAllUserProfiles(Func<IQueryable<UserProfile>, IIncludableQueryable<UserProfile, object>> include)
         {
-            var userProfile = userProfilesRepository.GetAll(includes);
+            var userProfile = userProfilesRepository.GetAll(include);
             return userProfile;
         }
 
@@ -61,9 +63,9 @@ namespace Marketplace.Service.Services
             return await userProfilesRepository.GetAllAsync();
         }
 
-        public async Task<List<UserProfile>> GetAllUserProfilesAsync(params Expression<Func<UserProfile, object>>[] includes)
+        public async Task<List<UserProfile>> GetAllUserProfilesAsync(Func<IQueryable<UserProfile>, IIncludableQueryable<UserProfile, object>> include)
         {
-            return await userProfilesRepository.GetAllAsync(includes);
+            return await userProfilesRepository.GetAllAsync(include);
         }
 
 
@@ -74,9 +76,9 @@ namespace Marketplace.Service.Services
             return userProfile;
         }
 
-        public UserProfile GetUserProfile(Expression<Func<UserProfile, bool>> where, params Expression<Func<UserProfile, object>>[] includes)
+        public UserProfile GetUserProfile(Expression<Func<UserProfile, bool>> where, Func<IQueryable<UserProfile>, IIncludableQueryable<UserProfile, object>> include)
         {
-            var userProfile = userProfilesRepository.Get(where, includes);
+            var userProfile = userProfilesRepository.Get(where, include);
             return userProfile;
         }
 
@@ -91,9 +93,9 @@ namespace Marketplace.Service.Services
             return await userProfilesRepository.GetUserByIdAsync(id);
         }
 
-        public async Task<UserProfile> GetUserProfileAsync(Expression<Func<UserProfile, bool>> where, params Expression<Func<UserProfile, object>>[] includes)
+        public async Task<UserProfile> GetUserProfileAsync(Expression<Func<UserProfile, bool>> where, Func<IQueryable<UserProfile>, IIncludableQueryable<UserProfile, object>> include)
         {
-            return await userProfilesRepository.GetAsync(where, includes);
+            return await userProfilesRepository.GetAsync(where, include);
         }
 
         public async Task<UserProfile> GetUserProfileByNameAsync(string name)

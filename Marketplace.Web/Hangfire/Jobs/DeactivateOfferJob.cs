@@ -1,6 +1,7 @@
 ﻿using Marketplace.Service.Services;
 using Marketplace.Web.HtmlHelpers;
 using Microsoft.AspNetCore.Identity.UI.Services;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -27,7 +28,7 @@ namespace Marketplace.Web.Hangfire.Jobs
         public async Task Do(int itemId, string callbackUrl)
         {
 
-            var offer = offerService.GetOffer(itemId, i => i.UserProfile, i => i.UserProfile.User);
+            var offer = offerService.GetOffer(itemId, source => source.Include(i => i.UserProfile).ThenInclude(u => u.User));
             if (offer != null)
             {                
                 offerService.DeactivateOffer(offer, offer.UserProfileId);

@@ -12,30 +12,38 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Marketplace.Web.Hangfire;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.EntityFrameworkCore;
+using Marketplace.Web.Components;
+using Marketplace.Model;
 
 namespace Marketplace.Web.Controllers
 {
     public class OfferController : Controller
     {
         private readonly IOfferService offerService;
+        private readonly IFilterTextService filterTextService;
+        private readonly IFilterRangeService filterRangeService;
         private readonly IGameService gameService;
         private readonly IUserProfileService userProfileService;
         private readonly IUserService userService;
         private readonly int offerDays = 30;
         private const int pageSize = 4;
 
-        public OfferController(IOfferService offerService, IUserProfileService userProfileService, IGameService gameService, IUserService userService)
+        public OfferController(IOfferService offerService, IUserProfileService userProfileService, IGameService gameService, IUserService userService, IFilterTextService filterTextService, IFilterRangeService filterRangeService)
         {
             this.offerService = offerService;
             this.userProfileService = userProfileService;
             this.gameService = gameService;
             this.userService = userService;
+            this.filterTextService = filterTextService;
+            this.filterRangeService = filterRangeService;
         }
 
 
         public async Task<ActionResult> List(string game = "csgo")
         {
-            var offers = await offerService.GetOffersAsync(o => o.Game.Value == game && o.State == OfferState.active, i => i.Game, i => i.UserProfile);
+            // include: source => source.Include(i => i.Game)
+            var offers = await offerService.GetOffersAsync(o => o.Game.Value == game && o.State == OfferState.Active, source => source.Include(i => i.Game).Include(i => i.UserProfile));
             var model = new OfferListViewModel();
             var gameObj = gameService.GetGameByValue(game);
             model.SearchInfo = new SearchOfferViewModel
@@ -55,79 +63,81 @@ namespace Marketplace.Web.Controllers
 
         public async Task<ActionResult> OfferSearch(SearchOfferViewModel search)
         {
-            Sort sort = (Sort)Enum.Parse(typeof(Sort), search.SortBy, true);
+
+
+            //Sort sort = (Sort)Enum.Parse(typeof(Sort), search.SortBy, true);
 
             
-            List<Offer> offers = await offerService.GetOffersAsync(o => o.Game.Value == search.Game && o.State == OfferState.active, i => i.Game, i => i.UserProfile);
+            //List<Offer> offers = await offerService.GetOffersAsync(o => o.Game.Value == search.Game && o.State == OfferState.active, source => source.Include(i => i.Game).Include(i => i.UserProfile));
 
-            if (search.PersonalAccount)
-            {
-                offers = offers.Where(o => o.PersonalAccount).ToList();
-            }
+            //if (search.PersonalAccount)
+            //{
+            //    offers = offers.Where(o => o.PersonalAccount).ToList();
+            //}
 
-            if (search.IsBanned)
-            {
-                offers = offers.Where(o => o.IsBanned).ToList();
-            }
+            //if (search.IsBanned)
+            //{
+            //    offers = offers.Where(o => o.IsBanned).ToList();
+            //}
 
-            //offers = offers.Where(o => search.IsBanned && o.IsBanned).ToList();
-            //offers = offers.Where(o => search.Game == o.Game.Value).ToList();
+            ////offers = offers.Where(o => search.IsBanned && o.IsBanned).ToList();
+            ////offers = offers.Where(o => search.Game == o.Game.Value).ToList();
 
-            if (offers.Any() && search.PriceFrom == 0)
-            {
-                search.PriceFrom = offers.Min(o => o.Price);
-            }
-            if (offers.Any() && search.PriceTo == 0)
-            {
-                search.PriceTo = offers.Max(o => o.Price);
-            }
-            offers = offers.Where(o => search.PriceFrom <= o.Price && search.PriceTo >= o.Price).ToList();
-            switch (sort)
-            {
-                case Sort.BestSeller:
-                    offers = offers.OrderBy(o => o.UserProfile.Rating).ToList();
-                    break;
-                case Sort.Newest:
-                    offers = offers.OrderBy(o => o.CreatedDate).ToList();
-                    break;
-                case Sort.PriceAsc:
-                    offers = offers.OrderBy(o => o.Price).ToList();
-                    break;
-                case Sort.PriceDesc:
-                    offers = offers.OrderByDescending(o => o.Price).ToList();
-                    break;
-                default:
-                    offers = offers.OrderBy(o => o.UserProfile.Rating).ToList();
-                    break;
-            }
-            var modelOffers = Mapper.Map<IEnumerable<Offer>, IEnumerable<OfferViewModel>>(offers);
+            //if (offers.Any() && search.PriceFrom == 0)
+            //{
+            //    search.PriceFrom = offers.Min(o => o.Price);
+            //}
+            //if (offers.Any() && search.PriceTo == 0)
+            //{
+            //    search.PriceTo = offers.Max(o => o.Price);
+            //}
+            //offers = offers.Where(o => search.PriceFrom <= o.Price && search.PriceTo >= o.Price).ToList();
+            //switch (sort)
+            //{
+            //    case Sort.BestSeller:
+            //        offers = offers.OrderBy(o => o.UserProfile.Rating).ToList();
+            //        break;
+            //    case Sort.Newest:
+            //        offers = offers.OrderBy(o => o.CreatedDate).ToList();
+            //        break;
+            //    case Sort.PriceAsc:
+            //        offers = offers.OrderBy(o => o.Price).ToList();
+            //        break;
+            //    case Sort.PriceDesc:
+            //        offers = offers.OrderByDescending(o => o.Price).ToList();
+            //        break;
+            //    default:
+            //        offers = offers.OrderBy(o => o.UserProfile.Rating).ToList();
+            //        break;
+            //}
+            //var modelOffers = Mapper.Map<IEnumerable<Offer>, IEnumerable<OfferViewModel>>(offers);
 
-            var model = new OfferListViewModel()
-            {
-                Offers = modelOffers.Skip((search.Page - 1) * pageSize).Take(pageSize).ToList(),
-                PageInfo = new PageInfoViewModel
-                {
+            //var model = new OfferListViewModel()
+            //{
+            //    Offers = modelOffers.Skip((search.Page - 1) * pageSize).Take(pageSize).ToList(),
+            //    PageInfo = new PageInfoViewModel
+            //    {
 
-                    PageNumber = search.Page,
-                    PageSize = pageSize,
-                    TotalItems = modelOffers.Count()
-                }
-            };
+            //        PageNumber = search.Page,
+            //        PageSize = pageSize,
+            //        TotalItems = modelOffers.Count()
+            //    }
+            //};
 
 
 
-            foreach (var item in model.SortBy)
-            {
-                if (item.Value == search.SortBy.ToString())
-                {
-                    item.Selected = true;
-                }
-                else
-                {
-                    item.Selected = false;
-                }
-            }
-            return PartialView("_OfferTable", model);
+            //foreach (var item in model.SortBy)
+            //{
+            //    if (item.Value == search.SortBy.ToString())
+            //    {
+            //        item.Selected = true;
+            //    }
+            //    else
+            //    {
+            //        item.Selected = false;
+            //    }
+            //}
+            return PartialView("_OfferTable");
         }
 
         //public JsonResult GetFilters(string game)
@@ -156,11 +166,13 @@ namespace Marketplace.Web.Controllers
 
         [Authorize]
         [HttpPost]
-        public async Task<IActionResult> Create(CreateOfferViewModel model)
+        public async Task<IActionResult> Create(CreateOfferViewModel model, Dictionary<string, string> text_filter, Dictionary<string, double> range_filter)
         {
+            
             int currentUserId = await userService.GetCurrentUserId(HttpContext.User);
             Game game = gameService.GetGameByValue(model.Game);
             UserProfile user = await userProfileService.GetUserProfileByIdAsync(currentUserId);
+
             var errors = ModelState.Values.SelectMany(v => v.Errors);
             if (ModelState.IsValid && game != null && user != null)
             {
@@ -168,6 +180,61 @@ namespace Marketplace.Web.Controllers
                 offer.CreatedDate = offer.CreatedDate.AddDays(offerDays);
                 offer.UserProfile = user;
                 offer.Game = game;
+
+
+                foreach (var filter in text_filter)
+                {
+                    var entityFilters = await filterTextService.GetFiltersTextAsync(ft => ft.Value == filter.Key && ft.Game.Equals(game), include: source => source.Include(i => i.PredefinedValues));
+                    var entityFilter = entityFilters.FirstOrDefault();
+                    if (entityFilter != null)
+                    {
+                        foreach (var eFilterValue in entityFilter.PredefinedValues)
+                        {
+                            if (filter.Value == eFilterValue.Value)
+                            {
+                                //entityFilter.FilterTextValue = eFilterValue;
+                                OfferFilterTextValue offerFilterTextValue = new OfferFilterTextValue()
+                                {
+                                    FilterTextValue = eFilterValue,
+                                    Offer = offer
+                                };
+                                offer.OfferFilterTextValues.Add(offerFilterTextValue);
+
+                                //filterTextService.SaveFilterText();
+                            }
+                        }
+                    }
+
+                    //entityFilters = await filterTextService.GetFiltersTextAsync(f => f.Value == filter.Key, null);
+
+                }
+
+                foreach (var filter in range_filter)
+                {
+                    var entityFilters = await filterRangeService.GetFiltersRangeAsync(ft => ft.Value == filter.Key, include: source => source.Include(i => i.FilterRangeValue));
+                    var entityFilter = entityFilters.FirstOrDefault();
+                    if (entityFilter != null)
+                    {
+                        //entityFilter.FilterTextValue = eFilterValue;
+                        if (filter.Value > entityFilter.To || filter.Value < entityFilter.From)
+                        {
+                            return NotFound();
+                        }
+                        FilterRangeValue filterRangeValue = new FilterRangeValue()
+                        {
+                            Value = filter.Value,
+                            FilterRange = entityFilter                            
+                        };
+                        offer.FilterRangeValues.Add(filterRangeValue);
+
+                        //filterTextService.SaveFilterText();                                               
+                    }
+
+                    //entityFilters = await filterTextService.GetFiltersTextAsync(f => f.Value == filter.Key, null);
+
+                }
+
+
                 offerService.CreateOffer(offer);
                 offerService.SaveOffer();
                 
@@ -185,7 +252,7 @@ namespace Marketplace.Web.Controllers
         {
             if (id != null)
             {
-                Offer offer = await offerService.GetOfferAsync(id.Value, i => i.UserProfile, i => i.Game);
+                Offer offer = await offerService.GetOfferAsync(id.Value, source => source.Include(i => i.Game).Include(i => i.UserProfile));
                 if (offer != null)
                 {
                     var model = Mapper.Map<Offer, DetailsOfferViewModel>(offer);
@@ -194,5 +261,17 @@ namespace Marketplace.Web.Controllers
             }
             return NotFound();
         }
+
+        public IActionResult FilterListViewComponent(string game)
+        {
+            return ViewComponent(typeof(FilterListViewComponent), game);
+        }
+
+
+        private void CreateOfferWithFilters(Offer offer, Dictionary<string,string> text_filter, string[] range_filter_from, string[] range_filter_to)
+        {
+            offer.OfferFilterTextValues.Add(new OfferFilterTextValue() { });
+        }
+        
     }
 }

@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using Marketplace.Model.Models;
-using Marketplace.Web.Areas.Admin.Models.FilterRange;
+using Marketplace.Web.Areas.Admin.Models;
 using Marketplace.Web.Areas.Admin.Models.Game;
 using System;
 using System.Collections.Generic;
@@ -25,6 +25,14 @@ namespace Marketplace.Web.Areas.Admin.Automapper
                 .ForMember(o => o.To, map => map.MapFrom(vm => vm.To))
                 .ForAllOtherMembers(opt => opt.Ignore());
 
+            CreateMap<CreateFilterTextViewModel, FilterText>()
+                .ForMember(o => o.Name, map => map.MapFrom(vm => vm.Name))
+                .ForMember(o => o.Value, map => map.MapFrom(vm => vm.Value))
+                .ForAllOtherMembers(opt => opt.Ignore());
+            CreateMap<CreateFilterTextValueViewModel, FilterTextValue>()
+                .ForMember(o => o.Name, map => map.MapFrom(vm => vm.Name))
+                .ForMember(o => o.Value, map => map.MapFrom(vm => vm.Value))
+                .ForAllOtherMembers(opt => opt.Ignore());
             //CreateMap<CreateFilterViewModel, Filter>()
             //    .ForMember(o => o.Name, map => map.MapFrom(vm => vm.Name))
             //    .ForMember(o => o.Value, map => map.MapFrom(vm => vm.Value))

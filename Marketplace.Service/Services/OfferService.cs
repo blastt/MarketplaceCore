@@ -1,6 +1,9 @@
 ﻿using Marketplace.Data.Infrastructure;
 using Marketplace.Data.Repositories;
+using Marketplace.Model;
 using Marketplace.Model.Models;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Query;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,20 +16,20 @@ namespace Marketplace.Service.Services
     public interface IOfferService
     {
         IEnumerable<Offer> GetAllOffers();
-        IEnumerable<Offer> GetAllOffers(params Expression<Func<Offer, object>>[] includes);
-        IEnumerable<Offer> GetOffers(Expression<Func<Offer, bool>> where, params Expression<Func<Offer, object>>[] includes);
+        IEnumerable<Offer> GetAllOffers(Func<IQueryable<Offer>, IIncludableQueryable<Offer, object>> include);
+        IEnumerable<Offer> GetOffers(Expression<Func<Offer, bool>> where, Func<IQueryable<Offer>, IIncludableQueryable<Offer, object>> include);
         Task<List<Offer>> GetAllOffersAsync();
-        Task<List<Offer>> GetAllOffersAsync(params Expression<Func<Offer, object>>[] includes);
-        Task<List<Offer>> GetOffersAsync(Expression<Func<Offer, bool>> where, params Expression<Func<Offer, object>>[] includes);
+        Task<List<Offer>> GetAllOffersAsync(Func<IQueryable<Offer>, IIncludableQueryable<Offer, object>> include);
+        Task<List<Offer>> GetOffersAsync(Expression<Func<Offer, bool>> where, Func<IQueryable<Offer>, IIncludableQueryable<Offer, object>> include);
 
         //IEnumerable<Offer> GetCategoryGadgets(string categoryName, string gadgetName = null);
         Offer GetOffer(int id);
         Task<Offer> GetOfferAsync(int id);
         void Delete(Offer offer);
-        Offer GetOffer(int id, params Expression<Func<Offer, object>>[] includes);
-        Task<Offer> GetOfferAsync(int id, params Expression<Func<Offer, object>>[] includes);
+        Offer GetOffer(int id, Func<IQueryable<Offer>, IIncludableQueryable<Offer, object>> include);
+        Task<Offer> GetOfferAsync(int id, Func<IQueryable<Offer>, IIncludableQueryable<Offer, object>> include);
         //Task<Offer> GetOfferAsync(int id);
-        //Task<IEnumerable<Offer>> GetOffersAsync(Expression<Func<Offer, bool>> where);
+        Task<IEnumerable<Offer>> GetOffersAsync(Expression<Func<Offer, bool>> where);
         decimal CalculateMiddlemanPrice(decimal offerPrice);
         IEnumerable<Offer> SearchOffers(string game, string sort, ref bool isOnline, ref bool searchInDiscription,
             string searchString, ref int page, int pageSize, ref int totalItems, ref decimal minGamePrice, ref decimal maxGamePrice, ref decimal priceFrom, ref decimal priceTo, string[] filters);
@@ -66,15 +69,15 @@ namespace Marketplace.Service.Services
             return offers;
         }
 
-        public IEnumerable<Offer> GetAllOffers(params Expression<Func<Offer, object>>[] includes)
+        public IEnumerable<Offer> GetAllOffers(Func<IQueryable<Offer>, IIncludableQueryable<Offer, object>> include)
         {
-            var offers = offersRepository.GetAll(includes);
+            var offers = offersRepository.GetAll(include);
             return offers;
         }
 
-        public IEnumerable<Offer> GetOffers(Expression<Func<Offer, bool>> where, params Expression<Func<Offer, object>>[] includes)
+        public IEnumerable<Offer> GetOffers(Expression<Func<Offer, bool>> where, Func<IQueryable<Offer>, IIncludableQueryable<Offer, object>> include)
         {
-            var query = offersRepository.GetMany(where, includes);
+            var query = offersRepository.GetMany(where, include);
             return query;
         }
 
@@ -83,22 +86,22 @@ namespace Marketplace.Service.Services
             return await offersRepository.GetAllAsync();
         }
 
-        public async Task<List<Offer>> GetAllOffersAsync(params Expression<Func<Offer, object>>[] includes)
+        public async Task<List<Offer>> GetAllOffersAsync(Func<IQueryable<Offer>, IIncludableQueryable<Offer, object>> include)
         {
-            return await offersRepository.GetAllAsync(includes);
+            return await offersRepository.GetAllAsync(include);
         }
 
-        public async Task<List<Offer>> GetOffersAsync(Expression<Func<Offer, bool>> where, params Expression<Func<Offer, object>>[] includes)
+        public async Task<List<Offer>> GetOffersAsync(Expression<Func<Offer, bool>> where, Func<IQueryable<Offer>, IIncludableQueryable<Offer, object>> include)
         {
-            return await offersRepository.GetManyAsync(where, includes);
+            return await offersRepository.GetManyAsync(where, include);
         }
 
 
         public bool DeactivateOffer(Offer offer, int currentUserId)
         {
-            if (offer != null && offer.UserProfileId == currentUserId && offer.State == OfferState.active)
+            if (offer != null && offer.UserProfileId == currentUserId && offer.State == OfferState.Active)
             {
-                offer.State = OfferState.inactive;
+                offer.State = OfferState.Inactive;
                 offer.DateDeleted = DateTime.Now;
                 return true;
             }
@@ -116,15 +119,15 @@ namespace Marketplace.Service.Services
             return await offersRepository.GetByIdAsync(id);
         }
 
-        public Offer GetOffer(int id, params Expression<Func<Offer, object>>[] includes)
+        public Offer GetOffer(int id, Func<IQueryable<Offer>, IIncludableQueryable<Offer, object>> include)
         {
-            var offer = offersRepository.GetById(id, includes);
+            var offer = offersRepository.GetById(id, include);
             return offer;
         }
 
-        public async Task<Offer> GetOfferAsync(int id, params Expression<Func<Offer, object>>[] includes)
+        public async Task<Offer> GetOfferAsync(int id, Func<IQueryable<Offer>, IIncludableQueryable<Offer, object>> include)
         {
-            return await offersRepository.GetByIdAsync(id, includes);
+            return await offersRepository.GetByIdAsync(id, include);
         }
 
         //public async Task<Offer> GetOfferAsync(int id)
@@ -150,7 +153,7 @@ namespace Marketplace.Service.Services
 
         private IEnumerable<Offer> SearchOffersByGame(string game)
         {
-            return offersRepository.GetMany(m => m.Game.Value == game, i => i.Game, i => i.UserProfile);
+            return offersRepository.GetMany(m => m.Game.Value == game, include: source => source.Include(i => i.Game).Include(i => i.UserProfile));
 
         }
 
@@ -250,7 +253,7 @@ namespace Marketplace.Service.Services
         {
             IEnumerable<Offer> offers;
             offers = SearchOffersByGame(game);
-            offers = offers.Where(o => o.State == OfferState.active);
+            offers = offers.Where(o => o.State == OfferState.Active);
             offers = SearchOffersBySearchString(offers, searchString, ref searchInDiscription);
             offers = SearchOffersByPrice(offers, ref priceFrom, ref priceTo, ref minGamePrice, ref maxGamePrice);
             offers = SortOffers(offers, sort);
@@ -287,6 +290,13 @@ namespace Marketplace.Service.Services
         {
             await unitOfWork.SaveChangesAsync();
         }
+
+        public async Task<IEnumerable<Offer>> GetOffersAsync(Expression<Func<Offer, bool>> where)
+        {
+            return await offersRepository.GetManyAsync(where);
+        }
+
+
 
         #endregion
 

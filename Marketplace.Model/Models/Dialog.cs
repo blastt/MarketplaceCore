@@ -15,6 +15,5 @@ namespace Marketplace.Model.Models
         public UserProfile Companion { get; set; }
 
         public ICollection<Message> Messages { get; set; } = new List<Message>();
-
     }
 }

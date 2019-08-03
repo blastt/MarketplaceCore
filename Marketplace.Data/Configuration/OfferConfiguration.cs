@@ -19,6 +19,11 @@ namespace Marketplace.Data.Configuration
             builder.Property(o => o.MiddlemanPrice).ValueGeneratedOnAddOrUpdate();
             builder.Property(o => o.Discription).IsRequired().HasMaxLength(1000);
             builder.Property(o => o.AccountLogin).IsRequired().HasMaxLength(50);
+
+            builder
+                .HasMany(bc => bc.OfferFilterTextValues)
+                .WithOne(b => b.Offer)
+                .HasForeignKey(bc => bc.OfferId);
         }
     }
 }

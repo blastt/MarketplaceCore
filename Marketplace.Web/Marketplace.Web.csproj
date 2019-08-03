@@ -24,6 +24,8 @@
     <Folder Include="Areas\User\Resources\" />
     <Folder Include="Models\Game\" />
     <Folder Include="Models\Order\" />
+    <Folder Include="Attributes\" />
+    <Folder Include="Resources\Enum\" />
     <Folder Include="Views\Game\" />
   </ItemGroup>
 
@@ -31,6 +33,23 @@
     <ProjectReference Include="..\Marketplace.Data\Marketplace.Data.csproj" />
     <ProjectReference Include="..\Marketplace.Model\Marketplace.Model.csproj" />
     <ProjectReference Include="..\Marketplace.Service\Marketplace.Service.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="SharedResource.cs">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="Resources\SharedResource.en.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <CustomToolNamespace>Web.Resources</CustomToolNamespace>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\SharedResource.ru.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <CustomToolNamespace>Web.Resources</CustomToolNamespace>
+    </EmbeddedResource>
   </ItemGroup>
 
 </Project>

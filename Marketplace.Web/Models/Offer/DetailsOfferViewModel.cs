@@ -1,4 +1,6 @@
-﻿using Marketplace.Web.Models.UserProfile;
+﻿using Marketplace.Web.Models.FilterBooleanValue;
+using Marketplace.Web.Models.FilterRangeValue;
+using Marketplace.Web.Models.UserProfile;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -43,6 +45,10 @@ namespace Marketplace.Web.Models.Offer
 
         [Display(Name = "Платите ли вы за гаранта?")]
         public bool SellerPaysMiddleman { get; set; }
+
+        public IList<FilterTextValueViewModel> FilterTextValues { get; set; }
+        public IList<FilterRangeValueViewModel> FilterRangeValues { get; set; }
+        public IList<FilterBooleanValueViewModel> FilterBooleanValues { get; set; }
 
 
         public UserProfileViewModel User { get; set; }

@@ -9,7 +9,13 @@ namespace Marketplace.Model.Models
     {
         public IList<FilterTextValue> PredefinedValues { get; set; }
 
+        
         public int? FilterTextValueId { get; set; }
         public FilterTextValue FilterTextValue { get; set; }
+
+        public FilterText()
+        {
+            PredefinedValues = new List<FilterTextValue>();
+        }
     }
 }

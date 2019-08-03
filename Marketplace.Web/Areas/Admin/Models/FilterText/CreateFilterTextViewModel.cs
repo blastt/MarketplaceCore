@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Marketplace.Web.Areas.Admin.Models.FilterText
+namespace Marketplace.Web.Areas.Admin.Models
 {
     public class CreateFilterTextViewModel
     {

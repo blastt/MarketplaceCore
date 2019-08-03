@@ -13,7 +13,14 @@ namespace Marketplace.Data.Configuration
         {
             builder.ToTable("FilterTextValues");
             builder.HasKey(f => f.Id);
-            builder.HasOne(f => f.Offer).WithMany(o => o.FilterTextValues).HasForeignKey(o => o.OfferId);
+
+
+
+            builder
+                .HasMany(bc => bc.OfferFilterTextValues)
+                .WithOne(b => b.FilterTextValue)
+                .HasForeignKey(bc => bc.FilterTextValueId);
+            
             builder.HasOne(b => b.SelectedFilterText).WithOne(u => u.FilterTextValue).HasForeignKey<FilterText>(f => f.FilterTextValueId);
         }
     }

@@ -252,15 +252,11 @@ namespace Marketplace.Data.Migrations
 
                     b.Property<string>("Name");
 
-                    b.Property<int>("OfferId");
-
                     b.Property<string>("Value");
 
                     b.HasKey("Id");
 
                     b.HasIndex("FilterTextId");
-
-                    b.HasIndex("OfferId");
 
                     b.ToTable("FilterTextValues");
                 });
@@ -363,7 +359,7 @@ namespace Marketplace.Data.Migrations
 
                     b.Property<decimal>("Price");
 
-                    b.Property<bool>("SellerPaysMiddleman");
+                    b.Property<int>("SecureTransactionPayer");
 
                     b.Property<int>("State");
 
@@ -380,6 +376,27 @@ namespace Marketplace.Data.Migrations
                     b.HasIndex("UserProfileId");
 
                     b.ToTable("Offers");
+                });
+
+            modelBuilder.Entity("Marketplace.Model.Models.OfferFilterTextValue", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime>("CreatedDate");
+
+                    b.Property<int>("FilterTextValueId");
+
+                    b.Property<int>("OfferId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("FilterTextValueId");
+
+                    b.HasIndex("OfferId");
+
+                    b.ToTable("OfferFilterTextValue");
                 });
 
             modelBuilder.Entity("Marketplace.Model.Models.Order", b =>
@@ -875,11 +892,6 @@ namespace Marketplace.Data.Migrations
                     b.HasOne("Marketplace.Model.Models.FilterText", "FilterText")
                         .WithMany("PredefinedValues")
                         .HasForeignKey("FilterTextId");
-
-                    b.HasOne("Marketplace.Model.Models.Offer", "Offer")
-                        .WithMany("FilterTextValues")
-                        .HasForeignKey("OfferId")
-                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("Marketplace.Model.Models.Message", b =>
@@ -910,6 +922,19 @@ namespace Marketplace.Data.Migrations
                     b.HasOne("Marketplace.Model.Models.UserProfile", "UserProfile")
                         .WithMany("Offers")
                         .HasForeignKey("UserProfileId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("Marketplace.Model.Models.OfferFilterTextValue", b =>
+                {
+                    b.HasOne("Marketplace.Model.Models.FilterTextValue", "FilterTextValue")
+                        .WithMany("OfferFilterTextValues")
+                        .HasForeignKey("FilterTextValueId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("Marketplace.Model.Models.Offer", "Offer")
+                        .WithMany("OfferFilterTextValues")
+                        .HasForeignKey("OfferId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 

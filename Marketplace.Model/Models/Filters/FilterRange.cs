@@ -9,7 +9,6 @@ namespace Marketplace.Model.Models
     {
         public double From { get; set; }
         public double To { get; set; }
-
         public int? FilterRangeValueId { get; set; }
         public FilterRangeValue FilterRangeValue { get; set; }
     }

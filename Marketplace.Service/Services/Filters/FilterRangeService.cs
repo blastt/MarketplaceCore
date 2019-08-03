@@ -1,8 +1,10 @@
 ﻿using Marketplace.Data.Infrastructure;
 using Marketplace.Data.Repositories;
 using Marketplace.Model.Models;
+using Microsoft.EntityFrameworkCore.Query;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
@@ -14,11 +16,11 @@ namespace Marketplace.Service.Services
         void Delete(FilterRange filterRange);
 
         IEnumerable<FilterRange> GetAllFiltersRange();
-        IEnumerable<FilterRange> GetAllFiltersRange(params Expression<Func<FilterRange, object>>[] includes);
+        IEnumerable<FilterRange> GetAllFiltersRange(Func<IQueryable<FilterRange>, IIncludableQueryable<FilterRange, object>> include);
         Task<IList<FilterRange>> GetAllFiltersRangeAsync();
-        Task<IList<FilterRange>> GetAllFiltersRangeAsync(params Expression<Func<FilterRange, object>>[] includes);
-        IEnumerable<FilterRange> GetFiltersRange(Expression<Func<FilterRange, bool>> where, params Expression<Func<FilterRange, object>>[] includes);
-        Task<IList<FilterRange>> GetFiltersRangeAsync(Expression<Func<FilterRange, bool>> where, params Expression<Func<FilterRange, object>>[] includes);
+        Task<IList<FilterRange>> GetAllFiltersRangeAsync(Func<IQueryable<FilterRange>, IIncludableQueryable<FilterRange, object>> include);
+        IEnumerable<FilterRange> GetFiltersRange(Expression<Func<FilterRange, bool>> where, Func<IQueryable<FilterRange>, IIncludableQueryable<FilterRange, object>> include);
+        Task<IList<FilterRange>> GetFiltersRangeAsync(Expression<Func<FilterRange, bool>> where, Func<IQueryable<FilterRange>, IIncludableQueryable<FilterRange, object>> include);
 
         void CreateFilterRange(FilterRange filterRange);
         void SaveFilterRange();
@@ -44,9 +46,9 @@ namespace Marketplace.Service.Services
             filterRangeRepository.Remove(filterRange);
         }
 
-        public IEnumerable<FilterRange> GetAllFiltersRange(params Expression<Func<FilterRange, object>>[] includes)
+        public IEnumerable<FilterRange> GetAllFiltersRange(Func<IQueryable<FilterRange>, IIncludableQueryable<FilterRange, object>> include)
         {
-            var filterRange = filterRangeRepository.GetAll(includes);
+            var filterRange = filterRangeRepository.GetAll(include);
             return filterRange;
         }
 
@@ -60,21 +62,21 @@ namespace Marketplace.Service.Services
         {
             return await filterRangeRepository.GetAllAsync();
         }
-        public async Task<IList<FilterRange>> GetAllFiltersRangeAsync(params Expression<Func<FilterRange, object>>[] includes)
+        public async Task<IList<FilterRange>> GetAllFiltersRangeAsync(Func<IQueryable<FilterRange>, IIncludableQueryable<FilterRange, object>> include)
         {
-            return await filterRangeRepository.GetAllAsync(includes);
+            return await filterRangeRepository.GetAllAsync(include);
         }
 
 
-        public IEnumerable<FilterRange> GetFiltersRange(Expression<Func<FilterRange, bool>> where, params Expression<Func<FilterRange, object>>[] includes)
+        public IEnumerable<FilterRange> GetFiltersRange(Expression<Func<FilterRange, bool>> where, Func<IQueryable<FilterRange>, IIncludableQueryable<FilterRange, object>> include)
         {
-            var query = filterRangeRepository.GetMany(where, includes);
+            var query = filterRangeRepository.GetMany(where, include);
             return query;
         }
 
-        public async Task<IList<FilterRange>> GetFiltersRangeAsync(Expression<Func<FilterRange, bool>> where, params Expression<Func<FilterRange, object>>[] includes)
+        public async Task<IList<FilterRange>> GetFiltersRangeAsync(Expression<Func<FilterRange, bool>> where, Func<IQueryable<FilterRange>, IIncludableQueryable<FilterRange, object>> include)
         {
-            return await filterRangeRepository.GetManyAsync(where, includes);
+            return await filterRangeRepository.GetManyAsync(where, include);
         }
 
         public void SaveFilterRange()

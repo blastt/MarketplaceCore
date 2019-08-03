@@ -3,12 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
-using Marketplace.Model.Enums;
+using Marketplace.Model;
 using Marketplace.Model.Models;
 using Marketplace.Service.Services;
 using Marketplace.Web.Areas.User.Models.Order;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace Marketplace.Web.Areas.User.Controllers
 {
@@ -26,8 +27,9 @@ namespace Marketplace.Web.Areas.User.Controllers
 
         public async Task<ActionResult> SellList()
         {
+            // include: source => source.Include(i => i.Game)
             var userId = await userService.GetCurrentUserId(HttpContext.User);
-            var orders = await orderService.GetOrdersAsync(o => o.SellerId == userId, i => i.Buyer, i => i.CurrentStatus, i => i.Offer);
+            var orders = await orderService.GetOrdersAsync(o => o.SellerId == userId, include: source => source.Include(i => i.Buyer).Include(i => i.CurrentStatus).Include(i => i.Offer));
             var modelOrders = Mapper.Map<IEnumerable<Order>, IEnumerable<OrderViewModel>>(orders);
             var model = new OrderListViewModel()
             {
@@ -39,7 +41,7 @@ namespace Marketplace.Web.Areas.User.Controllers
         public async Task<ActionResult> BuyList()
         {
             var userId = await userService.GetCurrentUserId(HttpContext.User);
-            var orders = await orderService.GetOrdersAsync(o => o.BuyerId == userId, i => i.Seller, i => i.CurrentStatus, i => i.Offer);
+            var orders = await orderService.GetOrdersAsync(o => o.BuyerId == userId, include: source => source.Include(i => i.Seller).Include(i => i.CurrentStatus).Include(i => i.Offer));
             var modelOrders = Mapper.Map<IEnumerable<Order>, IEnumerable<OrderViewModel>>(orders);
             var model = new OrderListViewModel()
             {
@@ -52,8 +54,7 @@ namespace Marketplace.Web.Areas.User.Controllers
         {
             if (id != null)
             {
-
-                var order = await orderService.GetOrderAsync(id.Value, i => i.Seller, i => i.Middleman, i => i.Buyer, i => i.CurrentStatus, i => i.StatusLogs, i => i.AccountInfos, i => i.Offer, i => i.StatusLogs.Select(m => m.OldStatus), i => i.StatusLogs.Select(m => m.NewStatus));
+                var order = await orderService.GetOrderAsync(id.Value, include: source => source.Include(i => i.Seller).Include(i => i.Middleman).Include(i => i.Buyer).Include(i => i.CurrentStatus).Include(i => i.StatusLogs).ThenInclude(m => m.OldStatus).Include(i => i.StatusLogs).ThenInclude(m => m.NewStatus).Include(i => i.AccountInfos).Include(i => i.Offer));
                 if (order != null)
                 {
                     var currenUserId = await userService.GetCurrentUserId(HttpContext.User);
@@ -108,10 +109,11 @@ namespace Marketplace.Web.Areas.User.Controllers
                         {
                             model.ShowProvideData = true;
                         }
-                        if (order.Offer.SellerPaysMiddleman)
-                        {
-                            model.MiddlemanPrice = 0;
-                        }
+                        //TODO
+                        //if (order.Offer.SellerPaysMiddleman)
+                        //{
+                        //    model.MiddlemanPrice = 0;
+                        //}
                         else
                         {
                             model.MiddlemanPrice = order.Offer.MiddlemanPrice.Value;

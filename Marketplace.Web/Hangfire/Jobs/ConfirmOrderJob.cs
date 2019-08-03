@@ -1,4 +1,5 @@
 ﻿using Marketplace.Service.Services;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,7 +23,8 @@ namespace Marketplace.Web.Hangfire.Jobs
         //[DisableConcurrentExecution(10 * 60)]
         public async Task Do(int orderId)
         {
-            var order = orderService.GetOrder(orderId, i => i.BuyerId, i => i.SellerId);
+
+            var order = orderService.GetOrder(orderId, source => source.Include(i => i.Buyer).Include(i => i.Seller));
 
             if (order != null)
             {

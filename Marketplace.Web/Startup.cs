@@ -55,7 +55,7 @@ namespace Marketplace.Web
                 options.Password.RequiredUniqueChars = 1;
 
                 // Lockout settings.
-                options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(60);
+                options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromDays(30);
                 options.Lockout.MaxFailedAccessAttempts = 5;
                 options.Lockout.AllowedForNewUsers = true;
 
@@ -146,6 +146,7 @@ namespace Marketplace.Web
             {
                 new CultureInfo("en"),
                 new CultureInfo("ru"),
+                new CultureInfo("ua")
             };
 
             opts.DefaultRequestCulture = new RequestCulture("en");

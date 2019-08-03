@@ -1,6 +1,8 @@
 ﻿using Marketplace.Data.Infrastructure;
 using Marketplace.Data.Repositories;
 using Marketplace.Model.Models;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Query;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,21 +17,21 @@ namespace Marketplace.Service.Services
         IEnumerable<Dialog> GetAllDialogs();
         Task<List<Dialog>> GetAllDialogsAsync();
         Dialog GetDialog(int id);
-        Dialog GetDialog(Expression<Func<Dialog, bool>> where, params Expression<Func<Dialog, object>>[] includes);
+        Dialog GetDialog(Expression<Func<Dialog, bool>> where, Func<IQueryable<Dialog>, IIncludableQueryable<Dialog, object>> include);
 
         Task<Dialog> GetDialogAsync(int id);
-        Task<Dialog> GetDialogAsync(Expression<Func<Dialog, bool>> where, params Expression<Func<Dialog, object>>[] includes);
+        Task<Dialog> GetDialogAsync(Expression<Func<Dialog, bool>> where, Func<IQueryable<Dialog>, IIncludableQueryable<Dialog, object>> include);
 
         void CreateDialog(Dialog message);
 
         Dialog GetPrivateDialog(UserProfile user1, UserProfile user2);
         int GetOtherUserInDialog(int dialogId, int userId);
-        IEnumerable<Dialog> GetUserDialogs(int userId, params Expression<Func<Dialog, object>>[] includes);
-        IEnumerable<Dialog> GetUserDialogs(int userId, Expression<Func<Dialog, bool>> where, params Expression<Func<Dialog, object>>[] includes);
+        IEnumerable<Dialog> GetUserDialogs(int userId, Func<IQueryable<Dialog>, IIncludableQueryable<Dialog, object>> include);
+        IEnumerable<Dialog> GetUserDialogs(int userId, Expression<Func<Dialog, bool>> where, Func<IQueryable<Dialog>, IIncludableQueryable<Dialog, object>> include);
         Task<List<Dialog>> GetUserDialogsAsync(int userId);
         Task<List<Dialog>> GetUserDialogsAsync(int userId, Expression<Func<Dialog, bool>> where);
-        Task<List<Dialog>> GetUserDialogsAsync(int userId, params Expression<Func<Dialog, object>>[] includes);
-        Task<List<Dialog>> GetUserDialogsAsync(int userId, Expression<Func<Dialog, bool>> where, params Expression<Func<Dialog, object>>[] includes);
+        Task<List<Dialog>> GetUserDialogsAsync(int userId, Func<IQueryable<Dialog>, IIncludableQueryable<Dialog, object>> include);
+        Task<List<Dialog>> GetUserDialogsAsync(int userId, Expression<Func<Dialog, bool>> where, Func<IQueryable<Dialog>, IIncludableQueryable<Dialog, object>> include);
         int UnreadDialogsForUserCount(int userId);
         int UnreadMessagesInDialogCount(Dialog dialog);
 
@@ -70,9 +72,9 @@ namespace Marketplace.Service.Services
             return dialog;
         }
 
-        public Dialog GetDialog(Expression<Func<Dialog, bool>> where, params Expression<Func<Dialog, object>>[] includes)
+        public Dialog GetDialog(Expression<Func<Dialog, bool>> where, Func<IQueryable<Dialog>, IIncludableQueryable<Dialog, object>> include)
         {
-            var dialog = dialogsRepository.Get(where, includes);
+            var dialog = dialogsRepository.Get(where, include);
             return dialog;
         }
 
@@ -81,9 +83,9 @@ namespace Marketplace.Service.Services
             return await dialogsRepository.GetByIdAsync(id);
         }
 
-        public async Task<Dialog> GetDialogAsync(Expression<Func<Dialog, bool>> where, params Expression<Func<Dialog, object>>[] includes)
+        public async Task<Dialog> GetDialogAsync(Expression<Func<Dialog, bool>> where, Func<IQueryable<Dialog>, IIncludableQueryable<Dialog, object>> include)
         {
-            return await dialogsRepository.GetAsync(where, includes);
+            return await dialogsRepository.GetAsync(where, include);
         }
 
         public void CreateDialog(Dialog dialog)
@@ -134,7 +136,7 @@ namespace Marketplace.Service.Services
         {
             int unreadDialogsCount = 0;
             var user = userProfileRepository.GetMany(u => u.Id == userId,
-                i => i.DialogsAsCreator.Select(d => d.Messages), i => i.DialogsAsСompanion.Select(d => d.Messages)).SingleOrDefault();
+                include: source => source.Include(u => u.DialogsAsCreator).ThenInclude(d => d.Messages).Include(i => i.DialogsAsСompanion).ThenInclude(d => d.Messages)).SingleOrDefault();
             if (user != null)
             {
                 var creatorDialogs = user.DialogsAsCreator;
@@ -158,15 +160,15 @@ namespace Marketplace.Service.Services
             return unreadDialogsCount;
         }
 
-        public IEnumerable<Dialog> GetUserDialogs(int userId, params Expression<Func<Dialog, object>>[] includes)
+        public IEnumerable<Dialog> GetUserDialogs(int userId, Func<IQueryable<Dialog>, IIncludableQueryable<Dialog, object>> include)
         {
-            var dialogs = dialogsRepository.GetMany(d => d.CompanionId == userId || d.CreatorId == userId, includes);
+            var dialogs = dialogsRepository.GetMany(d => d.CompanionId == userId || d.CreatorId == userId, include);
             return dialogs;
         }
 
-        public IEnumerable<Dialog> GetUserDialogs(int userId, Expression<Func<Dialog, bool>> where, params Expression<Func<Dialog, object>>[] includes)
+        public IEnumerable<Dialog> GetUserDialogs(int userId, Expression<Func<Dialog, bool>> where, Func<IQueryable<Dialog>, IIncludableQueryable<Dialog, object>> include)
         {
-            var dialogs = dialogsRepository.GetMany(where, includes).Where(d => d.CompanionId == userId || d.CreatorId == userId);
+            var dialogs = dialogsRepository.GetMany(where, include).Where(d => d.CompanionId == userId || d.CreatorId == userId);
             return dialogs;
         }
 
@@ -182,15 +184,15 @@ namespace Marketplace.Service.Services
             return dialogs;
         }
 
-        public async Task<List<Dialog>> GetUserDialogsAsync(int userId, params Expression<Func<Dialog, object>>[] includes)
+        public async Task<List<Dialog>> GetUserDialogsAsync(int userId, Func<IQueryable<Dialog>, IIncludableQueryable<Dialog, object>> include)
         {
-            var dialogs = await dialogsRepository.GetManyAsync(d => d.CompanionId == userId || d.CreatorId == userId, includes);
+            var dialogs = await dialogsRepository.GetManyAsync(d => d.CompanionId == userId || d.CreatorId == userId, include);
             return dialogs;
         }
 
-        public async Task<List<Dialog>> GetUserDialogsAsync(int userId, Expression<Func<Dialog, bool>> where, params Expression<Func<Dialog, object>>[] includes)
+        public async Task<List<Dialog>> GetUserDialogsAsync(int userId, Expression<Func<Dialog, bool>> where, Func<IQueryable<Dialog>, IIncludableQueryable<Dialog, object>> include)
         {
-            var dialogs = (await dialogsRepository.GetManyAsync(where, includes)).Where(d => d.CompanionId == userId || d.CreatorId == userId).ToList();
+            var dialogs = (await dialogsRepository.GetManyAsync(where, include)).Where(d => d.CompanionId == userId || d.CreatorId == userId).ToList();
             return dialogs;
         }
 

@@ -7,8 +7,8 @@ namespace Marketplace.Model.Models
 {
     public class FilterTextValue : BaseEntity<int>
     {
-        public int OfferId { get; set; }
-        public Offer Offer { get; set; }
+        public IList<OfferFilterTextValue> OfferFilterTextValues { get; set; }
+        
         public string Name { get; set; }
         public string Value { get; set; }
         public FilterText FilterText { get; set; }

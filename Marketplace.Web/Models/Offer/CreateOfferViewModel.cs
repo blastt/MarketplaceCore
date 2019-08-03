@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc.Rendering;
+﻿using Marketplace.Model;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -46,7 +47,7 @@ namespace Marketplace.Web.Models.Offer
 
         
         [Display(Name = "Платите ли вы за гаранта?")]
-        public bool SellerPaysMiddleman { get; set; }
+        public SecureTransactionPayerViewModel SecureTransactionPayer { get; set; }
 
         public string[] filters { get; set; }
     }

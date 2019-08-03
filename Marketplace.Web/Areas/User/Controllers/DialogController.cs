@@ -7,6 +7,7 @@ using Marketplace.Model.Models;
 using Marketplace.Service.Services;
 using Marketplace.Web.Areas.User.Models.Dialog;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace Marketplace.Web.Areas.User.Controllers
 {
@@ -27,9 +28,10 @@ namespace Marketplace.Web.Areas.User.Controllers
 
         public async Task<ActionResult> Inbox()
         {
+            //include: source => source.Include(i => i.Game).Include(i => i.UserProfile)
             int currentUserId = await userService.GetCurrentUserId(HttpContext.User);
-            var dialogs = await dialogService.GetUserDialogsAsync(currentUserId, i => i.Companion, i => i.Creator, i => i.Messages);
-            var dialogsUnread = await dialogService.GetUserDialogsAsync(currentUserId, d => d.Messages.Any(m => !m.ToViewed), i => i.Messages);
+            var dialogs = await dialogService.GetUserDialogsAsync(currentUserId,include: source => source.Include(i => i.Companion).Include(i => i.Creator).Include(i => i.Messages));
+            var dialogsUnread = await dialogService.GetUserDialogsAsync(currentUserId, d => d.Messages.Any(m => !m.ToViewed), include: source => source.Include(i => i.Messages));
             var modelDialogs = new List<DialogViewModel>(); Mapper.Map<IEnumerable<Dialog>, IEnumerable<DialogViewModel>>(dialogs);
 
             foreach (var dialog in dialogs)
@@ -52,7 +54,7 @@ namespace Marketplace.Web.Areas.User.Controllers
 
             int currentUserId = await userService.GetCurrentUserId(HttpContext.User);
             var dialogs = await dialogService.GetUserDialogsAsync(currentUserId, d => d.Messages.Any(m => !m.ToViewed));
-            var dialogsInbox = await dialogService.GetUserDialogsAsync(currentUserId, i => i.Messages);
+            var dialogsInbox = await dialogService.GetUserDialogsAsync(currentUserId, include: source => source.Include(i => i.Messages));
             var modelDialogs = Mapper.Map<IEnumerable<Dialog>, IEnumerable<DialogViewModel>>(dialogs);
             var model = new DialogListViewModel()
             {
@@ -70,7 +72,7 @@ namespace Marketplace.Web.Areas.User.Controllers
             string dialogWithUserImage = null;
             if (id != null)
             {
-                Dialog dialog = await dialogService.GetDialogAsync(d => d.Id == id.Value, i => i.Creator, i => i.Companion, i => i.Messages);
+                Dialog dialog = await dialogService.GetDialogAsync(d => d.Id == id.Value, include: source => source.Include(i => i.Creator).Include(i => i.Companion).Include(i => i.Messages));
                 if (dialog != null && ((await dialogService.GetUserDialogsAsync(currentUserId)).Count() != 0))
                 {
 

@@ -5,6 +5,7 @@ using Marketplace.Web.Areas.User.Models.Message;
 using Marketplace.Web.SignalRHubs;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -42,12 +43,17 @@ namespace Marketplace.Web.Areas.User.Controllers
                     return Json(new { success = false, responseText = "Вы не ввели сообщение" }, new Newtonsoft.Json.JsonSerializerSettings() { });
                 }
 
+                //include: source => source.Include(i => i.UserTo)
+                var toUser = userProfileService.GetUserProfile(u => u.Id == model.ReceiverId, source => source
+                .Include(i => i.DialogsAsСompanion).ThenInclude(d => d.Messages)
+                .Include(i => i.DialogsAsCreator).ThenInclude(d => d.Messages));
+                //var toUser = userProfileService.GetUserProfile(u => u.Id == model.ReceiverId, u => u.DialogsAsСompanion, u => u.DialogsAsCreator,
+                //    u => u.DialogsAsCreator.Select(i => i.Messages), u => u.DialogsAsСompanion.Select(i => i.Messages));
 
-                var toUser = userProfileService.GetUserProfile(u => u.Id == model.ReceiverId, u => u.DialogsAsСompanion, u => u.DialogsAsCreator,
-                    u => u.DialogsAsCreator.Select(i => i.Messages), u => u.DialogsAsСompanion.Select(i => i.Messages));
                 var currentUserId = await userService.GetCurrentUserId(HttpContext.User);
-                var fromUser = await userProfileService.GetUserProfileAsync(u => u.Id == currentUserId, u => u.DialogsAsСompanion, u => u.DialogsAsCreator,
-                    u => u.DialogsAsCreator.Select(i => i.Messages), u => u.DialogsAsСompanion.Select(i => i.Messages));
+                var fromUser = await userProfileService.GetUserProfileAsync(u => u.Id == currentUserId, source => source
+                .Include(i => i.DialogsAsСompanion).ThenInclude(d => d.Messages)
+                .Include(i => i.DialogsAsCreator).ThenInclude(d => d.Messages));
                 if (toUser != null && fromUser != null && toUser.Id != fromUser.Id)
                 {
 

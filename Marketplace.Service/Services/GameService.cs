@@ -1,8 +1,10 @@
 ﻿using Marketplace.Data.Infrastructure;
 using Marketplace.Data.Repositories;
 using Marketplace.Model.Models;
+using Microsoft.EntityFrameworkCore.Query;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
@@ -16,13 +18,13 @@ namespace Marketplace.Service.Services
         IEnumerable<Game> GetAllGames();
         Task<List<Game>> GetAllGamesAsync();
 
-        IEnumerable<Game> GetGames(Expression<Func<Game, bool>> where, params Expression<Func<Game, object>>[] includes);
-        Task<List<Game>> GetGamesAsync(Expression<Func<Game, bool>> where, params Expression<Func<Game, object>>[] includes);
+        IEnumerable<Game> GetGames(Expression<Func<Game, bool>> where, Func<IQueryable<Game>, IIncludableQueryable<Game, object>> include);
+        Task<List<Game>> GetGamesAsync(Expression<Func<Game, bool>> where, Func<IQueryable<Game>, IIncludableQueryable<Game, object>> include);
 
         Game GetGame(int id);
         Game GetGameByValue(string name);
 
-        Game GetGameByValue(string name, params Expression<Func<Game, object>>[] includes);
+        Game GetGameByValue(string name, Func<IQueryable<Game>, IIncludableQueryable<Game, object>> include);
         void CreateGame(Game message);
         void SaveGame();
         Task SaveGameAsync();
@@ -53,15 +55,15 @@ namespace Marketplace.Service.Services
         }
 
 
-        public IEnumerable<Game> GetGames(Expression<Func<Game, bool>> where, params Expression<Func<Game, object>>[] includes)
+        public IEnumerable<Game> GetGames(Expression<Func<Game, bool>> where, Func<IQueryable<Game>, IIncludableQueryable<Game, object>> include)
         {
-            var query = gamesRepository.GetMany(where, includes);
+            var query = gamesRepository.GetMany(where, include);
             return query;
         }
 
-        public async Task<List<Game>> GetGamesAsync(Expression<Func<Game, bool>> where, params Expression<Func<Game, object>>[] includes)
+        public async Task<List<Game>> GetGamesAsync(Expression<Func<Game, bool>> where, Func<IQueryable<Game>, IIncludableQueryable<Game, object>> include)
         {
-            return await gamesRepository.GetManyAsync(where, includes);
+            return await gamesRepository.GetManyAsync(where, include);
         }
 
         public Game GetGame(int id)
@@ -96,9 +98,9 @@ namespace Marketplace.Service.Services
             return gamesRepository.GetGameByValue(name);
         }
 
-        public Game GetGameByValue(string name, params Expression<Func<Game, object>>[] includes)
+        public Game GetGameByValue(string name, Func<IQueryable<Game>, IIncludableQueryable<Game, object>> include)
         {
-            var query = gamesRepository.GetGameByValue(name, includes);
+            var query = gamesRepository.GetGameByValue(name, include);
             return query;
         }
 

@@ -1,10 +1,11 @@
 ﻿using AutoMapper;
-using Marketplace.Model.Enums;
+using Marketplace.Model;
 using Marketplace.Model.Models;
 using Marketplace.Service.Services;
 using Marketplace.Web.Areas.User.Models.Feedback;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -28,7 +29,7 @@ namespace Marketplace.Web.Areas.User.Controllers
         public async Task<ActionResult> All()
         {
             var userId = await userService.GetCurrentUserId(HttpContext.User);
-            var feedbacks = await feedbackService.GetFeedbacksAsync(f => f.UserToId == userId, i => i.UserTo);
+            var feedbacks = await feedbackService.GetFeedbacksAsync(f => f.UserToId == userId, include: source => source.Include(i => i.UserTo));
             var modelFeedbacks = Mapper.Map<IEnumerable<Feedback>, IEnumerable<FeedbackViewModel>>(feedbacks);
             var model = new FeedbackListViewModel()
             {
@@ -40,7 +41,7 @@ namespace Marketplace.Web.Areas.User.Controllers
         public async Task<ActionResult> Positive()
         {
             var userId = await userService.GetCurrentUserId(HttpContext.User);
-            var feedbacks = await feedbackService.GetFeedbacksAsync(f => f.UserToId == userId && f.Grade == FeedbackGrade.Good, i => i.UserTo);
+            var feedbacks = await feedbackService.GetFeedbacksAsync(f => f.UserToId == userId && f.Grade == FeedbackGrade.Good, include: source => source.Include(i => i.UserTo));
             var modelFeedbacks = Mapper.Map<IEnumerable<Feedback>, IEnumerable<FeedbackViewModel>>(feedbacks);
             var model = new FeedbackListViewModel()
             {
@@ -52,7 +53,7 @@ namespace Marketplace.Web.Areas.User.Controllers
         public async Task<ActionResult> Negative()
         {
             var userId = await userService.GetCurrentUserId(HttpContext.User);
-            var feedbacks = await feedbackService.GetFeedbacksAsync(f => f.UserToId == userId && f.Grade == FeedbackGrade.Bad, i => i.UserTo);
+            var feedbacks = await feedbackService.GetFeedbacksAsync(f => f.UserToId == userId && f.Grade == FeedbackGrade.Bad, include: source => source.Include(i => i.UserTo));
             var modelFeedbacks = Mapper.Map<IEnumerable<Feedback>, IEnumerable<FeedbackViewModel>>(feedbacks);
             var model = new FeedbackListViewModel()
             {

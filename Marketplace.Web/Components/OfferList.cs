@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 
 namespace Marketplace.Web.Components
 {
@@ -20,7 +21,7 @@ namespace Marketplace.Web.Components
         public async Task<IViewComponentResult> InvokeAsync(SearchOfferViewModel searchInfo)
         {
             var model = new OfferListViewModel();
-            var offers = await offerService.GetAllOffersAsync(i => i.UserProfile.User, i => i.Game);
+            var offers = await offerService.GetAllOffersAsync(include: source => source.Include(i => i.Game).Include(i => i.UserProfile).ThenInclude(u => u.User));
             Sort sort;
             Enum.TryParse(searchInfo.SortBy, out sort);
             switch (sort)

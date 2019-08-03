@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Marketplace.Model.Models;
 using Marketplace.Service.Services;
-using Marketplace.Web.Areas.Admin.Models.FilterBoolean;
+using Marketplace.Web.Areas.Admin.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Marketplace.Web.Areas.Admin.Controllers
@@ -28,11 +28,11 @@ namespace Marketplace.Web.Areas.Admin.Controllers
         {
             if (ModelState.IsValid)
             {
-                IEnumerable<Game> games = await gameService.GetAllGamesAsync();
-                var game = games.FirstOrDefault(g => g.Value == model.Game);
+                Game game = gameService.GetGameByValue(model.Game);
                 if (game != null)
                 {
                     var filterBoolean = Mapper.Map<CreateFilterBooleanViewModel, FilterBoolean>(model);
+                    filterBoolean.Game = game;
                     filterBooleanService.CreateFilterBoolean(filterBoolean);
                     await filterBooleanService.SaveFilterBooleanAsync();
                     return View();

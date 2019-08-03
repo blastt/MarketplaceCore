@@ -1,8 +1,10 @@
 ﻿using Marketplace.Data.Infrastructure;
 using Marketplace.Data.Repositories;
 using Marketplace.Model.Models;
+using Microsoft.EntityFrameworkCore.Query;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
@@ -14,11 +16,11 @@ namespace Marketplace.Service.Services
         void Delete(FilterBooleanValue filterBooleanValue);
 
         IEnumerable<FilterBooleanValue> GetAllFilterBooleanValues();
-        IEnumerable<FilterBooleanValue> GetAllFilterBooleanValues(params Expression<Func<FilterBooleanValue, object>>[] includes);
+        IEnumerable<FilterBooleanValue> GetAllFilterBooleanValues(Func<IQueryable<FilterBooleanValue>, IIncludableQueryable<FilterBooleanValue, object>> include);
         Task<IList<FilterBooleanValue>> GetAllFilterBooleanValuesAsync();
-        Task<IList<FilterBooleanValue>> GetAllFilterBooleanValuesAsync(params Expression<Func<FilterBooleanValue, object>>[] includes);
-        IEnumerable<FilterBooleanValue> GetFilterBooleanValues(Expression<Func<FilterBooleanValue, bool>> where, params Expression<Func<FilterBooleanValue, object>>[] includes);
-        Task<IList<FilterBooleanValue>> GetFilterBooleanValuesAsync(Expression<Func<FilterBooleanValue, bool>> where, params Expression<Func<FilterBooleanValue, object>>[] includes);
+        Task<IList<FilterBooleanValue>> GetAllFilterBooleanValuesAsync(Func<IQueryable<FilterBooleanValue>, IIncludableQueryable<FilterBooleanValue, object>> include);
+        IEnumerable<FilterBooleanValue> GetFilterBooleanValues(Expression<Func<FilterBooleanValue, bool>> where, Func<IQueryable<FilterBooleanValue>, IIncludableQueryable<FilterBooleanValue, object>> include);
+        Task<IList<FilterBooleanValue>> GetFilterBooleanValuesAsync(Expression<Func<FilterBooleanValue, bool>> where, Func<IQueryable<FilterBooleanValue>, IIncludableQueryable<FilterBooleanValue, object>> include);
 
         void CreateFilterBooleanValue(FilterBooleanValue filterBooleanValue);
         void SaveFilterBooleanValue();
@@ -44,9 +46,9 @@ namespace Marketplace.Service.Services
             filterBooleanValueRepository.Remove(filterBooleanValue);
         }
 
-        public IEnumerable<FilterBooleanValue> GetAllFilterBooleanValues(params Expression<Func<FilterBooleanValue, object>>[] includes)
+        public IEnumerable<FilterBooleanValue> GetAllFilterBooleanValues(Func<IQueryable<FilterBooleanValue>, IIncludableQueryable<FilterBooleanValue, object>> include)
         {
-            var filterBooleanValue = filterBooleanValueRepository.GetAll(includes);
+            var filterBooleanValue = filterBooleanValueRepository.GetAll(include);
             return filterBooleanValue;
         }
 
@@ -60,21 +62,21 @@ namespace Marketplace.Service.Services
         {
             return await filterBooleanValueRepository.GetAllAsync();
         }
-        public async Task<IList<FilterBooleanValue>> GetAllFilterBooleanValuesAsync(params Expression<Func<FilterBooleanValue, object>>[] includes)
+        public async Task<IList<FilterBooleanValue>> GetAllFilterBooleanValuesAsync(Func<IQueryable<FilterBooleanValue>, IIncludableQueryable<FilterBooleanValue, object>> include)
         {
-            return await filterBooleanValueRepository.GetAllAsync(includes);
+            return await filterBooleanValueRepository.GetAllAsync(include);
         }
 
 
-        public IEnumerable<FilterBooleanValue> GetFilterBooleanValues(Expression<Func<FilterBooleanValue, bool>> where, params Expression<Func<FilterBooleanValue, object>>[] includes)
+        public IEnumerable<FilterBooleanValue> GetFilterBooleanValues(Expression<Func<FilterBooleanValue, bool>> where, Func<IQueryable<FilterBooleanValue>, IIncludableQueryable<FilterBooleanValue, object>> include)
         {
-            var query = filterBooleanValueRepository.GetMany(where, includes);
+            var query = filterBooleanValueRepository.GetMany(where, include);
             return query;
         }
 
-        public async Task<IList<FilterBooleanValue>> GetFilterBooleanValuesAsync(Expression<Func<FilterBooleanValue, bool>> where, params Expression<Func<FilterBooleanValue, object>>[] includes)
+        public async Task<IList<FilterBooleanValue>> GetFilterBooleanValuesAsync(Expression<Func<FilterBooleanValue, bool>> where, Func<IQueryable<FilterBooleanValue>, IIncludableQueryable<FilterBooleanValue, object>> include)
         {
-            return await filterBooleanValueRepository.GetManyAsync(where, includes);
+            return await filterBooleanValueRepository.GetManyAsync(where, include);
         }
 
         public void SaveFilterBooleanValue()

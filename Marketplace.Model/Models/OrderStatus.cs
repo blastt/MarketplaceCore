@@ -1,5 +1,4 @@
 ﻿using Marketplace.Model.Abstracts;
-using Marketplace.Model.Enums;
 using System;
 using System.Collections.Generic;
 using System.Text;

@@ -4,6 +4,7 @@ using Marketplace.Service.Services;
 using Marketplace.Web.Models;
 using Marketplace.Web.Models.Offer;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,12 +21,12 @@ namespace Marketplace.Web.Components
         }
         public async Task<IViewComponentResult> InvokeAsync(SearchOfferViewModel searchInfo)
         {
-            Game game = gameService.GetGameByValue(searchInfo.Game, i => i.RangeFilters, i => i.BooleanFilters, i => i.TextFilters, i => i.TextFilters.Select(tf => tf.PredefinedValues), includes: s => s.Include(i => i.TextFilters));
+            Game game = gameService.GetGameByValue(searchInfo.Game,include: source => source.Include(i => i.RangeFilters).Include(i => i.BooleanFilters).Include(i => i.TextFilters).Include(i => i.TextFilters).ThenInclude(tf => tf.PredefinedValues));
             if (game != null)
             {
-                searchInfo.RangeFilters = Mapper.Map<IList<FilterRange>, IList<FilterRangeViewModel>>(game.RangeFilters);
-                searchInfo.BooleanFilters = Mapper.Map<IList<FilterBoolean>, IList<FilterBooleanViewModel>>(game.BooleanFilters);
-                searchInfo.TextFilters = Mapper.Map<IList<FilterText>, IList<FilterTextViewModel>>(game.TextFilters);
+                searchInfo.FilterList.RangeFilters = Mapper.Map<IList<FilterRange>, IList<FilterRangeViewModel>>(game.RangeFilters);
+                searchInfo.FilterList.BooleanFilters = Mapper.Map<IList<FilterBoolean>, IList<FilterBooleanViewModel>>(game.BooleanFilters);
+                searchInfo.FilterList.TextFilters = Mapper.Map<IList<FilterText>, IList<FilterTextViewModel>>(game.TextFilters);
             }
 
             return View("_SearchPanelPartial", searchInfo);

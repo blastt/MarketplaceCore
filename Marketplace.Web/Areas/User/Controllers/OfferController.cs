@@ -4,12 +4,14 @@ using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using Hangfire;
+using Marketplace.Model;
 using Marketplace.Model.Models;
 using Marketplace.Service.Services;
 using Marketplace.Web.Areas.User.Models.Offer;
 using Marketplace.Web.Hangfire;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace Marketplace.Web.Areas.User.Controllers
 {
@@ -37,10 +39,10 @@ namespace Marketplace.Web.Areas.User.Controllers
         {
             int currentUserId = await userService.GetCurrentUserId(HttpContext.User);
             var model = new Models.Offer.OfferListViewModel();
-            var offers = await offerService.GetOffersAsync(o => o.UserProfileId == currentUserId && o.State == OfferState.active, i => i.Game);
+            var offers = await offerService.GetOffersAsync(o => o.UserProfileId == currentUserId && o.State == OfferState.Active, include: source => source.Include(i => i.Game));
             model.CountOfActive = offers.Count;
-            model.CountOfClosed = (await offerService.GetOffersAsync(o => o.UserProfileId == currentUserId && o.State == OfferState.closed)).Count;
-            model.CountOfInactive = (await offerService.GetOffersAsync(o => o.UserProfileId == currentUserId && o.State == OfferState.inactive)).Count;
+            model.CountOfClosed = (await offerService.GetOffersAsync(o => o.UserProfileId == currentUserId && o.State == OfferState.Closed)).Count();
+            model.CountOfInactive = (await offerService.GetOffersAsync(o => o.UserProfileId == currentUserId && o.State == OfferState.Inactive)).Count();
             model.Offers = Mapper.Map<IEnumerable<Offer>, IEnumerable<OfferViewModel>>(offers);
             return View(model);
         }
@@ -49,10 +51,10 @@ namespace Marketplace.Web.Areas.User.Controllers
         {
             int currentUserId = await userService.GetCurrentUserId(HttpContext.User);
             var model = new Models.Offer.OfferListViewModel();
-            var offers = await offerService.GetOffersAsync(o => o.UserProfileId == currentUserId && o.State == OfferState.inactive, i => i.Game);
+            var offers = await offerService.GetOffersAsync(o => o.UserProfileId == currentUserId && o.State == OfferState.Inactive, include: source => source.Include(i => i.Game));
             model.CountOfInactive = offers.Count;
-            model.CountOfClosed = (await offerService.GetOffersAsync(o => o.UserProfileId == currentUserId && o.State == OfferState.closed)).Count;
-            model.CountOfActive = (await offerService.GetOffersAsync(o => o.UserProfileId == currentUserId && o.State == OfferState.active)).Count;
+            model.CountOfClosed = (await offerService.GetOffersAsync(o => o.UserProfileId == currentUserId && o.State == OfferState.Closed)).Count();
+            model.CountOfActive = (await offerService.GetOffersAsync(o => o.UserProfileId == currentUserId && o.State == OfferState.Active)).Count();
             model.Offers = Mapper.Map<IEnumerable<Offer>, IEnumerable<OfferViewModel>>(offers);
             return View(model);
         }
@@ -61,10 +63,10 @@ namespace Marketplace.Web.Areas.User.Controllers
         {
             int currentUserId = await userService.GetCurrentUserId(HttpContext.User);
             var model = new Models.Offer.OfferListViewModel();
-            var offers = await offerService.GetOffersAsync(o => o.UserProfileId == currentUserId && o.State == OfferState.closed, i => i.Game);
+            var offers = await offerService.GetOffersAsync(o => o.UserProfileId == currentUserId && o.State == OfferState.Closed, include: source => source.Include(i => i.Game));
             model.CountOfClosed = offers.Count;
-            model.CountOfInactive = (await offerService.GetOffersAsync(o => o.UserProfileId == currentUserId && o.State == OfferState.inactive)).Count;
-            model.CountOfActive = (await offerService.GetOffersAsync(o => o.UserProfileId == currentUserId && o.State == OfferState.active)).Count;
+            model.CountOfInactive = (await offerService.GetOffersAsync(o => o.UserProfileId == currentUserId && o.State == OfferState.Inactive)).Count();
+            model.CountOfActive = (await offerService.GetOffersAsync(o => o.UserProfileId == currentUserId && o.State == OfferState.Active)).Count();
             model.Offers = Mapper.Map<IEnumerable<Offer>, IEnumerable<OfferViewModel>>(offers);
             return View(model);
         }
@@ -75,8 +77,8 @@ namespace Marketplace.Web.Areas.User.Controllers
             if (id != null)
             {
                 var currentUserId = await userService.GetCurrentUserId(HttpContext.User);
-                var offer = await offerService.GetOfferAsync(id.Value, o => o.UserProfile);
-                if (offer != null && offer.UserProfileId == currentUserId && offer.State == OfferState.active)
+                var offer = await offerService.GetOfferAsync(id.Value, include: source => source.Include(i => i.UserProfile));
+                if (offer != null && offer.UserProfileId == currentUserId && offer.State == OfferState.Active)
                 {
                     if (offer.JobId != null)
                     {
@@ -96,10 +98,10 @@ namespace Marketplace.Web.Areas.User.Controllers
             if (id != null)
             {
                 var currentUserId = await userService.GetCurrentUserId(HttpContext.User);
-                var offer = await offerService.GetOfferAsync(id.Value, o => o.UserProfile);
-                if (offer != null && offer.UserProfileId == currentUserId && offer.State == OfferState.inactive)
+                var offer = await offerService.GetOfferAsync(id.Value, include: source => source.Include(i => i.UserProfile));
+                if (offer != null && offer.UserProfileId == currentUserId && offer.State == OfferState.Inactive)
                 {
-                    offer.State = OfferState.active;
+                    offer.State = OfferState.Active;
                     offer.CreatedDate = DateTime.Now;
                     offer.DateDeleted = offer.CreatedDate.AddDays(offerDays);
                     await offerService.SaveOfferAsync();
@@ -120,8 +122,8 @@ namespace Marketplace.Web.Areas.User.Controllers
             if (id != null)
             {
                 var currentUserId = await userService.GetCurrentUserId(HttpContext.User);
-                var offer = await offerService.GetOfferAsync(id.Value, o => o.UserProfile);
-                if (offer != null && offer.UserProfileId == currentUserId && offer.State == OfferState.inactive)
+                var offer = await offerService.GetOfferAsync(id.Value, include: source => source.Include(i => i.UserProfile));
+                if (offer != null && offer.UserProfileId == currentUserId && offer.State == OfferState.Inactive)
                 {
                     offerService.Delete(offer);
                     await offerService.SaveOfferAsync();

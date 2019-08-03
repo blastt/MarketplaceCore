@@ -1,4 +1,4 @@
-﻿using Marketplace.Model.Enums;
+﻿using Marketplace.Model;
 using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
