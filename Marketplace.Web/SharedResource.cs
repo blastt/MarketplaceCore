@@ -53,37 +53,10 @@ namespace Marketplace.Web
             }
         }
 
-        /// <summary>
-        ///   Looks up a localized string similar to Buyer.
-        /// </summary>
-        public static string Buyer
-        {
-            get
-            {
-                return ResourceManager.GetString("Buyer", resourceCulture);
-            }
-        }
+        public static string Buyer => ResourceManager.GetString("Buyer", resourceCulture);
 
-        /// <summary>
-        ///   Looks up a localized string similar to InTwain.
-        /// </summary>
-        public static string InTwain
-        {
-            get
-            {
-                return ResourceManager.GetString("InTwain", resourceCulture);
-            }
-        }
+        public static string InTwain => ResourceManager.GetString("InTwain", resourceCulture);
 
-        /// <summary>
-        ///   Looks up a localized string similar to Seller.
-        /// </summary>
-        public static string Seller
-        {
-            get
-            {
-                return ResourceManager.GetString("Seller", resourceCulture);
-            }
-        }
+        public static string Seller => ResourceManager.GetString("Seller", resourceCulture);
     }
 }

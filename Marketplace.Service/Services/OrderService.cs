@@ -62,15 +62,13 @@ namespace Marketplace.Service.Services
     {
         private readonly IOrderRepository ordersRepository;
         private readonly IFeedbackRepository feedbacksRepository;
-        private readonly IOrderStatusRepository orderStatusRepository;
         private readonly IUnitOfWork unitOfWork;
         private readonly IUserProfileRepository userProfileRepository;
         private readonly ITransactionRepository transactionRepository;
 
-        public OrderService(IOrderRepository ordersRepository, IFeedbackRepository feedbacksRepository, ITransactionRepository transactionRepository, IOrderStatusRepository orderStatusRepository, IUserProfileRepository userProfileRepository, IUnitOfWork unitOfWork)
+        public OrderService(IOrderRepository ordersRepository, IFeedbackRepository feedbacksRepository, ITransactionRepository transactionRepository, IUserProfileRepository userProfileRepository, IUnitOfWork unitOfWork)
         {
             this.feedbacksRepository = feedbacksRepository;
-            this.orderStatusRepository = orderStatusRepository;
             this.ordersRepository = ordersRepository;
             this.unitOfWork = unitOfWork;
             this.userProfileRepository = userProfileRepository;
@@ -185,39 +183,36 @@ namespace Marketplace.Service.Services
             var order = GetOrder(orderId, include: source => source.Include(i => i.CurrentStatus).Include(i => i.StatusLogs).Include(i => i.Middleman).Include(i => i.Transactions).ThenInclude(t => t.Sender).Include(i => i.Transactions).ThenInclude(t => t.Receiver));
             if (order != null)
             {
-                OrderStatus newOrderStatus = null;
-                if (order.MiddlemanId == userId && order.CurrentStatus.Value == OrderStatusValue.MiddlemanBackingAccount)
+                OrderStatus orderStatus;
+                if (order.MiddlemanId == userId && order.CurrentStatus == OrderStatus.MiddlemanBackingAccount)
                 {
-                    newOrderStatus = orderStatusRepository.GetOrderStatusByValue(OrderStatusValue.MiddlemanClosed);
-                    if (newOrderStatus != null)
+                    orderStatus = OrderStatus.MiddlemanClosed;
+                    var orderTransactions = order.Transactions.ToList();
+
+                    foreach (var transaction in orderTransactions)
                     {
-                        var orderTransactions = order.Transactions.ToList();
+                        transaction.Sender.Balance += transaction.Amount;
+                        transaction.Receiver.Balance -= transaction.Amount;
 
-                        foreach (var transaction in orderTransactions)
+                        order.Transactions.Add(new Transaction
                         {
-                            transaction.Sender.Balance += transaction.Amount;
-                            transaction.Receiver.Balance -= transaction.Amount;
-
-                            order.Transactions.Add(new Transaction
-                            {
-                                Receiver = transaction.Sender,
-                                Sender = transaction.Receiver,
-                                Amount = transaction.Amount,
-                                CreatedDate = DateTime.Now
-                            });
-                        }
-
-                        order.StatusLogs.AddLast(new StatusLog()
-                        {
-                            OldStatus = order.CurrentStatus,
-                            NewStatus = newOrderStatus,
-                            TimeStamp = DateTime.Now
+                            Receiver = transaction.Sender,
+                            Sender = transaction.Receiver,
+                            Amount = transaction.Amount,
+                            CreatedDate = DateTime.Now
                         });
-                        order.CurrentStatus = newOrderStatus;
-                        order.BuyerChecked = false;
-                        order.SellerChecked = false;
-                        return true;
                     }
+
+                    order.StatusLogs.AddLast(new StatusLog()
+                    {
+                        OrderStatus = order.CurrentStatus,
+                        TimeStamp = DateTime.Now
+                    });
+                    order.CurrentStatus = orderStatus;
+                    order.BuyerChecked = false;
+                    order.SellerChecked = false;
+                    return true;
+
                 }
             }
             return false;
@@ -229,73 +224,67 @@ namespace Marketplace.Service.Services
             var order = GetOrder(orderId, include: source => source.Include(i => i.CurrentStatus).Include(i => i.StatusLogs).Include(i => i.Transactions).ThenInclude(t => t.Sender).Include(i => i.Transactions).ThenInclude(t => t.Receiver));
             if (order != null)
             {
-                if (order.CurrentStatus.Value == OrderStatusValue.BuyerPaying ||
-                    order.CurrentStatus.Value == OrderStatusValue.OrderCreating ||
-                    order.CurrentStatus.Value == OrderStatusValue.MiddlemanFinding ||
-                    order.CurrentStatus.Value == OrderStatusValue.SellerProviding ||
-                    order.CurrentStatus.Value == OrderStatusValue.MiddlemanChecking)
+                if (order.CurrentStatus == OrderStatus.BuyerPaying ||
+                    order.CurrentStatus == OrderStatus.OrderCreating ||
+                    order.CurrentStatus == OrderStatus.MiddlemanFinding ||
+                    order.CurrentStatus == OrderStatus.SellerProviding ||
+                    order.CurrentStatus == OrderStatus.MiddlemanChecking)
                 {
-                    OrderStatus newOrderStatus = null;
+                    OrderStatus orderStatus;
                     switch (closer)
                     {
                         case Closer.Buyer:
                             {
-                                newOrderStatus = orderStatusRepository.GetOrderStatusByValue(OrderStatusValue.BuyerClosed);
+                                orderStatus = OrderStatus.BuyerClosed;
                             }
                             break;
                         case Closer.Seller:
                             {
-                                newOrderStatus = orderStatusRepository.GetOrderStatusByValue(OrderStatusValue.SellerClosed);
+                                orderStatus = OrderStatus.SellerClosed;
                             }
                             break;
                         case Closer.Middleman:
                             {
-                                newOrderStatus = orderStatusRepository.GetOrderStatusByValue(OrderStatusValue.MiddlemanClosed);
+                                orderStatus = OrderStatus.MiddlemanClosed;
                             }
                             break;
                         case Closer.Automatically:
                             {
-                                newOrderStatus = orderStatusRepository.GetOrderStatusByValue(OrderStatusValue.ClosedAutomatically);
+                                orderStatus = OrderStatus.ClosedAutomatically;
                             }
                             break;
                         default:
                             {
-                                newOrderStatus = orderStatusRepository.GetOrderStatusByValue(OrderStatusValue.ClosedAutomatically);
+                                orderStatus = OrderStatus.ClosedAutomatically;
                             }
                             break;
                     }
 
+                    var orderTransactions = order.Transactions.ToList();
+                    foreach (var transaction in orderTransactions)
+                    {
+                        transaction.Sender.Balance += transaction.Amount;
+                        transaction.Receiver.Balance -= transaction.Amount;
 
-
-                    if (newOrderStatus != null)
-                    {                        
-                        var orderTransactions = order.Transactions.ToList();
-
-                        foreach (var transaction in orderTransactions)
+                        order.Transactions.Add(new Transaction
                         {
-                            transaction.Sender.Balance += transaction.Amount;
-                            transaction.Receiver.Balance -= transaction.Amount;
-
-                            order.Transactions.Add(new Transaction
-                            {
-                                Receiver = transaction.Sender,
-                                Sender = transaction.Receiver,
-                                Amount = transaction.Amount,
-                                CreatedDate = DateTime.Now
-                            });
-                        }
-
-                        order.StatusLogs.AddLast(new StatusLog()
-                        {
-                            OldStatus = order.CurrentStatus,
-                            NewStatus = newOrderStatus,
-                            TimeStamp = DateTime.Now
+                            Receiver = transaction.Sender,
+                            Sender = transaction.Receiver,
+                            Amount = transaction.Amount,
+                            CreatedDate = DateTime.Now
                         });
-                        order.CurrentStatus = newOrderStatus;
-                        order.BuyerChecked = false;
-                        order.SellerChecked = false;
-                        return true;
                     }
+
+                    order.StatusLogs.AddLast(new StatusLog()
+                    {
+                        OrderStatus = order.CurrentStatus,
+                        TimeStamp = DateTime.Now
+                    });
+                    order.CurrentStatus = orderStatus;
+                    order.BuyerChecked = false;
+                    order.SellerChecked = false;
+                    return true;
+
 
                 }
 
@@ -331,54 +320,51 @@ namespace Marketplace.Service.Services
             var order = GetOrder(orderId, include: source => source.Include(i => i.Buyer).Include(i => i.Seller).Include(i => i.CurrentStatus).Include(i => i.StatusLogs));
             if (order != null)
             {
-                if (order.CurrentStatus != null)
+
+                if (order.BuyerId == currentUserId && order.CurrentStatus == OrderStatus.BuyerConfirming)
                 {
-                    if (order.BuyerId == currentUserId && order.CurrentStatus.Value == OrderStatusValue.BuyerConfirming)
+                    var mainCup = userProfileRepository.GetUserByName("palyerup");
+                    if (mainCup != null)
                     {
-                        var mainCup = userProfileRepository.GetUserByName("palyerup");
-                        if (mainCup != null)
+                        decimal amount = order.AmmountSellerGet.Value;
+                        transactionRepository.Add(new Transaction
                         {
-                            decimal amount = order.AmmountSellerGet.Value;
-                            transactionRepository.Add(new Transaction
-                            {
-                                Amount = amount,
-                                Receiver = order.Seller,
-                                Sender = mainCup,
-                                Order = order,
-                                CreatedDate = DateTime.Now
-                            });
+                            Amount = amount,
+                            Receiver = order.Seller,
+                            Sender = mainCup,
+                            Order = order,
+                            CreatedDate = DateTime.Now
+                        });
 
-                            mainCup.Balance -= amount;
-                            order.Seller.Balance += amount;
-                            order.StatusLogs.AddLast(new StatusLog()
-                            {
-                                OldStatus = order.CurrentStatus,
-                                NewStatus = orderStatusRepository.GetOrderStatusByValue(OrderStatusValue.PayingToSeller),
-                                TimeStamp = DateTime.Now
-                            });
-                            order.CurrentStatus = orderStatusRepository.GetOrderStatusByValue(OrderStatusValue.PayingToSeller);
+                        mainCup.Balance -= amount;
+                        order.Seller.Balance += amount;
+                        order.StatusLogs.AddLast(new StatusLog()
+                        {
+                            OrderStatus = order.CurrentStatus,
+                            TimeStamp = DateTime.Now
+                        });
+                        order.CurrentStatus = OrderStatus.PayingToSeller;
 
-                            order.StatusLogs.AddLast(new StatusLog()
-                            {
-                                OldStatus = order.CurrentStatus,
-                                NewStatus = orderStatusRepository.GetOrderStatusByValue(OrderStatusValue.ClosedSuccessfully),
-                                TimeStamp = DateTime.Now
-                            });
-                            order.CurrentStatus = orderStatusRepository.GetOrderStatusByValue(OrderStatusValue.ClosedSuccessfully);
+                        order.StatusLogs.AddLast(new StatusLog()
+                        {
+                            OrderStatus = OrderStatus.ClosedSuccessfully,
+                            TimeStamp = DateTime.Now
+                        });
+                        order.CurrentStatus = OrderStatus.ClosedSuccessfully;
 
 
 
-                            order.BuyerChecked = false;
-                            order.SellerChecked = false;
+                        order.BuyerChecked = false;
+                        order.SellerChecked = false;
 
 
 
-                            //TempData["orderBuyStatus"] = "Спасибо за подтверждение сделки! Сделка успешно закрыта.";
-                            //return RedirectToAction("BuyDetails", "Order", new { id = order.Id });
-                            return true;
-                        }
+                        //TempData["orderBuyStatus"] = "Спасибо за подтверждение сделки! Сделка успешно закрыта.";
+                        //return RedirectToAction("BuyDetails", "Order", new { id = order.Id });
+                        return true;
                     }
                 }
+
             }
             return false;
         }
@@ -388,84 +374,37 @@ namespace Marketplace.Service.Services
             var order = GetOrder(orderId, include: source => source.Include(i => i.Seller).Include(i => i.CurrentStatus).Include(i => i.StatusLogs));
             if (order != null)
             {
-                if (order.CurrentStatus != null)
+
+                if (order.MiddlemanId == currentUserId && order.CurrentStatus == OrderStatus.MiddlemanBackingAccount)
                 {
-                    if (order.MiddlemanId == currentUserId && order.CurrentStatus.Value == OrderStatusValue.MiddlemanBackingAccount)
+                    var mainCup = userProfileRepository.GetUserByName("palyerup");
+                    if (mainCup != null)
                     {
-                        var mainCup = userProfileRepository.GetUserByName("palyerup");
-                        if (mainCup != null)
+                        decimal amount = order.AmmountSellerGet.Value;
+                        transactionRepository.Add(new Transaction
                         {
-                            decimal amount = order.AmmountSellerGet.Value;
-                            transactionRepository.Add(new Transaction
-                            {
-                                Amount = amount,
-                                Receiver = order.Seller,
-                                Sender = mainCup,
-                                Order = order,
-                                CreatedDate = DateTime.Now
-                            });
+                            Amount = amount,
+                            Receiver = order.Seller,
+                            Sender = mainCup,
+                            Order = order,
+                            CreatedDate = DateTime.Now
+                        });
 
-                            mainCup.Balance -= amount;
-                            order.Seller.Balance += amount;
-                            order.StatusLogs.AddLast(new StatusLog()
-                            {
-                                OldStatus = order.CurrentStatus,
-                                NewStatus = orderStatusRepository.GetOrderStatusByValue(OrderStatusValue.PayingToSeller),
-                                TimeStamp = DateTime.Now
-                            });
-                            order.CurrentStatus = orderStatusRepository.GetOrderStatusByValue(OrderStatusValue.PayingToSeller);
-
-                            order.StatusLogs.AddLast(new StatusLog()
-                            {
-                                OldStatus = order.CurrentStatus,
-                                NewStatus = orderStatusRepository.GetOrderStatusByValue(OrderStatusValue.ClosedSuccessfully),
-                                TimeStamp = DateTime.Now
-                            });
-                            order.CurrentStatus = orderStatusRepository.GetOrderStatusByValue(OrderStatusValue.ClosedSuccessfully);
-
-
-
-                            order.BuyerChecked = false;
-                            order.SellerChecked = false;
-
-
-
-                            //TempData["orderBuyStatus"] = "Спасибо за подтверждение сделки! Сделка успешно закрыта.";
-                            //return RedirectToAction("BuyDetails", "Order", new { id = order.Id });
-                            return true;
-                        }
-                    }
-                }
-            }
-            return false;
-        }
-
-        public bool AbortOrder(int orderId, int currentUserId)
-        {
-            var order = GetOrder(orderId,include: source => source.Include(i => i.Buyer).Include(i => i.CurrentStatus).Include(i => i.StatusLogs));
-            if (order != null)
-            {
-                if (order.CurrentStatus != null)
-                {
-                    if (order.BuyerId == currentUserId && order.CurrentStatus.Value == OrderStatusValue.BuyerConfirming)
-                    {
-
+                        mainCup.Balance -= amount;
+                        order.Seller.Balance += amount;
+                        order.StatusLogs.AddLast(new StatusLog()
+                        {
+                            OrderStatus = OrderStatus.PayingToSeller,
+                            TimeStamp = DateTime.Now
+                        });
+                        order.CurrentStatus = OrderStatus.PayingToSeller;
 
                         order.StatusLogs.AddLast(new StatusLog()
                         {
-                            OldStatus = order.CurrentStatus,
-                            NewStatus = orderStatusRepository.GetOrderStatusByValue(OrderStatusValue.AbortedByBuyer),
+                            OrderStatus = OrderStatus.ClosedSuccessfully,
                             TimeStamp = DateTime.Now
                         });
-                        order.CurrentStatus = orderStatusRepository.GetOrderStatusByValue(OrderStatusValue.AbortedByBuyer);
-
-                        order.StatusLogs.AddLast(new StatusLog()
-                        {
-                            OldStatus = order.CurrentStatus,
-                            NewStatus = orderStatusRepository.GetOrderStatusByValue(OrderStatusValue.MiddlemanBackingAccount),
-                            TimeStamp = DateTime.Now
-                        });
-                        order.CurrentStatus = orderStatusRepository.GetOrderStatusByValue(OrderStatusValue.MiddlemanBackingAccount);
+                        order.CurrentStatus = OrderStatus.ClosedSuccessfully;
 
 
 
@@ -480,6 +419,47 @@ namespace Marketplace.Service.Services
 
                     }
                 }
+            }
+            return false;
+        }
+
+        public bool AbortOrder(int orderId, int currentUserId)
+        {
+            var order = GetOrder(orderId, include: source => source.Include(i => i.Buyer).Include(i => i.CurrentStatus).Include(i => i.StatusLogs));
+            if (order != null)
+            {
+
+                if (order.BuyerId == currentUserId && order.CurrentStatus == OrderStatus.BuyerConfirming)
+                {
+
+
+                    order.StatusLogs.AddLast(new StatusLog()
+                    {
+                        OrderStatus = OrderStatus.AbortedByBuyer,
+                        TimeStamp = DateTime.Now
+                    });
+                    order.CurrentStatus = OrderStatus.AbortedByBuyer;
+
+                    order.StatusLogs.AddLast(new StatusLog()
+                    {
+                        OrderStatus = OrderStatus.MiddlemanBackingAccount,
+                        TimeStamp = DateTime.Now
+                    });
+                    order.CurrentStatus = OrderStatus.MiddlemanBackingAccount;
+
+
+
+                    order.BuyerChecked = false;
+                    order.SellerChecked = false;
+
+
+
+                    //TempData["orderBuyStatus"] = "Спасибо за подтверждение сделки! Сделка успешно закрыта.";
+                    //return RedirectToAction("BuyDetails", "Order", new { id = order.Id });
+                    return true;
+
+                }
+
             }
             return false;
         }

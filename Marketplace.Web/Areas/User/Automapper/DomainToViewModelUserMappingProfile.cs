@@ -46,7 +46,6 @@ namespace Marketplace.Web.Areas.User.Automapper
 
             CreateMap<Order, OrderViewModel>()
                 .ForPath(o => o.BuyerName, map => map.MapFrom(vm => vm.Buyer.UserName))
-                .ForPath(o => o.CurrentStatus, map => map.MapFrom(vm => vm.CurrentStatus.DuringName))
                 .ForPath(o => o.SellerName, map => map.MapFrom(vm => vm.Seller.UserName))
                 .ForMember(o => o.Id, map => map.MapFrom(vm => vm.Id))
                 .ForMember(o => o.CreatedDate, map => map.MapFrom(vm => vm.CreatedDate));

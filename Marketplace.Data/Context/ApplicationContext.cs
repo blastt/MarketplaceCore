@@ -46,7 +46,6 @@ namespace Marketplace.Data.Context
         public DbSet<Message> Messages { get; set; }
         public DbSet<Game> Games { get; set; }
         public DbSet<AccountInfo> AccountInfos { get; set; }
-        public DbSet<OrderStatus> OrderStatuses { get; set; }
         public DbSet<Dialog> Dialogs { get; set; }
         public DbSet<StatusLog> StatusLogs { get; set; }
         public DbSet<Billing> Billings { get; set; }
@@ -69,7 +68,6 @@ namespace Marketplace.Data.Context
             new MessageConfiguration(modelBuilder.Entity<Message>());
             new OfferConfiguration(modelBuilder.Entity<Offer>());
             new OrderConfiguration(modelBuilder.Entity<Order>());
-            new OrderStatusConfiguration(modelBuilder.Entity<OrderStatus>());
             new ScreenshotConfiguration(modelBuilder.Entity<Screenshot>());
             new StatusLogConfiguration(modelBuilder.Entity<StatusLog>());
             new TransactionConfiguration(modelBuilder.Entity<Transaction>());

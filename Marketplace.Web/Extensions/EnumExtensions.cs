@@ -8,7 +8,7 @@ using System.Reflection;
 using System.Resources;
 using System.Threading.Tasks;
 
-namespace Marketplace.Web.Extensions
+namespace Marketplace.Web
 {
     public static class EnumExtensions
     {

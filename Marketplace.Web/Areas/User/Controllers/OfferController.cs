@@ -63,6 +63,13 @@ namespace Marketplace.Web.Areas.User.Controllers
         {
             int currentUserId = await userService.GetCurrentUserId(HttpContext.User);
             var model = new Models.Offer.OfferListViewModel();
+            foreach (var item in offerService.GetAllOffers())
+            {
+                if (item.State == OfferState.Closed)
+                {
+
+                }
+            }
             var offers = await offerService.GetOffersAsync(o => o.UserProfileId == currentUserId && o.State == OfferState.Closed, include: source => source.Include(i => i.Game));
             model.CountOfClosed = offers.Count;
             model.CountOfInactive = (await offerService.GetOffersAsync(o => o.UserProfileId == currentUserId && o.State == OfferState.Inactive)).Count();

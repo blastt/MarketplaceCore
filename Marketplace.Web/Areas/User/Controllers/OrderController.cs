@@ -7,6 +7,7 @@ using Marketplace.Model;
 using Marketplace.Model.Models;
 using Marketplace.Service.Services;
 using Marketplace.Web.Areas.User.Models.Order;
+using Marketplace.Web.Extensions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -54,7 +55,7 @@ namespace Marketplace.Web.Areas.User.Controllers
         {
             if (id != null)
             {
-                var order = await orderService.GetOrderAsync(id.Value, include: source => source.Include(i => i.Seller).Include(i => i.Middleman).Include(i => i.Buyer).Include(i => i.CurrentStatus).Include(i => i.StatusLogs).ThenInclude(m => m.OldStatus).Include(i => i.StatusLogs).ThenInclude(m => m.NewStatus).Include(i => i.AccountInfos).Include(i => i.Offer));
+                var order = await orderService.GetOrderAsync(id.Value, include: source => source.Include(i => i.Seller).Include(i => i.Middleman).Include(i => i.Buyer).Include(i => i.CurrentStatus).Include(i => i.StatusLogs).Include(i => i.StatusLogs).Include(i => i.AccountInfos).Include(i => i.Offer));
                 if (order != null)
                 {
                     var currenUserId = await userService.GetCurrentUserId(HttpContext.User);
@@ -70,42 +71,42 @@ namespace Marketplace.Web.Areas.User.Controllers
                         model.CountOfBuy = ordersBuy.Count;
                         model.CountOfSell = ordersSell.Count;
 
-                        var currentStatus = order.CurrentStatus.Value;
-                        if (currentStatus == OrderStatusValue.BuyerPaying ||
-                            currentStatus == OrderStatusValue.OrderCreating ||
-                            currentStatus == OrderStatusValue.MiddlemanFinding ||
-                            currentStatus == OrderStatusValue.SellerProviding ||
-                            currentStatus == OrderStatusValue.MiddlemanChecking)
+                        var currentStatus = order.CurrentStatus;
+                        if (currentStatus == OrderStatus.BuyerPaying ||
+                            currentStatus == OrderStatus.OrderCreating ||
+                            currentStatus == OrderStatus.MiddlemanFinding ||
+                            currentStatus == OrderStatus.SellerProviding ||
+                            currentStatus == OrderStatus.MiddlemanChecking)
                         {
                             model.ShowCloseButton = true;
                         }
-                        if (currentStatus == OrderStatusValue.BuyerPaying)
+                        if (currentStatus == OrderStatus.BuyerPaying)
                         {
                             model.ShowPayButton = true;
                         }
-                        if ((currentStatus == OrderStatusValue.ClosedSuccessfully ||
-                            currentStatus == OrderStatusValue.PayingToSeller) && !order.BuyerFeedbacked)
+                        if ((currentStatus == OrderStatus.ClosedSuccessfully ||
+                            currentStatus == OrderStatus.PayingToSeller) && !order.BuyerFeedbacked)
                         {
                             model.ShowFeedbackToSeller = true;
                         }
-                        if ((currentStatus == OrderStatusValue.ClosedSuccessfully ||
-                            currentStatus == OrderStatusValue.PayingToSeller) && !order.SellerFeedbacked)
+                        if ((currentStatus == OrderStatus.ClosedSuccessfully ||
+                            currentStatus == OrderStatus.PayingToSeller) && !order.SellerFeedbacked)
                         {
                             model.ShowFeedbackToBuyer = true;
                         }
-                        if (currentStatus == OrderStatusValue.BuyerConfirming ||
-                            currentStatus == OrderStatusValue.ClosedSuccessfully ||
-                            currentStatus == OrderStatusValue.PayingToSeller)
+                        if (currentStatus == OrderStatus.BuyerConfirming ||
+                            currentStatus == OrderStatus.ClosedSuccessfully ||
+                            currentStatus == OrderStatus.PayingToSeller)
                         {
                             model.ShowAccountInfo = true;
                         }
 
-                        if (currentStatus == OrderStatusValue.BuyerConfirming)
+                        if (currentStatus == OrderStatus.BuyerConfirming)
                         {
                             model.ShowConfirm = true;
                         }
 
-                        if (currentStatus == OrderStatusValue.SellerProviding)
+                        if (currentStatus == OrderStatus.SellerProviding)
                         {
                             model.ShowProvideData = true;
                         }
@@ -118,20 +119,19 @@ namespace Marketplace.Web.Areas.User.Controllers
                         {
                             model.MiddlemanPrice = order.Offer.MiddlemanPrice.Value;
                         }
-                        IList<StatusLog> orderLogs = new List<StatusLog>();
+                        LinkedList<StatusLog> orderLogs = new LinkedList<StatusLog>();
 
                         foreach (var log in order.StatusLogs)
                         {
-                            orderLogs.Add(log);
-                            if (log.NewStatus.Value == OrderStatusValue.AbortedByBuyer)
+                            orderLogs.AddLast(log);
+                            if (log.OrderStatus == OrderStatus.AbortedByBuyer)
                             {
-                                var test = order.StatusLogs.FirstOrDefault(s => s.NewStatus.Value == OrderStatusValue.BuyerConfirming);
+                                var test = order.StatusLogs.FirstOrDefault(s => s.OrderStatus == OrderStatus.BuyerConfirming);
                                 orderLogs.Remove(test);
                             }
                         }
                         model.Logs = orderLogs;
-                        model.CurrentStatusName = order.CurrentStatus.DuringName;
-                        model.StatusLogs = order.StatusLogs;
+                        model.Logs = order.StatusLogs;
                         model.ModeratorId = order.MiddlemanId;
                         return View(model);
                     }

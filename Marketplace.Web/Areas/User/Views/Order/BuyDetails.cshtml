@@ -22,7 +22,7 @@
                 <div class="row">
                     <div class="col-lg-12">
                         <div class="alert alert-dismissible alert-success">
-                            <span>Стстус заказа изменился: <span class="text-700">@Model.CurrentStatusName</span></span>
+                            <span>Стстус заказа изменился: <span class="text-700">@Model.CurrentStatus.GetDisplayName()</span></span>
                         </div>
                     </div>
                 </div>
@@ -38,7 +38,7 @@
                 <div class="row">
                     <div class="col-lg-12">
                         <div class="alert alert-dismissible alert-warning">
-                            <span>Текущий статус заказа: <span class="text-700">@Model.CurrentStatusName</span></span>
+                            <span>Текущий статус заказа: <span class="text-700">@Model.CurrentStatus.GetDisplayName()</span></span>
                         </div>
                     </div>
                 </div>
@@ -172,7 +172,7 @@
                     {
                         <div class="order-details-node">
                             <div class="node-circle"></div>
-                            <div class="node-name">@log.OldStatus.FinishedName</div>
+                            <div class="node-name">@log.OrderStatus.GetDisplayName()</div>
                             <div class="node-date">@log.TimeStamp</div>
                         </div>
                     }

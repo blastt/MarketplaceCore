@@ -100,26 +100,44 @@ namespace Marketplace.Model.Models
         public bool IsOnline { get; set; }
 
 
-        public IList<Billing> Billings { get; set; } = new List<Billing>();
-        public IList<Transaction> TransactionsAsReceiver { get; set; } = new List<Transaction>();
-        public IList<Transaction> TransactionsAsSender { get; set; } = new List<Transaction>();
+        public IList<Billing> Billings { get; set; }
+        public IList<Transaction> TransactionsAsReceiver { get; set; }
+        public IList<Transaction> TransactionsAsSender { get; set; }
 
         public decimal Balance { get; set; }
         public User User { get; set; }
-        public ICollection<Message> MessagesAsSender { get; set; } = new List<Message>();
-        public ICollection<Message> MessagesAsReceiver { get; set; } = new List<Message>();
-        public ICollection<Offer> Offers { get; set; } = new List<Offer>();
+        public ICollection<Message> MessagesAsSender { get; set; }
+        public ICollection<Message> MessagesAsReceiver { get; set; }
+        public ICollection<Offer> Offers { get; set; }
 
-        public ICollection<Order> OrdersAsSeller { get; set; } = new List<Order>();
-        public ICollection<Order> OrdersAsBuyer { get; set; } = new List<Order>();
-        public ICollection<Order> OrdersAsMiddleman { get; set; } = new List<Order>();
+        public ICollection<Order> OrdersAsSeller { get; set; }
+        public ICollection<Order> OrdersAsBuyer { get; set; }
+        public ICollection<Order> OrdersAsMiddleman { get; set; }
 
-        public ICollection<Feedback> FeedbacksMy { get; set; } = new List<Feedback>();
-        public ICollection<Feedback> FeedbacksToOthers { get; set; } = new List<Feedback>();
+        public ICollection<Feedback> FeedbacksMy { get; set; }
+        public ICollection<Feedback> FeedbacksToOthers { get; set; }
 
-        public ICollection<Dialog> DialogsAsCreator { get; set; } = new List<Dialog>();
-        public ICollection<Dialog> DialogsAsСompanion { get; set; } = new List<Dialog>();
+        public ICollection<Dialog> DialogsAsCreator { get; set; }
+        public ICollection<Dialog> DialogsAsСompanion { get; set; }
 
-        public ICollection<Withdraw> Withdraws { get; set; } = new List<Withdraw>();
+        public ICollection<Withdraw> Withdraws { get; set; }
+
+        public UserProfile()
+        {
+            Billings = new List<Billing>();
+            TransactionsAsReceiver = new List<Transaction>();
+            TransactionsAsSender = new List<Transaction>();
+            MessagesAsSender = new List<Message>();
+            MessagesAsReceiver = new List<Message>();
+            Offers = new List<Offer>();
+            OrdersAsSeller = new List<Order>();
+            OrdersAsBuyer = new List<Order>();
+            OrdersAsMiddleman = new List<Order>();
+            FeedbacksMy = new List<Feedback>();
+            FeedbacksToOthers = new List<Feedback>();
+            DialogsAsCreator = new List<Dialog>();
+            DialogsAsСompanion = new List<Dialog>();
+            Withdraws = new List<Withdraw>();
+        }
     }
 }

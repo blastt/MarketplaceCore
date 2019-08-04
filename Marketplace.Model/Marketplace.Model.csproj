@@ -10,15 +10,4 @@
     </Reference>
   </ItemGroup>
 
-  <ItemGroup>
-    <EmbeddedResource Update="Resources\Enums_SecureTransactionPayer.en.resx">
-      <CustomToolNamespace>Resources</CustomToolNamespace>
-      <Generator>ResXFileCodeGenerator</Generator>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Resources\Enums_SecureTransactionPayer.ru.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <CustomToolNamespace>Resources</CustomToolNamespace>
-    </EmbeddedResource>
-  </ItemGroup>
-
 </Project>

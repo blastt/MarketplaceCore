@@ -1,9 +1,11 @@
-﻿using Marketplace.Model.Models;
+﻿using Marketplace.Model;
+using Marketplace.Model.Models;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
+using Marketplace.Web;
 
 namespace Marketplace.Web.Areas.User.Models.Order
 {
@@ -13,10 +15,10 @@ namespace Marketplace.Web.Areas.User.Models.Order
         public int CountOfSell { get; set; }
 
         public int Id { get; set; }
-        public IEnumerable<StatusLog> StatusLogs { get; set; }
+        //public LinkedList<StatusLog> StatusLogs { get; set; }
 
 
-        public string CurrentStatusName { get; set; }
+        public OrderStatusViewModel CurrentStatus { get; set; }
         public string OfferHeader { get; set; }
 
         [DataType(DataType.Currency)]
@@ -45,10 +47,16 @@ namespace Marketplace.Web.Areas.User.Models.Order
         public int SellerId { get; set; }
         public string SellerName { get; set; }
 
-        public IList<StatusLog> Logs { get; set; } = new List<StatusLog>();
+        public LinkedList<StatusLog> Logs { get; set; }
 
-        public virtual IList<AccountInfo> AccountInfos { get; set; } = new List<AccountInfo>();
+        public virtual IList<AccountInfo> AccountInfos { get; set; }
 
         public DateTime DateCreated { get; set; }
+
+        public DetailsOrderViewModel()
+        {
+            Logs = new LinkedList<StatusLog>();
+            AccountInfos = new List<AccountInfo>();
+        }
     }
 }

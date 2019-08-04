@@ -184,7 +184,7 @@ namespace Marketplace.Data.Infrastructure
         {
             IQueryable<T> set = dbSet;
 
-            set = include(set);
+            set = include(set).Where(where); ;
             return set.ToList();
         }
 
@@ -192,7 +192,7 @@ namespace Marketplace.Data.Infrastructure
         {
             IQueryable<T> set = dbSet;
 
-            set = include(set);
+            set = include(set).Where(where);
             return set.ToListAsync();
         }
 

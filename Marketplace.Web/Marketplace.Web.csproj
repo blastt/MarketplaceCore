@@ -25,7 +25,6 @@
     <Folder Include="Models\Game\" />
     <Folder Include="Models\Order\" />
     <Folder Include="Attributes\" />
-    <Folder Include="Resources\Enum\" />
     <Folder Include="Views\Game\" />
   </ItemGroup>
 

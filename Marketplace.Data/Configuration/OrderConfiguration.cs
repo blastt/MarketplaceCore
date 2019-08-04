@@ -15,7 +15,6 @@ namespace Marketplace.Data.Configuration
             builder.ToTable("Orders");
             builder.HasKey(a => a.Id);
             builder.Property(o => o.WithmiddlemanSum).ValueGeneratedOnAddOrUpdate();            
-            builder.HasOne(o => o.CurrentStatus).WithMany(s => s.Orders).HasForeignKey(o => o.CurrentStatusId).OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

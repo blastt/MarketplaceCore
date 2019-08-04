@@ -36,6 +36,10 @@ body {
     padding-top: 100px;
 }
 
+a {
+    color: #54aaff;
+}
+
 .table{
     margin-bottom:0px
 }

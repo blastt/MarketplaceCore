@@ -16,8 +16,6 @@ namespace Marketplace.Data.Configuration
             builder.ToTable("StatusLogs");
             builder.HasKey(a => a.Id);
             builder.HasOne(m => m.Order).WithMany(m => m.StatusLogs).HasForeignKey(m => m.OrderId).OnDelete(DeleteBehavior.Cascade);
-            builder.HasOne(m => m.NewStatus).WithMany(m => m.NewStatusLogs).HasForeignKey(m => m.NewStatusId).OnDelete(DeleteBehavior.Restrict);
-            builder.HasOne(m => m.OldStatus).WithMany(m => m.OldStatusLogs).HasForeignKey(m => m.OldStatusId).OnDelete(DeleteBehavior.Restrict);
         }
     }
 }

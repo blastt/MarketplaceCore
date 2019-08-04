@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Marketplace.Model
 {
-    public enum OrderStatusValue
+    public enum OrderStatus
     {
         OrderCreating,
         BuyerPaying,

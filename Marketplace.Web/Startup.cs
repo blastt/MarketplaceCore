@@ -82,7 +82,6 @@ namespace Marketplace.Web
             services.AddTransient<IUserProfileRepository, UserProfileRepository>();
             services.AddTransient<IFeedbackRepository, FeedbackRepository>();
             services.AddTransient<IMessageRepository, MessageRepository>();
-            services.AddTransient<IOrderStatusRepository, OrderStatusRepository>();
             services.AddTransient<IDialogRepository, DialogRepository>();
             services.AddTransient<IBillingRepository, BillingRepository>();
             services.AddTransient<ITransactionRepository, TransactionRepository>();
