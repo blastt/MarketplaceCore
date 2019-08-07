@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.28307.168
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29001.49
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Marketplace.Data", "Marketplace.Data\Marketplace.Data.csproj", "{87EB2274-394C-49DF-B05D-515105ECB5D1}"
 EndProject
@@ -9,7 +9,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Marketplace.Service", "Mark
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Marketplace.Model", "Marketplace.Model\Marketplace.Model.csproj", "{0C0A5532-8218-408C-98A0-0B1B44F79383}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Marketplace.Web", "Marketplace.Web\Marketplace.Web.csproj", "{761971B6-D77A-45E0-880F-17AF0143B9A9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Marketplace.Web", "Marketplace.Web\Marketplace.Web.csproj", "{761971B6-D77A-45E0-880F-17AF0143B9A9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Marketplace.Api", "Marketplace.Api\Marketplace.Api.csproj", "{FA01E98F-B940-41FD-BAB1-FED05DA4BD8A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{761971B6-D77A-45E0-880F-17AF0143B9A9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{761971B6-D77A-45E0-880F-17AF0143B9A9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{761971B6-D77A-45E0-880F-17AF0143B9A9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FA01E98F-B940-41FD-BAB1-FED05DA4BD8A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FA01E98F-B940-41FD-BAB1-FED05DA4BD8A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FA01E98F-B940-41FD-BAB1-FED05DA4BD8A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FA01E98F-B940-41FD-BAB1-FED05DA4BD8A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
