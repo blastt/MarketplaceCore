@@ -12,5 +12,10 @@ namespace Marketplace.Model.Models
         public Order Order { get; set; }
         public OrderStatus OrderStatus { get; set; }
 
+        public StatusLog()
+        {
+            TimeStamp = DateTime.Now;
+        }
+
     }
 }
