@@ -10,7 +10,6 @@ using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using System.Text.Encodings.Web;
 using Marketplace.Model.Models;
-using Microsoft.AspNetCore.Identity.UI.Pages.Account.Internal;
 using Marketplace.Service.Services;
 
 namespace Marketplace.Web.Controllers
