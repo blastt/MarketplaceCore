@@ -1,0 +1,9 @@
+.offer-create {
+	display: flex;
+	flex-direction: column;
+}
+
+.form-item {
+	display: inline-flex;
+	flex-direction: column;
+}
