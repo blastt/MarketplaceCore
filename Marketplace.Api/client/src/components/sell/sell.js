@@ -30,11 +30,12 @@ class Sell extends React.Component {
 		if (!phoneName || phonePrice <= 0) {
 			return;
 		}
-		// this.props.onPhoneSubmit({ name: phoneName, price: phonePrice });
+		this.props.onPhoneSubmit({ name: phoneName, price: phonePrice });
 		this.setState({ name: '', price: 0 });
 	}
 
 	onAddPhone(phone) {
+		console.log(phone);
 		if (phone) {
 			let data = JSON.stringify({ name: phone.name, price: phone.price });
 			let xhr = new XMLHttpRequest();
