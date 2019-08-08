@@ -1,21 +1,86 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
+// import React from 'react';
+// import ReactDOM from 'react-dom';
+
+import React, { Component } from 'react';
 
 import './sell.css';
 
-const Sell = ({ apiUrl }) => {
-	return (
-		<div className='offer-create'>
-			<h2>Create offer</h2>
-			<form className='offer-create-form' action='Create' method='post'>
-				<p className='form-item'>
-					<label htmlFor='header'>Header</label>
-					{apiUrl}
-					<input type='text' placeholder='губошлёп' />
-				</p>
-			</form>
-		</div>
-	);
-};
+class Sell extends React.Component {
+	constructor(props) {
+		super(props);
+		this.state = { name: '', price: 0 };
+		// this.state = { phones: [] };
+
+		this.onSubmit = this.onSubmit.bind(this);
+		this.onNameChange = this.onNameChange.bind(this);
+		this.onPriceChange = this.onPriceChange.bind(this);
+
+		this.onAddPhone = this.onAddPhone.bind(this);
+	}
+	onNameChange(e) {
+		this.setState({ name: e.target.value });
+	}
+	onPriceChange(e) {
+		this.setState({ price: e.target.value });
+	}
+	onSubmit(e) {
+		e.preventDefault();
+		let phoneName = this.state.name.trim();
+		let phonePrice = this.state.price;
+		if (!phoneName || phonePrice <= 0) {
+			return;
+		}
+		// this.props.onPhoneSubmit({ name: phoneName, price: phonePrice });
+		this.setState({ name: '', price: 0 });
+	}
+
+	onAddPhone(phone) {
+		if (phone) {
+			let data = JSON.stringify({ name: phone.name, price: phone.price });
+			let xhr = new XMLHttpRequest();
+
+			xhr.open('post', this.props.apiUrl, true);
+			xhr.setRequestHeader('Content-type', 'application/json');
+			xhr.onload = function() {
+				if (xhr.status === 200) {
+					this.loadData();
+				}
+			}.bind(this);
+			xhr.send(data);
+			console.log(data);
+		}
+	}
+	render() {
+		return (
+			<div className='offer-create'>
+				<h2>Create offer</h2>
+				<form className='offer-create-form' onSubmit={this.onSubmit}>
+					<p className='form-item'>
+						<label htmlFor='header'>Name</label>
+						{this.props.apiUrl}
+						<br />
+						{this.state.name}
+						<input
+							type='text'
+							value={this.state.name}
+							onChange={this.onNameChange}
+							placeholder='Имя'
+						/>
+					</p>
+					<p className='form-item'>
+						<label htmlFor='header'>Price</label>
+						<input
+							type='text'
+							value={this.state.price}
+							onChange={this.onPriceChange}
+							placeholder='Цена'
+						/>
+					</p>
+					<input className='button' type='submit' />
+				</form>
+			</div>
+		);
+	}
+}
 
 export default Sell;
