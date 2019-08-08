@@ -9,13 +9,10 @@ class Sell extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = { name: '', price: 0 };
-		// this.state = { phones: [] };
 
 		this.onSubmit = this.onSubmit.bind(this);
 		this.onNameChange = this.onNameChange.bind(this);
 		this.onPriceChange = this.onPriceChange.bind(this);
-
-		this.onAddPhone = this.onAddPhone.bind(this);
 	}
 	onNameChange(e) {
 		this.setState({ name: e.target.value });
@@ -30,27 +27,22 @@ class Sell extends React.Component {
 		if (!phoneName || phonePrice <= 0) {
 			return;
 		}
-		this.props.onPhoneSubmit({ name: phoneName, price: phonePrice });
+
+		let data = JSON.stringify({ name: phoneName, price: phonePrice });
+		let xhr = new XMLHttpRequest();
+
+		xhr.open('post', this.props.apiUrl, true);
+		xhr.setRequestHeader('Content-type', 'application/json');
+		xhr.onload = function() {
+			if (xhr.status === 200) {
+				this.loadData();
+			}
+		}.bind(this);
+		xhr.send(data);
+		console.log(data);
 		this.setState({ name: '', price: 0 });
 	}
 
-	onAddPhone(phone) {
-		console.log(phone);
-		if (phone) {
-			let data = JSON.stringify({ name: phone.name, price: phone.price });
-			let xhr = new XMLHttpRequest();
-
-			xhr.open('post', this.props.apiUrl, true);
-			xhr.setRequestHeader('Content-type', 'application/json');
-			xhr.onload = function() {
-				if (xhr.status === 200) {
-					this.loadData();
-				}
-			}.bind(this);
-			xhr.send(data);
-			console.log(data);
-		}
-	}
 	render() {
 		return (
 			<div className='offer-create'>
