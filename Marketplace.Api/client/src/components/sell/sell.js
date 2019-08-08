@@ -76,7 +76,9 @@ class Sell extends React.Component {
 							placeholder='Цена'
 						/>
 					</p>
-					<input className='button' type='submit' />
+					<button className='button' type='submit'>
+						Go
+					</button>
 				</form>
 			</div>
 		);
