@@ -174,7 +174,7 @@ namespace Marketplace.Web.Controllers
             UserProfile user = await userProfileService.GetUserProfileByIdAsync(currentUserId);
 
             var errors = ModelState.Values.SelectMany(v => v.Errors);
-            if (ModelState.IsValid && game != null && user != null)
+            if (/*ModelState.IsValid && */game != null && user != null)
             {
                 var offer = Mapper.Map<CreateOfferViewModel, Offer>(model);
                 offer.CreatedDate = offer.CreatedDate.AddDays(offerDays);
