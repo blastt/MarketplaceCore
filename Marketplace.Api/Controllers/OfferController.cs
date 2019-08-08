@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Marketplace.Api.ViewModels.Offer;
 using Marketplace.Model.Models;
 using Marketplace.Service.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -37,6 +38,13 @@ namespace Marketplace.Api.Controllers
             IList<string> s = new List<string>() { "l", "d,", "ds" };
 
             return offers;
+            
+        }
+
+        [HttpPost]
+        public IActionResult Post([FromBody]CreateOfferViewModel model)
+        {  
+            return Ok(model);
         }
     }
 }
