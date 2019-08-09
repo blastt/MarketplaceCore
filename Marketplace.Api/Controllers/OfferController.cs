@@ -38,7 +38,7 @@ namespace Marketplace.Api.Controllers
             IList<string> s = new List<string>() { "l", "d,", "ds" };
 
             return offers;
-            
+
         }
 
         [HttpGet("[action]")]
