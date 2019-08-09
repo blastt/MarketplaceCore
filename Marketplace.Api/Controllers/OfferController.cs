@@ -41,8 +41,14 @@ namespace Marketplace.Api.Controllers
             
         }
 
+        [HttpGet("[action]")]
+        public CreateOfferViewModel Create()
+        {
+            var model = new CreateOfferViewModel();
+            return model;
+        }
         [HttpPost]
-        public IActionResult Post([FromBody]CreateOfferViewModel model)
+        public IActionResult Create([FromBody]CreateOfferViewModel model)
         {  
             return Ok(model);
         }
