@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
 using System.Collections.Generic;
 
-namespace Marketplace.Api.ViewModels.Offer
+namespace Marketplace.Api.ViewModels
 {
     public class CreateOfferViewModel
     {
