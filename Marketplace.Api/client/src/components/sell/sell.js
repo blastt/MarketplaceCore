@@ -3,11 +3,6 @@ import React, { Component } from 'react';
 import './sell.css';
 
 class Sell extends Component {
-	// constructor(props) {
-	// 	super(props);
-	// 	this.state = { header: '', description: '', login: '', price: 0 };
-	// }
-
 	state = { header: '', description: '', login: '', price: 0 };
 
 	onHeaderChange = (e) => {
