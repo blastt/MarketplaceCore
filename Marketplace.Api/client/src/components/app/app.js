@@ -8,7 +8,8 @@ import './app.css';
 const App = () => {
 	return (
 		<div>
-			<Sell apiUrl='/api/offer' />
+			{/* <Sell apiUrl='/api/offer' /> */}
+			<Sell apiUrl='https://localhost:44348/api/offer/create' />
 		</div>
 	);
 };
