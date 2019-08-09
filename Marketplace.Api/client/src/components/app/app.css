@@ -3,6 +3,9 @@
 	padding: 0;
 
 	box-sizing: border-box;
+
+	font-family: 'Montserrat', Arial, sans-serif;
+	/* font-size: 3vmin; */
 }
 
 body {
@@ -13,5 +16,5 @@ body {
 }
 
 .container {
-	width: 50vmin;
+	width: 60vmin;
 }
