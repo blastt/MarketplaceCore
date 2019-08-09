@@ -1,34 +1,44 @@
-// import React from 'react';
-// import ReactDOM from 'react-dom';
-
 import React, { Component } from 'react';
 
 import './sell.css';
 
-class Sell extends React.Component {
-	constructor(props) {
-		super(props);
-		this.state = { name: '', price: 0 };
+class Sell extends Component {
+	// constructor(props) {
+	// 	super(props);
+	// 	this.state = { header: '', description: '', login: '', price: 0 };
+	// }
 
-		this.onSubmit = this.onSubmit.bind(this);
-		this.onNameChange = this.onNameChange.bind(this);
-		this.onPriceChange = this.onPriceChange.bind(this);
-	}
-	onNameChange(e) {
-		this.setState({ name: e.target.value });
-	}
-	onPriceChange(e) {
+	state = { header: '', description: '', login: '', price: 0 };
+
+	onHeaderChange = (e) => {
+		this.setState({ header: e.target.value });
+	};
+	onDescriptionChange = (e) => {
+		this.setState({ description: e.target.value });
+	};
+	onLoginChange = (e) => {
+		this.setState({ login: e.target.value });
+	};
+	onPriceChange = (e) => {
 		this.setState({ price: e.target.value });
-	}
-	onSubmit(e) {
+	};
+
+	onSubmit = (e) => {
 		e.preventDefault();
-		let phoneName = this.state.name.trim();
+		let phoneHeader = this.state.header.trim();
+		let phoneDescription = this.state.description.trim();
+		let phoneLogin = this.state.login.trim();
 		let phonePrice = this.state.price;
-		if (!phoneName || phonePrice <= 0) {
+		if (!phoneHeader || !phoneDescription || !phoneLogin || phonePrice <= 0) {
 			return;
 		}
 
-		let data = JSON.stringify({ name: phoneName, price: phonePrice });
+		let data = JSON.stringify({
+			header: phoneHeader,
+			description: phoneDescription,
+			login: phoneLogin,
+			price: phonePrice,
+		});
 		let xhr = new XMLHttpRequest();
 
 		xhr.open('post', this.props.apiUrl, true);
@@ -37,11 +47,11 @@ class Sell extends React.Component {
 			if (xhr.status === 200) {
 				this.loadData();
 			}
-		}.bind(this);
+		};
 		xhr.send(data);
 		console.log(data);
-		this.setState({ name: '', price: 0 });
-	}
+		this.setState({ header: '', description: '', login: '', price: 0 });
+	};
 
 	render() {
 		return (
@@ -49,24 +59,61 @@ class Sell extends React.Component {
 				<h2>Create offer</h2>
 				<form className='offer-create-form' onSubmit={this.onSubmit}>
 					<p className='form-item'>
-						<label htmlFor='header'>Name</label>
-						{this.props.apiUrl}
+						<label htmlFor='header'>Header</label>
+						{/* {this.props.apiUrl}
 						<br />
-						{this.state.name}
+						{this.state.header} */}
 						<input
 							type='text'
-							value={this.state.name}
-							onChange={this.onNameChange}
-							placeholder='Имя'
+							value={this.state.header}
+							onChange={this.onHeaderChange}
+							// placeholder='Имя'
 						/>
 					</p>
 					<p className='form-item'>
-						<label htmlFor='header'>Price</label>
+						<label htmlFor='description'>Description</label>
+						{/* {this.props.apiUrl}
+						<br />
+						{this.state.header} */}
+						<input
+							type='text'
+							value={this.state.description}
+							onChange={this.onDescriptionChange}
+							// placeholder='Имя'
+						/>
+					</p>
+					<p className='form-item'>
+						<label htmlFor='login'>Account login</label>
+						{/* {this.props.apiUrl}
+						<br />
+						{this.state.header} */}
+						<input
+							type='text'
+							value={this.state.login}
+							onChange={this.onLoginChange}
+							// placeholder='Имя'
+						/>
+					</p>
+					<p>
+						{/* <label htmlFor='login'>Account login</label> */}
+						{/* {this.props.apiUrl}
+						<br />
+						{this.state.header} */}
+						<input
+							type='checkbox'
+							// value={this.state.login}
+							// onChange={this.onLoginChange}
+							// placeholder='Имя'
+						/>
+						<span>Personal Account?</span>
+					</p>
+					<p className='form-item'>
+						<label htmlFor='price'>Price</label>
 						<input
 							type='text'
 							value={this.state.price}
 							onChange={this.onPriceChange}
-							placeholder='Цена'
+							// placeholder='Цена'
 						/>
 					</p>
 					<button className='button' type='submit'>
