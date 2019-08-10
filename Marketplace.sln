@@ -11,7 +11,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Marketplace.Model", "Market
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Marketplace.Web", "Marketplace.Web\Marketplace.Web.csproj", "{761971B6-D77A-45E0-880F-17AF0143B9A9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Marketplace.Api", "Marketplace.Api\Marketplace.Api.csproj", "{FA01E98F-B940-41FD-BAB1-FED05DA4BD8A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Marketplace.Api", "Marketplace.Api\Marketplace.Api.csproj", "{FA01E98F-B940-41FD-BAB1-FED05DA4BD8A}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Marketplace.Blazor.Client", "Marketplace.Blazor.Client\Marketplace.Blazor.Client.csproj", "{FB77448F-154A-4DEB-9DAA-BDC4A525105E}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Marketplace.Blazor.Server", "Marketplace.Blazor.Server\Marketplace.Blazor.Server.csproj", "{CD1D8F38-40AA-4ED7-AF30-54F43B294EFB}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Marketplace.Blazor.Shared", "Marketplace.Blazor.Shared\Marketplace.Blazor.Shared.csproj", "{2912CC6C-5876-4D92-825F-8158A813729D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,6 +45,18 @@ Global
 		{FA01E98F-B940-41FD-BAB1-FED05DA4BD8A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FA01E98F-B940-41FD-BAB1-FED05DA4BD8A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FA01E98F-B940-41FD-BAB1-FED05DA4BD8A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FB77448F-154A-4DEB-9DAA-BDC4A525105E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FB77448F-154A-4DEB-9DAA-BDC4A525105E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FB77448F-154A-4DEB-9DAA-BDC4A525105E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FB77448F-154A-4DEB-9DAA-BDC4A525105E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CD1D8F38-40AA-4ED7-AF30-54F43B294EFB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CD1D8F38-40AA-4ED7-AF30-54F43B294EFB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CD1D8F38-40AA-4ED7-AF30-54F43B294EFB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CD1D8F38-40AA-4ED7-AF30-54F43B294EFB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2912CC6C-5876-4D92-825F-8158A813729D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2912CC6C-5876-4D92-825F-8158A813729D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2912CC6C-5876-4D92-825F-8158A813729D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2912CC6C-5876-4D92-825F-8158A813729D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
