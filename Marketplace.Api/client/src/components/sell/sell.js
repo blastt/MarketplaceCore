@@ -40,16 +40,16 @@ class Sell extends Component {
 
 	componentDidMount = () => {
 		fetch(this.props.apiUrl)
-			//.then((response) => response.json())
 			.then((response) => response.json())
 			.then((data) => {
 				// const get = JSON.parse(data);
 				this.setState({ offers: data });
 				// console.log(data);
 				console.log(this.state.offers);
+				console.log(Object.keys(this.state.offers));
 			});
 
-		// console.log(this.state.header);
+		// console.log(Object.keys(this.state.offers));
 	};
 
 	render() {
