@@ -1,3 +1,4 @@
+using Marketplace.Api.Automapper;
 using Marketplace.Data.Context;
 using Marketplace.Data.Infrastructure;
 using Marketplace.Data.Repositories;
@@ -120,6 +121,9 @@ namespace Marketplace.Api
             // UI strings that we have localized.
             opts.SupportedUICultures = supportedCultures;
         });
+
+            services.AddAutoMapper();
+
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
             // In production, the React files will be served from this directory
@@ -203,6 +207,13 @@ namespace Marketplace.Api
         public static string GetAuthConnectionStringFromConfig()
         {
             return new DatabaseConfiguration().GetAuthConnectionString();
+        }
+    }
+    public static class AutoMapperExtentions
+    {
+        public static void AddAutoMapper(this IServiceCollection services)
+        {
+            AutoMapperConfiguration.Configure();
         }
     }
 }

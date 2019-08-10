@@ -13,11 +13,15 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Marketplace.Web", "Marketpl
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Marketplace.Api", "Marketplace.Api\Marketplace.Api.csproj", "{FA01E98F-B940-41FD-BAB1-FED05DA4BD8A}"
 EndProject
+<<<<<<< HEAD
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Marketplace.Blazor.Client", "Marketplace.Blazor.Client\Marketplace.Blazor.Client.csproj", "{FB77448F-154A-4DEB-9DAA-BDC4A525105E}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Marketplace.Blazor.Server", "Marketplace.Blazor.Server\Marketplace.Blazor.Server.csproj", "{CD1D8F38-40AA-4ED7-AF30-54F43B294EFB}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Marketplace.Blazor.Shared", "Marketplace.Blazor.Shared\Marketplace.Blazor.Shared.csproj", "{2912CC6C-5876-4D92-825F-8158A813729D}"
+=======
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Marketplace.BlazorUI", "Marketplace.BlazorUI\Marketplace.BlazorUI.csproj", "{663EE722-92C3-426F-AF16-CECE9EA8B689}"
+>>>>>>> User area added
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -45,6 +49,7 @@ Global
 		{FA01E98F-B940-41FD-BAB1-FED05DA4BD8A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FA01E98F-B940-41FD-BAB1-FED05DA4BD8A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FA01E98F-B940-41FD-BAB1-FED05DA4BD8A}.Release|Any CPU.Build.0 = Release|Any CPU
+<<<<<<< HEAD
 		{FB77448F-154A-4DEB-9DAA-BDC4A525105E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{FB77448F-154A-4DEB-9DAA-BDC4A525105E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FB77448F-154A-4DEB-9DAA-BDC4A525105E}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -57,6 +62,12 @@ Global
 		{2912CC6C-5876-4D92-825F-8158A813729D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2912CC6C-5876-4D92-825F-8158A813729D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2912CC6C-5876-4D92-825F-8158A813729D}.Release|Any CPU.Build.0 = Release|Any CPU
+=======
+		{663EE722-92C3-426F-AF16-CECE9EA8B689}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{663EE722-92C3-426F-AF16-CECE9EA8B689}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{663EE722-92C3-426F-AF16-CECE9EA8B689}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{663EE722-92C3-426F-AF16-CECE9EA8B689}.Release|Any CPU.Build.0 = Release|Any CPU
+>>>>>>> User area added
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
