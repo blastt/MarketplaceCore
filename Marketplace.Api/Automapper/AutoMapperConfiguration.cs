@@ -1,9 +1,5 @@
 ﻿using AutoMapper;
 using Marketplace.Api.Areas.User.Automapper;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace Marketplace.Api.Automapper
 {
