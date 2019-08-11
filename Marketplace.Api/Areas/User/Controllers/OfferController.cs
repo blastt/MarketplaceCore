@@ -6,7 +6,6 @@ using AutoMapper;
 using Marketplace.Api.Areas.User.ViewModels;
 using Marketplace.Api.Areas.User.ViewModels.Offer;
 using Marketplace.Model;
-using Marketplace.Model.Models;
 using Marketplace.Service.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

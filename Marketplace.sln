@@ -1,27 +1,15 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
-VisualStudioVersion = 16.0.29001.49
+VisualStudioVersion = 16.0.29201.188
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Marketplace.Data", "Marketplace.Data\Marketplace.Data.csproj", "{87EB2274-394C-49DF-B05D-515105ECB5D1}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Marketplace.Model", "Marketplace.Model\Marketplace.Model.csproj", "{5D4E47EB-FE97-4829-8BD4-3A45462D5F1E}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Marketplace.Service", "Marketplace.Service\Marketplace.Service.csproj", "{0101934D-4406-47ED-A403-BE890063B59D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Marketplace.Data", "Marketplace.Data\Marketplace.Data.csproj", "{EB77744A-BB9F-495C-A10D-D7317B716AB7}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Marketplace.Model", "Marketplace.Model\Marketplace.Model.csproj", "{0C0A5532-8218-408C-98A0-0B1B44F79383}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Marketplace.Service", "Marketplace.Service\Marketplace.Service.csproj", "{F83309C0-E193-48B3-9AB8-8FB81AE5C265}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Marketplace.Web", "Marketplace.Web\Marketplace.Web.csproj", "{761971B6-D77A-45E0-880F-17AF0143B9A9}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Marketplace.Api", "Marketplace.Api\Marketplace.Api.csproj", "{FA01E98F-B940-41FD-BAB1-FED05DA4BD8A}"
-EndProject
-<<<<<<< HEAD
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Marketplace.Blazor.Client", "Marketplace.Blazor.Client\Marketplace.Blazor.Client.csproj", "{FB77448F-154A-4DEB-9DAA-BDC4A525105E}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Marketplace.Blazor.Server", "Marketplace.Blazor.Server\Marketplace.Blazor.Server.csproj", "{CD1D8F38-40AA-4ED7-AF30-54F43B294EFB}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Marketplace.Blazor.Shared", "Marketplace.Blazor.Shared\Marketplace.Blazor.Shared.csproj", "{2912CC6C-5876-4D92-825F-8158A813729D}"
-=======
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Marketplace.BlazorUI", "Marketplace.BlazorUI\Marketplace.BlazorUI.csproj", "{663EE722-92C3-426F-AF16-CECE9EA8B689}"
->>>>>>> User area added
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Marketplace.Api", "Marketplace.Api\Marketplace.Api.csproj", "{8E6FAA73-6F79-43A7-8EB3-37E784BAB210}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -29,50 +17,27 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{87EB2274-394C-49DF-B05D-515105ECB5D1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{87EB2274-394C-49DF-B05D-515105ECB5D1}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{87EB2274-394C-49DF-B05D-515105ECB5D1}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{87EB2274-394C-49DF-B05D-515105ECB5D1}.Release|Any CPU.Build.0 = Release|Any CPU
-		{0101934D-4406-47ED-A403-BE890063B59D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{0101934D-4406-47ED-A403-BE890063B59D}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{0101934D-4406-47ED-A403-BE890063B59D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{0101934D-4406-47ED-A403-BE890063B59D}.Release|Any CPU.Build.0 = Release|Any CPU
-		{0C0A5532-8218-408C-98A0-0B1B44F79383}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{0C0A5532-8218-408C-98A0-0B1B44F79383}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{0C0A5532-8218-408C-98A0-0B1B44F79383}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{0C0A5532-8218-408C-98A0-0B1B44F79383}.Release|Any CPU.Build.0 = Release|Any CPU
-		{761971B6-D77A-45E0-880F-17AF0143B9A9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{761971B6-D77A-45E0-880F-17AF0143B9A9}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{761971B6-D77A-45E0-880F-17AF0143B9A9}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{761971B6-D77A-45E0-880F-17AF0143B9A9}.Release|Any CPU.Build.0 = Release|Any CPU
-		{FA01E98F-B940-41FD-BAB1-FED05DA4BD8A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{FA01E98F-B940-41FD-BAB1-FED05DA4BD8A}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{FA01E98F-B940-41FD-BAB1-FED05DA4BD8A}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{FA01E98F-B940-41FD-BAB1-FED05DA4BD8A}.Release|Any CPU.Build.0 = Release|Any CPU
-<<<<<<< HEAD
-		{FB77448F-154A-4DEB-9DAA-BDC4A525105E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{FB77448F-154A-4DEB-9DAA-BDC4A525105E}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{FB77448F-154A-4DEB-9DAA-BDC4A525105E}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{FB77448F-154A-4DEB-9DAA-BDC4A525105E}.Release|Any CPU.Build.0 = Release|Any CPU
-		{CD1D8F38-40AA-4ED7-AF30-54F43B294EFB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{CD1D8F38-40AA-4ED7-AF30-54F43B294EFB}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{CD1D8F38-40AA-4ED7-AF30-54F43B294EFB}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{CD1D8F38-40AA-4ED7-AF30-54F43B294EFB}.Release|Any CPU.Build.0 = Release|Any CPU
-		{2912CC6C-5876-4D92-825F-8158A813729D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{2912CC6C-5876-4D92-825F-8158A813729D}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{2912CC6C-5876-4D92-825F-8158A813729D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{2912CC6C-5876-4D92-825F-8158A813729D}.Release|Any CPU.Build.0 = Release|Any CPU
-=======
-		{663EE722-92C3-426F-AF16-CECE9EA8B689}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{663EE722-92C3-426F-AF16-CECE9EA8B689}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{663EE722-92C3-426F-AF16-CECE9EA8B689}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{663EE722-92C3-426F-AF16-CECE9EA8B689}.Release|Any CPU.Build.0 = Release|Any CPU
->>>>>>> User area added
+		{5D4E47EB-FE97-4829-8BD4-3A45462D5F1E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5D4E47EB-FE97-4829-8BD4-3A45462D5F1E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5D4E47EB-FE97-4829-8BD4-3A45462D5F1E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5D4E47EB-FE97-4829-8BD4-3A45462D5F1E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EB77744A-BB9F-495C-A10D-D7317B716AB7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EB77744A-BB9F-495C-A10D-D7317B716AB7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EB77744A-BB9F-495C-A10D-D7317B716AB7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EB77744A-BB9F-495C-A10D-D7317B716AB7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F83309C0-E193-48B3-9AB8-8FB81AE5C265}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F83309C0-E193-48B3-9AB8-8FB81AE5C265}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F83309C0-E193-48B3-9AB8-8FB81AE5C265}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F83309C0-E193-48B3-9AB8-8FB81AE5C265}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8E6FAA73-6F79-43A7-8EB3-37E784BAB210}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8E6FAA73-6F79-43A7-8EB3-37E784BAB210}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8E6FAA73-6F79-43A7-8EB3-37E784BAB210}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8E6FAA73-6F79-43A7-8EB3-37E784BAB210}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {42E68AF4-3267-4AEC-86BA-7300D35E27A7}
+		SolutionGuid = {20D23157-9A1C-4D9F-B41A-EE4A1A56D64D}
 	EndGlobalSection
 EndGlobal

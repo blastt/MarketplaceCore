@@ -9,9 +9,9 @@ namespace Marketplace.Api.Automapper
 {
     public class AutoMapperConfiguration
     {
-        public static void Configure()
+        public static IMapper Configure()
         {
-            Mapper.Initialize(x =>
+            var mapperConfiguration = new MapperConfiguration(x =>
             {
 
                 x.AddProfile<DomainToViewModelMappingProfile>();
@@ -26,6 +26,10 @@ namespace Marketplace.Api.Automapper
                 //x.AddProfile<DomainToViewModelMiddlemanMappingProfile>();
 
             });
+
+            var mapper = mapperConfiguration.CreateMapper();
+
+            return mapper;
         }
     }
 }

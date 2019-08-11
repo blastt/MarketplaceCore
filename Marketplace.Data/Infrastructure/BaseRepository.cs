@@ -1,7 +1,7 @@
 ﻿using Marketplace.Data.Context;
 using Marketplace.Model.Abstracts;
 using Marketplace.Model.Interfaces;
-using Marketplace.Model.Models;
+using Marketplace.Model;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Query;
 using System;

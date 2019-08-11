@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using Marketplace.Api.Areas.User.ViewModels;
-using Marketplace.Model.Models;
+using Marketplace.Model;
 using Marketplace.Service.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;

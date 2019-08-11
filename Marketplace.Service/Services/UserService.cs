@@ -1,6 +1,6 @@
 ﻿using Marketplace.Data.Infrastructure;
 using Marketplace.Data.Repositories;
-using Marketplace.Model.Models;
+using Marketplace.Model;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore.Query;
 using System;

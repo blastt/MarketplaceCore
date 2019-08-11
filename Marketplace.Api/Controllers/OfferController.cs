@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using Marketplace.Api.ViewModels.Offer;
-using Marketplace.Model.Models;
+using Marketplace.Model;
 using Marketplace.Service.Services;
 using Microsoft.AspNetCore.Mvc;
 

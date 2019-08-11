@@ -5,7 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Marketplace.Model.Models
+namespace Marketplace.Model
 {
     public class User : BaseUserEntity<int>
     {

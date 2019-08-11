@@ -1,8 +1,9 @@
+using AutoMapper;
 using Marketplace.Api.Automapper;
 using Marketplace.Data.Context;
 using Marketplace.Data.Infrastructure;
 using Marketplace.Data.Repositories;
-using Marketplace.Model.Models;
+using Marketplace.Model;
 using Marketplace.Service.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -11,7 +12,6 @@ using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Razor;
 using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -123,13 +123,12 @@ namespace Marketplace.Api
         });
 
             services.AddAutoMapper();
-
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
             // In production, the React files will be served from this directory
             services.AddSpaStaticFiles(configuration =>
             {
-                configuration.RootPath = "client/build";
+                configuration.RootPath = "ClientApp/build";
             });
         }
 
@@ -160,7 +159,7 @@ namespace Marketplace.Api
 
             app.UseSpa(spa =>
             {
-                spa.Options.SourcePath = "client";
+                spa.Options.SourcePath = "ClientApp";
 
                 if (env.IsDevelopment())
                 {
@@ -168,9 +167,7 @@ namespace Marketplace.Api
                 }
             });
         }
-
     }
-
     public static class ConfigureContainerExtentions
     {
         public static void AddDbContext(this IServiceCollection serviceCollection,
@@ -194,26 +191,13 @@ namespace Marketplace.Api
             return new DatabaseConfiguration().GetAuthConnectionString();
         }
     }
-
-    public static class ApplicationBuilderExtentions
-    {
-
-
-        public static string GetDataConnectionStringFromConfig()
-        {
-            return new DatabaseConfiguration().GetDataConnectionString();
-        }
-
-        public static string GetAuthConnectionStringFromConfig()
-        {
-            return new DatabaseConfiguration().GetAuthConnectionString();
-        }
-    }
     public static class AutoMapperExtentions
     {
         public static void AddAutoMapper(this IServiceCollection services)
         {
-            AutoMapperConfiguration.Configure();
+            IMapper mapper = AutoMapperConfiguration.Configure();
+            services.AddSingleton(mapper);
+
         }
     }
 }

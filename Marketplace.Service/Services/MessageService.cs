@@ -1,6 +1,6 @@
 ﻿using Marketplace.Data.Infrastructure;
 using Marketplace.Data.Repositories;
-using Marketplace.Model.Models;
+using Marketplace.Model;
 using System;
 using System.Collections.Generic;
 using System.Text;

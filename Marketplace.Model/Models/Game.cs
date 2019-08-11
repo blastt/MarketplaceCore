@@ -1,9 +1,10 @@
 ﻿using Marketplace.Model.Abstracts;
+using Marketplace.Model;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Marketplace.Model.Models
+namespace Marketplace.Model
 {
     public class Game : BaseEntity<int>
     {
