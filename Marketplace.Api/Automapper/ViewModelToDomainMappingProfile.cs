@@ -1,10 +1,6 @@
 ﻿using AutoMapper;
-using Marketplace.Api.ViewModels.Offer;
+using Marketplace.Api.ViewModels;
 using Marketplace.Model;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace Marketplace.Api.Automapper
 {

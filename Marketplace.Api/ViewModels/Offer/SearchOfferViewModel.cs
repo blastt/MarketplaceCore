@@ -1,10 +1,4 @@
-﻿using Marketplace.Model.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace Marketplace.Api.ViewModels
+﻿namespace Marketplace.Api.ViewModels
 {
 	public class SearchOfferViewModel
 	{
