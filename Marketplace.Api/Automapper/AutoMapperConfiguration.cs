@@ -10,11 +10,11 @@ namespace Marketplace.Api.Automapper
             var mapperConfiguration = new MapperConfiguration(x =>
             {
 
-                x.AddProfile<DomainToViewModelMappingProfile>();
-                x.AddProfile<ViewModelToDomainMappingProfile>();
+                x.AddProfile(new DomainToViewModelMappingProfile());
+                x.AddProfile(new ViewModelToDomainMappingProfile());
 
-                x.AddProfile<DomainToViewModelUserMappingProfile>();
-                x.AddProfile<ViewModelToDomainUserMappingProfile>();
+                x.AddProfile(new DomainToViewModelUserMappingProfile());
+                x.AddProfile(new ViewModelToDomainUserMappingProfile());
 
                 //x.AddProfile<DomainToViewModelAdminMappingProfile>();
                 //x.AddProfile<ViewModelToDomainAdminMappingProfile>();

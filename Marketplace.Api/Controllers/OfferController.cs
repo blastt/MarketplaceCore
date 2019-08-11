@@ -20,12 +20,15 @@ namespace Marketplace.Api.Controllers
 		private readonly IGameService gameService;
 		private readonly IUserProfileService userProfileService;
 		private readonly IUserService userService;
-		private readonly int offerDays = 30;
+        private readonly IMapper mapper;
+
+        private readonly int offerDays = 30;
 		private const int pageSize = 4;
 
-		public OfferController(IOfferService offerService, IUserProfileService userProfileService, IGameService gameService, IUserService userService, IFilterTextService filterTextService, IFilterRangeService filterRangeService)
+		public OfferController(IMapper mapper, IOfferService offerService, IUserProfileService userProfileService, IGameService gameService, IUserService userService, IFilterTextService filterTextService, IFilterRangeService filterRangeService)
 		{
-			this.offerService = offerService;
+            this.mapper = mapper;
+            this.offerService = offerService;
 			this.userProfileService = userProfileService;
 			this.gameService = gameService;
 			this.userService = userService;
@@ -45,7 +48,7 @@ namespace Marketplace.Api.Controllers
 				Game = game
 			};
 			model.GameName = gameObj == null ? "" : gameObj.Name;
-			model.Offers = Mapper.Map<IEnumerable<Offer>, IEnumerable<OfferViewModel>>(offers).Take(pageSize);
+			model.Offers = mapper.Map<IEnumerable<Offer>, IEnumerable<OfferViewModel>>(offers).Take(pageSize);
 			model.PageInfo = new PageInfoViewModel
 			{
 				PageNumber = 1,
